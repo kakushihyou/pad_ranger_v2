@@ -1,18 +1,18 @@
 .detail {
     padding: 40px 40px 40px 40px;
     // border-bottom: 1px solid rgb(241, 241, 241);
-    .buttons {
-      position: absolute;
-      top: 0;
-      right: 0;
-      Text {
-        padding: 20px;
-        font-size: 30px;
-      }
-    }
+    // .buttons {
+    //   position: absolute;
+    //   top: 0;
+    //   right: 0;
+    //   Text {
+    //     padding: 20px;
+    //     font-size: 30px;
+    //   }
+    // }
     .header {
       display: flex;
-      margin-bottom: 35px;
+      margin-bottom: 15px;
       .photo {
         flex: 1;
         margin-left: 40px;
@@ -30,10 +30,10 @@
         font-weight: 700;
         text-align: center;
         padding-right: 40px;
-        padding-top: 30px;
+        padding-top: 20px;
         .nickname {
           font-size: 50px;
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
       }
     }
@@ -44,6 +44,7 @@
         margin-bottom: 35px;
         .clickLook {
           color: blue;
+          text-decoration: underline;
         }
       }
     }
@@ -51,7 +52,7 @@
     .modify {
       display: flex;
       border: none;
-      margin-top: 30px;
+      margin-top: 25px;
       background-color: #9BCEFA;
     }
 
@@ -59,7 +60,7 @@
       display: flex;
       background-color: #FFC1C1;
       border: none;
-      margin-top: 30px;
+      margin-top: 25px;
     }
     
   }

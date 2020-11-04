@@ -8,13 +8,12 @@ import Httpclient from '../../../httpclient/http'
 import SignlePetResume  from "../../components/singlePetResume/singlePetResume";
 import Swip from '../../components/swipe/swipe'
 
-
 export default class Index extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      petResumeList: []
+      petResumeList: [],
     }
   }
 
@@ -88,31 +87,14 @@ export default class Index extends Component {
     // }).catc((error) => {
     //   console.error(error)
     // })
+   }
 
-    // TODO 获取用户的宠物列表结果示例
-    // {
-    //   Code: "00000"
-    //   Message: "获取用户宠物列表成功"
-    //   Success: true
-    //   Data:
-    //     count: 1
-    //     userPetList: [
-    //       {
-    //         id: 100000
-    //         userID: 1000000002
-    //         nickName: "kuro"
-    //         headImg: ""
-    //         gender: 0 （-1:未知，0:母，1:公）
-    //         birthday: "2015-03-12 08:00:00"
-    //         species: 1 （物种 1:猫，2:狗）
-    //         colour: "黑色"
-    //         weight: 9.5
-    //         adoptDate: "2015-06-15 08:00:00"
-    //         sterilizationFlag: 1 （绝育标识 1:已绝育，0:未绝育）
-    //         sterilizationDate: "2016-09-01 18:12:40"
-    //       }
-    //     ]
-    // }
+  componentDidShow () {
+    this.getPetList()
+  }
+
+   getPetList() {
+    // TODO 获取用户的宠物列表结果示例  
     let petResumeListInfo 
     Httpclient.get('http://localhost:9669/pet/list?userID=' + '1000000002')
     .then(res => {
@@ -130,7 +112,7 @@ export default class Index extends Component {
 
       console.log('设置到state中')
       this.setState({
-        petResumeList: petResumeListInfo
+        petResumeList: petResumeListInfo,
       })
 
       // console.log(this.state.petResumeList)
@@ -141,20 +123,12 @@ export default class Index extends Component {
     })
    }
 
-  componentDidMount () {
-    
-   }
-
-   onButtonClick() {
-     
-   }
-
   render () {
     // console.log('开始渲染页面' + JSON.stringify(this.state.petResumeList))
     return (
       
       this.state.petResumeList.map((item) => {
-        let modify_url = '../../pages/petDetail/petDetail?ID=' + item.id
+        let modify_url = '/pages/petUpdate/petUpdate?petID=' + item.id
         return (
           <View className='index' onLongPress={this.addPetInfo}>
             <Swip content={<SignlePetResume petResume={item} />} info={item} modify_url={modify_url} />

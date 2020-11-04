@@ -1,22 +1,29 @@
 import React, { Component } from 'react'
 import Taro, { getCurrentInstance, getCurrentPages } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtButton, AtAvatar } from 'taro-ui'
-import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizationMemo, getInoculationMemo} from '../../util/tool'
+import { View, Picker } from '@tarojs/components'
+import { AtButton, AtAvatar, AtList, AtListItem, AtInput } from 'taro-ui'
+import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizationMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './petDetail.scss'
+import './petUpdate.scss'
 import Httpclient from '../../../httpclient/http'
 
-export default class PetDetail extends Component {
+export default class PetUpdate extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      petDetail: {}
+      petDetail: {},
+      genderSelector: ['公', '母'],
+      genderSelectorChecked: '',
+      speciesSelector: ['猫', '狗'],
+      speciesSelectorChecked: '',
+      sterilizationSelector: ['已绝育', '未绝育'],
+      sterilizationSelectorChecked: ''
     }
-    this.modifyPet = this.modifyPet.bind(this)
-    this.deletePet = this.deletePet.bind(this)
+    
+    this.commit = this.commit.bind(this)
+    this.goback = this.goback.bind(this)
   }
 
 
@@ -29,7 +36,9 @@ export default class PetDetail extends Component {
       .then(res => {
         console.log(res.Data)
         this.setState({
-          petDetail: res.Data
+          petDetail: res.Data,
+          genderSelectorChecked: getGenderStr(res.Data.gender),
+          speciesSelectorChecked: getSpeciesMemo(res.Data.species)
         })
       })
       .catch(err => {
@@ -49,12 +58,12 @@ export default class PetDetail extends Component {
     })
   }
 
-  modifyPet = () =>{
+  commit = () =>{
     
 
   }
 
-  deletePet = () => {
+  goback = () => {
     let petDetail = this.state.petDetail
     Taro.showModal({
       cancelText:'好',
@@ -96,36 +105,38 @@ export default class PetDetail extends Component {
     })
   }
 
+  onClick = () => {
+
+  }
+
 
   render () {
     let petDetail = this.state.petDetail
     return (
-      <View className='detail'>
-        <View className='header '>
-          <View className='photo'>
-            <AtAvatar circle image={petDetail.headImg === '' ? getDefaultHeadImg(petDetail.species) : petDetail.headImg}></AtAvatar>
-          </View>
-          <View className='memo'>
-            <Text className='nickname'>{petDetail.nickName}</Text>
-            <Text>这是{petDetail.nickName}陪伴你的第{petDetail.accompanyDays}天</Text>
-          </View>
+      <View className='modify'>
+        <View className='photo'>
+          <AtAvatar circle image={petDetail.headImg === '' ? getDefaultHeadImg(petDetail.species) : petDetail.headImg}></AtAvatar>
         </View>
         <View className='center'>
-          <View>性别：{getGenderStr(petDetail.gender)}</View>
-          <View>年龄：{jsGetAge(petDetail.birthday || "")}岁</View>
-          <View>种类：{getSpeciesMemo(petDetail.species)}</View>
-          {/* <View>品种：山大王</View> */}
-          <View>花色：{petDetail.colour}</View>
+          <Picker class='picker' mode='selector' range={this.state.genderSelector} onChange={this.onChange}>
+            <AtList>
+              <AtListItem title='性别' extraText={this.state.genderSelectorChecked} />
+            </AtList>
+          </Picker>
+          <Picker class='picker' mode='selector' range={this.state.speciesSelector} onChange={this.onChange}>
+            <AtList>
+              <AtListItem title='种类' extraText={this.state.speciesSelectorChecked} />
+            </AtList>
+          </Picker>
+          <AtInput class='rightInput' name='colour' type='text' title='花色' placeholder='请输入花色' value={petDetail.colour} />
           <View>生日：{petDetail.birthday}</View>
           <View>接驾日期：{petDetail.adoptDate}</View>
           <View>体重：{petDetail.weight}KG</View>
           <View>是否绝育：{getSterilizationMemo(petDetail.sterilizationFlag)}</View>
           <View>绝育时间：{petDetail.sterilizationDate}</View>
-          <View>是否接种疫苗：{getInoculationMemo(petDetail.inoculationFlag)}</View>
-          <View>接种详情：<Text className='clickLook' onClick={this.handleClick}>点击查看</Text></View>
         </View>
-        <AtButton className='modify' type='primary' size='small' circle onClick={this.modifyPet}>修改</AtButton>
-        <AtButton className='delete' type='primary' size='small' circle onClick={this.deletePet}>删除</AtButton>
+        <AtButton className='confirm' type='primary' size='small' circle onClick={this.commit}>确认</AtButton>
+        <AtButton className='cancel' type='primary' size='small' circle onClick={this.goback}>取消</AtButton>
       </View>
     )
   }

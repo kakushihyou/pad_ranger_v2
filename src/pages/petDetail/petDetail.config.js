@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '宠物详情'
+  navigationBarTitleText: '主子详情'
 }

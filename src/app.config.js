@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/petDetail/petDetail',
+    'pages/petUpdate/petUpdate',
     'pages/case/case',
     'pages/diary/diary',
     'pages/mine/mine'
