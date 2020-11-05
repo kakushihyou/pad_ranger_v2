@@ -21,7 +21,7 @@ export default class PetDetail extends Component {
 
 
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(getCurrentInstance().router.params)
     // TODO 获取宠物详情
     Httpclient.get(

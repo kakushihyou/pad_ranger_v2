@@ -398,13 +398,13 @@ export default class PetUpdate extends Component {
 
           <AtInput class='rightInput' name='weight' type='number' title='体重' border={false} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange}/>
           
-          <Picker class='picker' mode='date' onChange={this.onBirthdayChange}>
+          <Picker class='picker' mode='date' value={this.state.petDetail.birthday} onChange={this.onBirthdayChange}>
             <AtList hasBorder={true}>
               <AtListItem title='生日' hasBorder={false} extraText={this.state.birthdaySel} />
             </AtList>
           </Picker>
           
-          <Picker class='picker' mode='date' onChange={this.onAdoptDateChange}>
+          <Picker class='picker' mode='date' value={this.state.petDetail.adoptDate} onChange={this.onAdoptDateChange}>
             <AtList hasBorder={false}>
               <AtListItem title='接驾日期' hasBorder={false} extraText={this.state.adoptDateSel} />
             </AtList>
@@ -416,7 +416,7 @@ export default class PetUpdate extends Component {
             </AtList>
           </Picker>
           {/* <View>是否绝育：{getSterilizationMemo(petDetail.sterilizationFlag)}</View> */}
-          <Picker class='picker' mode='date' onChange={this.onSterilizationDateChange}>
+          <Picker class='picker' mode='date' value={this.state.petDetail.sterilizationDate} onChange={this.onSterilizationDateChange}>
             <AtList hasBorder={false}>
               <AtListItem title='绝育日期' hasBorder={false} extraText={this.state.sterilizationDateSel} />
             </AtList>
