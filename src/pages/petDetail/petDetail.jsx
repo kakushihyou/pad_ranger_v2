@@ -50,8 +50,10 @@ export default class PetDetail extends Component {
   }
 
   modifyPet = () =>{
-    
-
+    console.log('详情页跳转到修改页')
+    Taro.navigateTo({
+      url: '/pages/petUpdate/petUpdate?petID=' + this.state.petDetail.id
+    })
   }
 
   deletePet = () => {

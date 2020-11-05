@@ -86,7 +86,7 @@ const getGenderStr = (gender) => {
   switch (gender) {
     case 0:
       genderStr = '母'
-      break;
+      break
   
     case 1:
       genderStr = '公'
@@ -94,7 +94,6 @@ const getGenderStr = (gender) => {
 
     default:
       genderStr = '未知'
-      break;
   }
 
   return genderStr

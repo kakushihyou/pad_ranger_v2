@@ -20,26 +20,10 @@ export default class Swipe extends Component {
     let modifyUrl = this.props.modify_url
     let petInfo = this.props.info
     if (e.text === '修改') {
-      Taro.showModal({
-          cancelText:'认错人了',
-          cancelColor:'#FFC1C1',
-          confirmText:'dei!',
-          confirmColor:'#9BCEFA',
-          content:'是你要修改朕(' + petInfo.nickName + ')的信息？',
-          showCancel: true,  //是否显示取消按钮
-          success(res)
-          {
-              if(res.confirm)
-              {
-                console.log('修改')
-                Taro.navigateTo({
-                  url: modifyUrl
-                })
-              }else if(res.cancel)
-              {
-                console.log('取消修改')
-              }
-          }
+      
+      console.log('修改')
+      Taro.navigateTo({
+        url: modifyUrl
       })
     } else if (e.text === '删除') {
       Taro.showModal({
