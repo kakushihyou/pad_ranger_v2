@@ -1,6 +1,21 @@
+@import "~taro-ui/dist/style/components/fab.scss";
+
+.page{
+    height: 100%;
+    overflow: auto;
+}
+
 .index {
-    margin-bottom: 120px;
-    .at-fab {
-        background-color: #efc1c2;
-    }
+    margin-bottom: 10px;
+}
+
+.post-button {
+    position: fixed;
+    right: 50px;
+    bottom: 80px;
+    z-index: 10000;
+  }
+  
+.fabButton {
+    background-color: #9BCEFA;
 }

@@ -18,6 +18,22 @@ const getDefaultHeadImg = (species) => {
     return headImg
 }
 
+const getCurrentDate = () => {
+    var d = new Date();
+    var nowYear = d.getFullYear();
+    // console.log("当前年：" + nowYear)
+    var nowMonth = d.getMonth() + 1;
+    // console.log("当前月：" + nowMonth)
+    var nowDay = d.getDate();
+    var nowDayStr = String(nowDay)
+    console.log(nowDay)
+    if (nowDay < 10) {
+      
+      nowDayStr = '0' + nowDayStr
+    }
+    return nowYear + '-' + nowMonth + '-' + nowDayStr
+}
+
 const jsGetAge = (strBirthday) =>{       
     var returnAge;
     var strBirthdayArr=strBirthday.split(" ")[0].split("-");
@@ -144,4 +160,4 @@ const getInoculationMemo = (inoculationFlag) => {
   return inoculationMemo
 }
 
-export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo}
+export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate}

@@ -3,6 +3,7 @@ export default {
     'pages/index/index',
     'pages/petDetail/petDetail',
     'pages/petUpdate/petUpdate',
+    'pages/petAdd/petAdd',
     'pages/case/case',
     'pages/diary/diary',
     'pages/mine/mine'

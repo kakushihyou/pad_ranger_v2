@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text} from '@tarojs/components'
-import { AtButton, AtAvatar} from 'taro-ui'
+import Taro from '@tarojs/taro'
+import { AtButton, AtAvatar, AtFab} from 'taro-ui'
 import 'taro-ui/dist/style/index.scss'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.scss'
@@ -14,6 +15,8 @@ export default class Index extends Component {
     super(props)
     this.state = {
       petResumeList: [],
+      // TODO
+      userID: '1000000002'
     }
   }
 
@@ -96,7 +99,7 @@ export default class Index extends Component {
    getPetList() {
     // TODO 获取用户的宠物列表结果示例  
     let petResumeListInfo 
-    Httpclient.get('http://localhost:9669/pet/list?userID=' + '1000000002')
+    Httpclient.get('http://localhost:9669/pet/list?userID=' + this.state.userID)
     .then(res => {
       // console.log(res.Data)
 
@@ -123,18 +126,35 @@ export default class Index extends Component {
     })
    }
 
+  onButtonClick = () => {
+    Taro.navigateTo({
+      url: '/pages/petAdd/petAdd?userID=' + this.state.userID
+    })
+  } 
+
   render () {
     // console.log('开始渲染页面' + JSON.stringify(this.state.petResumeList))
     return (
-      
-      this.state.petResumeList.map((item) => {
-        let modify_url = '/pages/petUpdate/petUpdate?petID=' + item.id
-        return (
-          <View className='index' onLongPress={this.addPetInfo}>
-            <Swip content={<SignlePetResume petResume={item} />} info={item} modify_url={modify_url} />
-          </View>
-        )
-      })
+      <View className='page'>
+        <View className='list'>
+          {
+            this.state.petResumeList.map((item) => {
+              let modify_url = '/pages/petUpdate/petUpdate?petID=' + item.id
+              return (
+                <View className='index'>
+                  <Swip content={<SignlePetResume petResume={item} />} info={item} modify_url={modify_url} />
+                </View>
+              )
+            })
+          }
+        </View>
+        
+        <View className="post-button">
+          <AtFab className='fabButton' onClick={this.onButtonClick.bind(this)} size='small'>
+            <Text className="at-fab__icon at-icon at-icon-add"></Text>
+          </AtFab>
+        </View>
+      </View>
     )
   }
 }

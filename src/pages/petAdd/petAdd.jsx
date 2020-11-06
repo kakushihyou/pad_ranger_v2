@@ -1,34 +1,38 @@
 import React, { Component } from 'react'
-import Taro, { getApp, getCurrentInstance, getCurrentPages } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
-import { AtButton, AtAvatar, AtList, AtListItem, AtInput, AtMessage, AtImagePicker } from 'taro-ui'
-import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizationMemo} from '../../util/tool'
+import { AtButton, AtAvatar, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
+import {getDefaultHeadImg, getGenderStr, getCurrentDate, getSpeciesMemo, getSterilizationMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './petUpdate.scss'
+import './petAdd.scss'
 import Httpclient from '../../../httpclient/http'
+import AddIconBlank from '../../assets/icon/add_icon_blank.png'
 
 export default class PetUpdate extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      petDetail: {},
-      headImg: '',
+      headImg: AddIconBlank,
       nickName: '',
+      gender: 2,
+      species: 1,
+      sterilizationFlag: 0,
       colour: '',
       weight: '',
+      birthday: getCurrentDate(),
+      adoptDate: getCurrentDate(),
+      sterilizationDate: getCurrentDate(),
       genderSelector: ['母', '公', '未知'],
-      genderSelectorChecked: '',
+      genderSelectorChecked: '母',
       speciesSelector: ['猫', '狗'],
-      speciesSelectorChecked: '',
+      speciesSelectorChecked: '猫',
       sterilizationSelector: ['未绝育', '已绝育'],
-      sterilizationSelectorChecked: '',
-      birthdaySel: '',
-      adoptDateSel: '',
-      sterilizationDateSel: '',
-      changed: false,
-      saved: false,
+      sterilizationSelectorChecked: '未绝育',
+      birthdaySel: getCurrentDate(),
+      adoptDateSel: getCurrentDate(),
+      sterilizationDateSel: getCurrentDate(),
       uploading: false,
       errMsgMap: new Map()
     }
@@ -46,87 +50,36 @@ export default class PetUpdate extends Component {
   }
 
   componentWillMount () { 
-    console.log(getCurrentInstance().router.params)
-    // TODO 获取宠物详情
-    Httpclient.get(
-      'http://localhost:9669/pet/detail?ID=' + getCurrentInstance().router.params.petID)
-      .then(res => {
-        console.log(res.Data)
-        this.setState({
-          petDetail: res.Data,
-          headImg: res.Data.headImg,
-          nickName: res.Data.nickName,
-          colour: res.Data.colour,
-          weight: res.Data.weight,
-          genderSelectorChecked: getGenderStr(res.Data.gender),
-          sterilizationSelectorChecked: getSterilizationMemo(res.Data.sterilizationFlag),
-          speciesSelectorChecked: getSpeciesMemo(res.Data.species),
-          birthdaySel: res.Data.birthday,
-          adoptDateSel: res.Data.adoptDate,
-          sterilizationDateSel: res.Data.sterilizationDate
-        })
-      })
-      .catch(err => {
-        console.error(err)
-        Taro.showToast({
-          title: '出错了？朕很生气！',
-          icon: "none"
-        })
-        return
-      })
+    console.log(this.state)
   }
 
   onGenderChange = (e) => {
     console.log(e.detail.value)
     let gender = Number(e.detail.value)
-    let petDetail = this.state.petDetail
-    let preGender = Number(petDetail.gender)
-    if (gender === preGender) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.gender = gender
     this.setState({
-      petDetail: petDetail,
-      genderSelectorChecked: getGenderStr(gender),
-      changed: true
+      gender: gender,
+      genderSelectorChecked: getGenderStr(gender)
     })
   }
 
   onSpeciesChange = (e) => {
     console.log(e.detail.value)
     let species = Number(e.detail.value) + 1
-    let petDetail = this.state.petDetail
-    let preSpecies = Number(petDetail.species)
-    if (species === preSpecies) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.species = species
     this.setState({
-      petDetail: petDetail,
-      speciesSelectorChecked: getSpeciesMemo(species),
-      changed: true
+      species: species,
+      speciesSelectorChecked: getSpeciesMemo(species)
     })
   }
 
   onSterilizationChange = (e) => {
     console.log(e.detail.value)
     let sterilization = Number(e.detail.value)
-    let petDetail = this.state.petDetail
-    let preSterilization = Number(petDetail.sterilization)
-    if (sterilization === preSterilization) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.sterilizationFlag = sterilization
     this.setState({
-      petDetail: petDetail,
-      sterilizationSelectorChecked: getSterilizationMemo(sterilization),
-      changed: true
+      sterilizationFlag: sterilization,
+      sterilizationSelectorChecked: getSterilizationMemo(sterilization)
     })
   }
 
@@ -146,12 +99,9 @@ export default class PetUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let petDetail = this.state.petDetail
-      petDetail.nickName = value
+      
       this.setState({
-        nickName: value,
-        petDetail: petDetail,
-        changed: true
+        nickName: value
       })
       errMsgMap.delete('nickName')
     }
@@ -175,12 +125,8 @@ export default class PetUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let petDetail = this.state.petDetail
-      petDetail.colour = value
       this.setState({
-        colour: value,
-        petDetail: petDetail,
-        changed: true
+        colour: value
       })
       errMsgMap.delete('colour')
     }
@@ -190,9 +136,10 @@ export default class PetUpdate extends Component {
 
   onWeightChange = (value) => {
     console.log(value)
+    let weight = Number(value)
     let errMsgMap = this.state.errMsgMap
     let errMsg = '难道朕在你心里没有重量吗？'
-    if (value == null || value == '' || Number(value) == 0) {
+    if (value == null || value == '' || weight <= 0) {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
@@ -204,70 +151,42 @@ export default class PetUpdate extends Component {
         weight: ''
       })
     } else {
-      let petDetail = this.state.petDetail
-      petDetail.weight = value
       this.setState({
-        weight: value,
-        petDetail: petDetail,
-        changed: true
+        weight: weight
       })
       errMsgMap.delete('weight')
     }
 
-    return value
+    return weight
   }
 
   onBirthdayChange = (e) => {
     console.log(e.detail.value)
     let birthday = e.detail.value
-    let petDetail = this.state.petDetail
-    let preBirthday = petDetail.birthday
-    if (birthday === preBirthday) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.birthday = birthday
     this.setState({
-      petDetail: petDetail,
-      birthdaySel: birthday,
-      changed: true
+      birthday: birthday,
+      birthdaySel: birthday
     })
   }
 
   onAdoptDateChange = (e) => {
     console.log(e.detail.value)
     let adoptDate = e.detail.value
-    let petDetail = this.state.petDetail
-    let preAdoptDate = petDetail.adoptDate
-    if (adoptDate === preAdoptDate) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.adoptDate = adoptDate
     this.setState({
-      petDetail: petDetail,
-      adoptDateSel: adoptDate,
-      changed: true
+      adoptDate: adoptDate,
+      adoptDateSel: AdoptDate
     })
   }
 
   onSterilizationDateChange = (e) => {
     console.log(e.detail.value)
     let sterilizationDate = e.detail.value
-    let petDetail = this.state.petDetail
-    let preSterilizationDate = petDetail.sterilizationDate
-    if (sterilizationDate === preSterilizationDate) {
-      console.log('修改前后没有变化')
-      return
-    }
     
-    petDetail.sterilizationDate = sterilizationDate
     this.setState({
-      petDetail: petDetail,
-      sterilizationDateSel: sterilizationDate,
-      changed: true
+      sterilizationDate: sterilizationDate,
+      sterilizationDateSel: sterilizationDate
     })
   }
 
@@ -290,23 +209,22 @@ export default class PetUpdate extends Component {
         duration: 3000
       })
     } else {
-      
+      let userID  = getCurrentInstance().router.params.userID
       var requestBody = {
-        ID: this.state.petDetail.id,
-        UserID: this.state.petDetail.userID,
-        NickName: this.state.petDetail.nickName,
-        Gender: this.state.petDetail.gender, // 0:母，1:公，2:未知
-        Birthday: this.state.petDetail.birthday,
-        Species: this.state.petDetail.species, // 物种 1:猫，2:狗
-        Colour: this.state.petDetail.colour,
-        Weight: this.state.petDetail.weight,
-        AdoptDate: this.state.petDetail.adoptDate,
-        SterilizationFlag: this.state.petDetail.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
-        SterilizationDate: this.state.petDetail.sterilizationDate
+        UserID: Number(userID),
+        NickName: this.state.nickName,
+        Gender: this.state.gender, // 0:母，1:公，2:未知
+        Birthday: this.state.birthday,
+        Species: this.state.species, // 物种 1:猫，2:狗
+        Colour: this.state.colour,
+        Weight: this.state.weight,
+        AdoptDate: this.state.adoptDate,
+        SterilizationFlag: this.state.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
+        SterilizationDate: this.state.sterilizationDate
       }
 
       console.log(requestBody)
-      Httpclient.post(
+      Httpclient.put(
         'http://localhost:9669/pet', requestBody, 'application/json')
       .then(res => {
         console.log(res)
@@ -320,9 +238,6 @@ export default class PetUpdate extends Component {
                 delta: 1
               })
             }
-          })
-          this.setState({
-            saved: true
           })
           // this.goback()
         } else {
@@ -408,8 +323,7 @@ export default class PetUpdate extends Component {
           this.state.uploading ? (<AtActivityIndicator content='上传中...'></AtActivityIndicator>) : (<AtMessage />)
         }
         <View className='photo' onClick={this.imageSelect}>
-          <AtAvatar circle image={this.state.headImg === '' ? getDefaultHeadImg(petDetail.species) : this.state.headImg} >
-          </AtAvatar>
+          <AtAvatar circle image={this.state.headImg}></AtAvatar>
         </View>
         <View className='center'>
           <AtInput class='rightInput' name='nickName' type='text' title='昵称' border={false} adjustPosition={true} placeholder='请输入昵称' value={this.state.nickName} onChange={this.onNickNameChange} />
@@ -430,14 +344,14 @@ export default class PetUpdate extends Component {
 
           <AtInput class='rightInput' name='weight' type='number' title='体重' border={false} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange}/>
           
-          <Picker class='picker' mode='date' value={this.state.petDetail.birthday} onChange={this.onBirthdayChange}>
+          <Picker class='picker' mode='date' value={this.state.birthday} onChange={this.onBirthdayChange}>
             <AtList hasBorder={true}>
               <AtListItem title='生日' hasBorder={false} extraText={this.state.birthdaySel} />
             </AtList>
           </Picker>
           
-          <Picker class='picker' mode='date' value={this.state.petDetail.adoptDate} onChange={this.onAdoptDateChange}>
-            <AtList hasBorder={false}>
+          <Picker class='picker' mode='date' value={this.state.adoptDate} onChange={this.onAdoptDateChange}>
+            <AtList hasBorder={true}>
               <AtListItem title='接驾日期' hasBorder={false} extraText={this.state.adoptDateSel} />
             </AtList>
           </Picker>
@@ -448,7 +362,7 @@ export default class PetUpdate extends Component {
             </AtList>
           </Picker>
           {/* <View>是否绝育：{getSterilizationMemo(petDetail.sterilizationFlag)}</View> */}
-          <Picker class='picker' mode='date' value={this.state.petDetail.sterilizationDate} onChange={this.onSterilizationDateChange}>
+          <Picker class='picker' mode='date' value={this.state.sterilizationDate} onChange={this.onSterilizationDateChange}>
             <AtList hasBorder={false}>
               <AtListItem title='绝育日期' hasBorder={false} extraText={this.state.sterilizationDateSel} />
             </AtList>
