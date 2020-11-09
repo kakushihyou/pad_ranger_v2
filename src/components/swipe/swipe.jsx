@@ -37,9 +37,9 @@ export default class Swipe extends Component {
         {
             if(res.confirm)
             {
-              // console.log('删除')
-              // Httpclient.delete('http://localhost:9669/pet?ID=' + '100000')
-              // .then(res => {
+              console.log('删除')
+              Httpclient.delete('http://localhost:9669/pet?ID=' + petInfo.id)
+              .then(res => {
                 Taro.showToast({
                   title: petInfo.accompanyDays + '天，谢谢你',
                   duration: 3200,
@@ -53,15 +53,15 @@ export default class Swipe extends Component {
                     page.onShow()
                   }
                 })
-              // })
-              // .catch(err => {
-              //   console.error(err)
-              //   Taro.showToast({
-              //     title: '再陪你一会儿',
-              //     icon: "none"
-              //   })
-              //   return
-              // })
+              })
+              .catch(err => {
+                console.error(err)
+                Taro.showToast({
+                  title: '再陪你一会儿',
+                  icon: "none"
+                })
+                return
+              })
             }else if(res.cancel)
             {
               console.log('取消删除')
