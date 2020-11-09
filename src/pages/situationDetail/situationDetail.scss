@@ -1,0 +1,20 @@
+@import "~taro-ui/dist/style/components/tabs.scss";
+
+.at-tabs__item {
+    color: #efc1c2;
+    padding: 10px;
+    vertical-align: middle;
+
+}
+
+.at-tabs__item--active {
+    color: ivory;
+    background-color: #efc1c2;
+
+}
+
+.at-tabs__item-underline {
+    color: #efc1c2;
+    background-color: #efc1c2;
+}
+

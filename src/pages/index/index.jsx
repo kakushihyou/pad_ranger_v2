@@ -34,6 +34,7 @@ export default class Index extends Component {
     //       .then(res => {
     //         console.log(res.Data)
     //         var userId = res.Data
+    //         // TODO 将userId存入缓存
     //         // TODO 获取用户授权
     //         Taro.getSetting({
     //           success(res) {
@@ -139,10 +140,9 @@ export default class Index extends Component {
         <View className='list'>
           {
             this.state.petResumeList.map((item) => {
-              let modify_url = '/pages/petUpdate/petUpdate?petID=' + item.id
               return (
                 <View className='index'>
-                  <Swip content={<SignlePetResume petResume={item} />} info={item} modify_url={modify_url} />
+                  <Swip content={<SignlePetResume petResume={item} />} info={item} />
                 </View>
               )
             })

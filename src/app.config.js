@@ -4,7 +4,8 @@ export default {
     'pages/petDetail/petDetail',
     'pages/petUpdate/petUpdate',
     'pages/petAdd/petAdd',
-    'pages/case/case',
+    'pages/medicalTreatment/medicalTreatment',
+    'pages/situationDetail/situationDetail',
     'pages/diary/diary',
     'pages/mine/mine'
   ],
@@ -23,7 +24,7 @@ export default {
         text: '主子'
       },
       {
-        pagePath: 'pages/case/case',
+        pagePath: 'pages/medicalTreatment/medicalTreatment',
         iconPath: 'assets/icon/pet_case.png',
         selectedIconPath: 'assets/icon/pet_case.png',
         text: '病例'
