@@ -4,7 +4,7 @@
     color: #efc1c2;
     padding: 10px;
     vertical-align: middle;
-
+    position: relative;
 }
 
 .at-tabs__item--active {
@@ -18,3 +18,13 @@
     background-color: #efc1c2;
 }
 
+.post-button {
+    position: fixed;
+    right: 50px;
+    bottom: 80px;
+    z-index: 10000;
+  }
+  
+  .fabButton {
+    background-color: #9BCEFA;
+  }

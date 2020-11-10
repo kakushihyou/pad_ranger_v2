@@ -21,6 +21,13 @@ export default class Index extends Component {
   }
 
   componentWillMount () {
+    // TODO Test
+    Taro.setStorage({
+      key: 'userID',
+      Data: '1000000002'
+    })
+
+
     // TODO 判断是否需要微信授权
 
     // console.log('index222222222')
@@ -35,6 +42,10 @@ export default class Index extends Component {
     //         console.log(res.Data)
     //         var userId = res.Data
     //         // TODO 将userId存入缓存
+    //         Taro.setStorage({
+    //            key: 'userID',
+    //            Data: userId
+    //          })
     //         // TODO 获取用户授权
     //         Taro.getSetting({
     //           success(res) {
@@ -123,6 +134,10 @@ export default class Index extends Component {
     })
     .catch(err => {
       console.error(err)
+      Taro.showToast({
+        title: '出错了？朕很生气！',
+        icon: "none"
+      })
       return
     })
    }

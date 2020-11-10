@@ -160,4 +160,18 @@ const getInoculationMemo = (inoculationFlag) => {
   return inoculationMemo
 }
 
-export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate}
+const getDewormingTypeMemo = (dewormingType) => {
+  let getDewormingTypeMemo
+  switch(dewormingType) {
+    case 1:
+      getDewormingTypeMemo = '体内'
+      break
+    default:
+      getDewormingTypeMemo = '体外'
+      break
+  }
+
+  return getDewormingTypeMemo
+}
+
+export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate, getDewormingTypeMemo}
