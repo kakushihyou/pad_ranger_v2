@@ -6,7 +6,7 @@ import {getDewormingTypeMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petDewormingItem.scss'
-
+import Httpclient from '../../../httpclient/http'
 
 export default class PetDewormingItem extends Component {
 
@@ -16,8 +16,41 @@ export default class PetDewormingItem extends Component {
 
   trash = () => {
     console.log('开始删除')
-
     let petDewormingItem = this.props.info
+    Taro.showModal({
+      cancelText:'点错了',
+      cancelColor:'#FFC1C1',
+      confirmText:'没病',
+      confirmColor:'#9BCEFA',
+      content: '朕没病？',
+      showCancel: true,  //是否显示取消按钮
+      success(res)
+      {
+          if(res.confirm)
+          {
+            console.log('删除')
+            Httpclient.delete('http://localhost:9669/pet/deworming?ID=' + petDewormingItem.id)
+            .then(res => {
+              Taro.showToast({
+                title: '朕是不会生病的～',
+                duration: 3200,
+                icon: "none"
+              })
+            })
+            .catch(err => {
+              console.error(err)
+              Taro.showToast({
+                title: '咋还删不掉了呢～',
+                icon: "none"
+              })
+              return
+            })
+          }else if(res.cancel)
+          {
+            console.log('取消删除')
+          }
+      }
+    })
 
   }
 

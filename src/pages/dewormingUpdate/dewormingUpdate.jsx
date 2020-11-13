@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
-import { AtButton, AtList, AtListItem, AtInput } from 'taro-ui'
+import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
 import { getDewormingTypeMemo } from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -55,7 +55,7 @@ export default class DewormingUpdate extends Component {
           manufacturer: res.Data.manufacturer,
           dewormingAddress: res.Data.dewormingAddress,
           doctor: res.Data.doctor,
-          weight: res.Data.weight,
+          weight: res.Data.weight === 0 ? '' : res.Data.weight,
           dewormingTypeSelectorChecked: getDewormingTypeMemo(res.Data.dewormingType),
           dewormingDateSel: res.Data.dewormingDate,
           nextDewormingDateSel: res.Data.nextDewormingDate
@@ -134,11 +134,11 @@ export default class DewormingUpdate extends Component {
         weight: ''
       })
     } else {
-      let petDetail = this.state.petDetail
-      petDetail.weight = value
+      let dewormingDetail = this.state.dewormingDetail
+      dewormingDetail.weight = Number(value)
       this.setState({
         weight: value,
-        petDetail: petDetail,
+        dewormingDetail: dewormingDetail,
         changed: true
       })
       errMsgMap.delete('weight')
@@ -302,6 +302,7 @@ export default class DewormingUpdate extends Component {
   commit = (e) =>{
     console.log('提交')
     console.log(this.state.errMsgMap)
+    console.log(this.state.dewormingDetail)
     let errMsgMap = this.state.errMsgMap
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
@@ -319,23 +320,38 @@ export default class DewormingUpdate extends Component {
       })
     } else {
       
+      // ID                int64   `json:"id"`
+      // PetID             int64   `json:"petID"`
+      // Medication        string  `json:"medication"`
+      // DewormingType     int     `json:"dewormingType"`
+      // Manufacturer      string  `json:"manufacturer"`
+      // Dosage            string  `json:"dosage"`
+      // DewormingDate     string  `json:"dewormingDate"`
+      // NextDewormingDate string  `json:"nextDewormingDate"`
+      // DewormingAddress  string  `json:"dewormingAddress"`
+      // Remind            int     `json:"remind"`
+      // RemindTime        string  `json:"remindTime"`
+      // Doctor            string  `json:"doctor"`
+      // Weight            float32 `json:"weight"`
       var requestBody = {
-        ID: this.state.petDetail.id,
-        UserID: this.state.petDetail.userID,
-        NickName: this.state.petDetail.nickName,
-        Gender: this.state.petDetail.gender, // 0:母，1:公，2:未知
-        Birthday: this.state.petDetail.birthday,
-        Species: this.state.petDetail.species, // 物种 1:猫，2:狗
-        Colour: this.state.petDetail.colour,
-        Weight: this.state.petDetail.weight,
-        AdoptDate: this.state.petDetail.adoptDate,
-        SterilizationFlag: this.state.petDetail.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
-        SterilizationDate: this.state.petDetail.sterilizationDate
+        ID: this.state.dewormingDetail.id,
+        PetID: this.state.dewormingDetail.petID,
+        Medication: this.state.dewormingDetail.medication,
+        DewormingType: this.state.dewormingDetail.dewormingType, // 0:母，1:公，2:未知
+        Manufacturer: this.state.dewormingDetail.manufacturer,
+        Dosage: this.state.dewormingDetail.dosage, // 物种 1:猫，2:狗
+        DewormingDate: this.state.dewormingDetail.dewormingDate,
+        Weight: this.state.dewormingDetail.weight,
+        NextDewormingDate: this.state.dewormingDetail.nextDewormingDate,
+        DewormingAddress: this.state.dewormingDetail.dewormingAddress, // 绝育标识 1:已绝育，0:未绝育
+        Remind: this.state.dewormingDetail.remind,
+        RemindTime: this.state.dewormingDetail.remindTime,
+        Doctor: this.state.dewormingDetail.doctor
       }
 
       console.log(requestBody)
       Httpclient.post(
-        'http://localhost:9669/pet', requestBody, 'application/json')
+        'http://localhost:9669/pet/deworming', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {
@@ -415,7 +431,8 @@ export default class DewormingUpdate extends Component {
           <Text>下次驱虫：{petDewormingDetail.nextDewormingDate}</Text>
           <Text>驱虫地点：{petDewormingDetail.dewormingAddress}</Text>
           <Text>宠物医师：{petDewormingDetail.doctor}</Text> */}
-         <View className='center'>
+          <AtMessage /> 
+          <View className='center'>
           <Picker class='picker' mode='selector' range={this.state.dewormingTypeSelector} onChange={this.onDewormingTypeChange.bind(this)}>
             <AtList hasBorder={false}>
               <AtListItem title='驱虫类型' hasBorder={true} extraText={this.state.dewormingTypeSelectorChecked} />
