@@ -324,7 +324,6 @@ export default class PetUpdate extends Component {
           this.setState({
             saved: true
           })
-          // this.goback()
         } else {
           Taro.atMessage({
             message: res.Message,
@@ -341,10 +340,7 @@ export default class PetUpdate extends Component {
           duration: 3000
         })
       })
-
-      // this.goback()
     }
-
   }
 
   goback = () => {

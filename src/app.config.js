@@ -6,6 +6,7 @@ export default {
     'pages/petAdd/petAdd',
     'pages/medicalTreatment/medicalTreatment',
     'pages/situationDetail/situationDetail',
+    'pages/dewormingUpdate/dewormingUpdate',
     'pages/diary/diary',
     'pages/mine/mine'
   ],

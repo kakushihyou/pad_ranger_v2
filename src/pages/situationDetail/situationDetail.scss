@@ -25,6 +25,13 @@
     z-index: 10000;
   }
   
-  .fabButton {
-    background-color: #9BCEFA;
-  }
+.fabButton {
+background-color: #9BCEFA;
+}
+
+.tab_view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}

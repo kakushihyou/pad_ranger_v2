@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtButton , AtTabs, AtTabsPane, AtFab} from 'taro-ui'
-
+import Taro from '@tarojs/taro'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './situationDetail.scss'
 import PetInoculationList from '../../components/petInoculationList/petInoculationList'
@@ -15,6 +15,7 @@ export default class SituationDetail extends Component {
     super(props)
     this.state = {
       current: 0,
+      centerHeight: 0,
       petInoculationList: [],
       petDewormingList: [],
       petCaseList: []
@@ -117,20 +118,43 @@ export default class SituationDetail extends Component {
     }
   } 
 
+  // 获取可视区高度
+  componentDidMount () {
+    const info = Taro.getSystemInfoSync()
+    const { windowHeight, statusBarHeight, titleBarHeight } = info
+    const tempHeight = (windowHeight - 50) + 'px'
+    this.setState({
+      centerHeight: tempHeight
+    })
+  }
+
   render () {
     const tabList = [{ title: '疫苗' }, { title: '驱虫' }, { title: '疾病' }]
+    const { centerHeight } = this.state
+    const scrollStyle = {
+      height: centerHeight,
+      overflow: 'scroll'
+    }
+    // const scrollTop = 0
+    // const Threshold = 20
     return (
       <View>
-        <View>
+        <View className='tab_view'>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >
-              <PetInoculationList list={this.state.petInoculationList}/>
+              <View style={scrollStyle}>
+                <PetInoculationList list={this.state.petInoculationList}/>
+              </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-              <PetDewormingList list={this.state.petDewormingList}/>
+              <View style={scrollStyle}>
+                <PetDewormingList list={this.state.petDewormingList}/>
+              </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={2}>
-              <View>疾病</View>
+              <View style={scrollStyle}>
+                疾病
+              </View>
             </AtTabsPane>
           </AtTabs>
         </View>
