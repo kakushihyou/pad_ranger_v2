@@ -17,6 +17,7 @@ export default class PetDetail extends Component {
     }
     this.modifyPet = this.modifyPet.bind(this)
     this.deletePet = this.deletePet.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
 
@@ -43,9 +44,10 @@ export default class PetDetail extends Component {
   }
 
   handleClick() {
-    // TODO 跳转到病例页面
-    Taro.switchTab({
-      url: '/pages/case/case?tab=inoculation'
+    // 跳转到病例页面
+    console.log(this.state)
+    Taro.navigateTo({
+      url: '/pages/situationDetail/situationDetail?petID=' + this.state.petDetail.id
     })
   }
 
