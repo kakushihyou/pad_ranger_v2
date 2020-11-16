@@ -7,6 +7,9 @@ export default {
     'pages/medicalTreatment/medicalTreatment',
     'pages/situationDetail/situationDetail',
     'pages/dewormingUpdate/dewormingUpdate',
+    'pages/dewormingAdd/dewormingAdd',
+    'pages/inoculationAdd/inoculationAdd',
+    'pages/inoculationUpdate/inoculationUpdate',
     'pages/diary/diary',
     'pages/mine/mine'
   ],

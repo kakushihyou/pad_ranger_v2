@@ -101,9 +101,15 @@ export default class SituationDetail extends Component {
     switch(this.state.current) {
       case 0:
         console.log('跳转到新增疫苗记录页面')
+        Taro.navigateTo({
+          url: '/pages/inoculationAdd/inoculationAdd?petID=' + getCurrentInstance().router.params.petID
+        })
         break
       case 1:
         console.log('跳转到新增驱虫记录页面')
+        Taro.navigateTo({
+          url: '/pages/dewormingAdd/dewormingAdd?petID=' + getCurrentInstance().router.params.petID
+        })
         break
       case 2:
         console.log('跳转到新增病例记录页面')
@@ -138,7 +144,7 @@ export default class SituationDetail extends Component {
     // const scrollTop = 0
     // const Threshold = 20
     return (
-      <View>
+      <View className='page'>
         <View className='tab_view'>
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >

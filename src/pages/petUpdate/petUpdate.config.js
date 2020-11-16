@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '修改主子信息'
+  navigationBarTitleText: '修改驱虫信息'
 }

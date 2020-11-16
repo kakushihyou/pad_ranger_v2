@@ -174,4 +174,19 @@ const getDewormingTypeMemo = (dewormingType) => {
   return getDewormingTypeMemo
 }
 
-export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate, getDewormingTypeMemo}
+const getVaccineTypeMemo = (vaccineType) => {
+  let vaccineTypeMemo
+  switch (vaccineType) {
+    case 1:
+      vaccineTypeMemo = '核心疫苗'
+      break;
+  
+    default:
+      vaccineTypeMemo = '非核心疫苗'
+      break;
+  }
+
+  return vaccineTypeMemo
+}
+
+export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo}

@@ -34,7 +34,15 @@ export default class PetDewormingItem extends Component {
               Taro.showToast({
                 title: '朕是不会生病的～',
                 duration: 3200,
-                icon: "none"
+                icon: "none",
+                complete: function() {
+                  var page = getCurrentPages().pop()
+                    console.log(page)
+                    if (page == undefined || page == null) {
+                      return
+                    }
+                    page.onShow()
+                }
               })
             })
             .catch(err => {

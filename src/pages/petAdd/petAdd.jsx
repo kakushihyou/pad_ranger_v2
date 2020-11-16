@@ -263,34 +263,28 @@ export default class PetUpdate extends Component {
   }
 
   goback = () => {
-    if (this.state.changed && !this.state.saved) {
-      Taro.showModal({
-        cancelText:'稍后再改',
-        cancelColor:'#FFC1C1',
-        confirmText:'确实忘了',
-        confirmColor:'#9BCEFA',
-        content:'朕的信息是不是忘了保存？',
-        showCancel: true,  //是否显示取消按钮
-        success(res)
-        {
-            if(res.confirm)
-            {
-              console.log('留在页面')
-              return
-            }else if(res.cancel)
-            {
-              console.log('返回')
-              Taro.navigateBack({
-                delta: 1
-              })
-            }
-        }
-      })
-    } else {
-      Taro.navigateBack({
-        delta: 1
-      })
-    }
+    Taro.showModal({
+      cancelText:'稍后再来',
+      cancelColor:'#FFC1C1',
+      confirmText:'确实忘了',
+      confirmColor:'#9BCEFA',
+      content:'朕的信息是不是忘了保存？',
+      showCancel: true,  //是否显示取消按钮
+      success(res)
+      {
+          if(res.confirm)
+          {
+            console.log('留在页面')
+            return
+          }else if(res.cancel)
+          {
+            console.log('返回')
+            Taro.navigateBack({
+              delta: 1
+            })
+          }
+      }
+    })
   }
 
   imageSelect = () => {
