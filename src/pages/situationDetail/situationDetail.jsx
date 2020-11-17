@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import { AtButton , AtTabs, AtTabsPane, AtFab} from 'taro-ui'
+import { AtButton , AtTabs, AtTabsPane, AtFab, AtFloatLayout} from 'taro-ui'
 import Taro from '@tarojs/taro'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './situationDetail.scss'
@@ -8,6 +8,8 @@ import PetInoculationList from '../../components/petInoculationList/petInoculati
 import PetDewormingList from '../../components/petDewormingList/petDewormingList'
 import { getCurrentInstance } from '@tarojs/taro'
 import Httpclient from '../../../httpclient/http'
+import PetCaseList from '../../components/petCaseList/petCaseList'
+import PetCaseDetail from '../../components/petCaseDetail/petCaseDetail'
 
 export default class SituationDetail extends Component {
 
@@ -18,10 +20,16 @@ export default class SituationDetail extends Component {
       centerHeight: 0,
       petInoculationList: [],
       petDewormingList: [],
-      petCaseList: []
+      petCaseList: [],
+      floatLayoutShow: false,
+      caseID: '',
+      petCaseDetail: {}
     }
     this.getInoculationList = this.getInoculationList.bind(this)
     this.getDewormingList = this.getDewormingList.bind(this)
+    this.getCaseList = this.getCaseList.bind(this)
+    this.handleFloatLayoutCLose = this.handleFloatLayoutCLose.bind(this)
+    this.handleFloatLayoutShow = this.handleFloatLayoutShow.bind(this)
   }
 
   componentDidShow = () => {
@@ -39,6 +47,7 @@ export default class SituationDetail extends Component {
       this.getDewormingList()
     } else if (this.state.current === 2) {
       console.log('疾病')
+      this.getCaseList()
     } else {
       Taro.showToast({
         title: '别闹，朕困～',
@@ -89,6 +98,27 @@ export default class SituationDetail extends Component {
     })
   }
 
+  getCaseList = () => {
+    // TODO 获取病历记录
+    Httpclient.get('http://localhost:9669/pet/case/list?petID=' + getCurrentInstance().router.params.petID)
+    .then(res => {
+      console.log(res.Data)
+      if (res.Data.count > 0) {
+        this.setState({
+          petCaseList: res.Data.petCaseList
+        })
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.showToast({
+        title: '出错了？朕很生气！',
+        icon: "none"
+      })
+      return
+    })
+  }
+
   handleClick (value) {
     this.setState({
       current: value
@@ -113,6 +143,9 @@ export default class SituationDetail extends Component {
         break
       case 2:
         console.log('跳转到新增病例记录页面')
+        Taro.navigateTo({
+          url: '/pages/caseAdd/caseAdd?petID=' + getCurrentInstance().router.params.petID
+        })
         break
       default:
         Taro.showToast({
@@ -131,6 +164,36 @@ export default class SituationDetail extends Component {
     const tempHeight = (windowHeight - 50) + 'px'
     this.setState({
       centerHeight: tempHeight
+    })
+  }
+
+  handleFloatLayoutCLose = () => {
+    this.setState({
+      floatLayoutShow: false
+    })
+  }
+
+  handleFloatLayoutShow = (caseID) => {
+    this.setState({
+      floatLayoutShow: true,
+      caseID: caseID
+    })
+
+    console.log('前次诊疗ID' + caseID)
+    Httpclient.get('http://localhost:9669/pet/case?ID=' + caseID)
+    .then(res => {
+      console.log(res.Data)
+      this.setState({
+        petCaseDetail: res.Data
+      })
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.showToast({
+        title: '出错了？朕很生气！',
+        icon: "none"
+      })
+      return
     })
   }
 
@@ -157,9 +220,9 @@ export default class SituationDetail extends Component {
                 <PetDewormingList list={this.state.petDewormingList}/>
               </View>
             </AtTabsPane>
-            <AtTabsPane current={this.state.current} index={2}>
+            <AtTabsPane class='case' current={this.state.current} index={2}>
               <View style={scrollStyle}>
-                疾病
+                <PetCaseList list={this.state.petCaseList} handleFloatLayoutShow={this.handleFloatLayoutShow}/>
               </View>
             </AtTabsPane>
           </AtTabs>
@@ -169,6 +232,9 @@ export default class SituationDetail extends Component {
             <Text className="at-fab__icon at-icon at-icon-add"></Text>
           </AtFab>
         </View>
+        <AtFloatLayout isOpened={this.state.floatLayoutShow} title="上次诊疗" onClose={this.handleFloatLayoutCLose}>
+          <PetCaseDetail info={this.state.petCaseDetail} />
+        </AtFloatLayout>
       </View>
       
     )

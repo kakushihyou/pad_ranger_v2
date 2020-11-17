@@ -5,7 +5,7 @@ import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
 import { getDewormingTypeMemo } from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './DewormingUpdate.scss'
+import './dewormingUpdate.scss'
 import Httpclient from '../../../httpclient/http'
 
 export default class DewormingUpdate extends Component {

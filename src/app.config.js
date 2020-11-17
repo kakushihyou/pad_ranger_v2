@@ -31,7 +31,7 @@ export default {
         pagePath: 'pages/medicalTreatment/medicalTreatment',
         iconPath: 'assets/icon/pet_case.png',
         selectedIconPath: 'assets/icon/pet_case.png',
-        text: '病例'
+        text: '病历'
       },
       {
         pagePath: 'pages/diary/diary',

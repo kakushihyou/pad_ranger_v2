@@ -2,83 +2,84 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getDewormingTypeMemo, getCurrentDate} from '../../util/tool'
+import { getVaccineTypeMemo, getCurrentDate} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './dewormingAdd.scss'
+import './caseAdd.scss'
 import Httpclient from '../../../httpclient/http'
 
-export default class DewormingAdd extends Component {
+export default class CaseAdd extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      dewormingType: 1,
-      dewormingTypeSelector: ['体内', '体外'],
-      dewormingTypeSelectorChecked: '体内',
+      vaccineType: 1,
+      vaccineTypeSelector: ['核心疫苗', '非核心疫苗'],
+      vaccineTypeSelectorChecked: '核心疫苗',
       dosage: '',
       weight: '',
-      medication: '',
+      vaccineName: '',
       manufacturer: '',
-      dewormingAddress: '',
+      inoculationAddress: '',
       doctor: '',
-      dewormingDate: getCurrentDate(),
-      dewormingDateSel: getCurrentDate(),
-      nextDewormingDate: getCurrentDate(),
-      nextDewormingDateSel: getCurrentDate(),
+      inoculationDate: getCurrentDate(),
+      inoculationDateSel: getCurrentDate(),
+      nextInoculationDate: getCurrentDate(),
+      nextInoculationDateSel: getCurrentDate(),
       errMsgMap: new Map()
     }
     
     this.commit = this.commit.bind(this)
     this.goback = this.goback.bind(this)
-    this.onDewormingTypeChange = this.onDewormingTypeChange.bind(this)
-    this.onMedicationChange = this.onMedicationChange.bind(this)
+    this.onVaccineTypeChange = this.onVaccineTypeChange.bind(this)
+    this.onVaccineNameChange = this.onVaccineNameChange.bind(this)
     this.onDosageChange = this.onDosageChange.bind(this)
     this.onManufacturerChange =  this.onManufacturerChange.bind(this)
-    this.onDewormingAddressChange = this.onDewormingAddressChange.bind(this)
+    this.onInoculationAddressChange = this.onInoculationAddressChange.bind(this)
     this.onDoctorChange = this.onDoctorChange.bind(this)
     this.onWeightChange = this.onWeightChange.bind(this)
-    this.onDewormingDateChange = this.onDewormingDateChange.bind(this)
-    this.onNextDewormingDateChange = this.onNextDewormingDateChange.bind(this)
+    this.onInoculationDateChange = this.onInoculationDateChange.bind(this)
+    this.onNextInoculationDateChange = this.onNextInoculationDateChange.bind(this)
   }
 
-  onDewormingTypeChange = (e) => {
+  onVaccineTypeChange = (e) => {
     console.log(e.detail.value)
-    let dewormingType = Number(e.detail.value) + 1
+    let vaccineType = Number(e.detail.value) + 1
     
     this.setState({
-      dewormingType: dewormingType,
-      dewormingTypeSelectorChecked: getDewormingTypeMemo(dewormingType)
+      vaccineType: vaccineType,
+      vaccineTypeSelectorChecked: getVaccineTypeMemo(vaccineType)
     })
   }
 
-  onMedicationChange = (value) => {
+  onVaccineNameChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
-    let errMsg = '你给朕吃的什么药？'
+    let errMsg = '你给朕注射的什么药？'
     if (value == null || value == '') {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('medication', errMsg)
+      errMsgMap.set('vaccineName', errMsg)
       this.setState({
-        medication: '',
+        vaccineName: '',
         errMsgMap: errMsgMap
       })
     } else {
       
       this.setState({
-        medication: value
+        vaccineName: value
       })
-      errMsgMap.delete('medication')
+      errMsgMap.delete('vaccineName')
     }
 
     return value
   }
 
   onWeightChange = (value) => {
+    console.log('体重')
     console.log(value)
     let errMsgMap = this.state.errMsgMap
     let errMsg = '难道朕在你心里没有重量吗？'
@@ -156,7 +157,7 @@ export default class DewormingAdd extends Component {
     return value
   }
 
-  onDewormingAddressChange = (value) => {
+  onInoculationAddressChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
     let errMsg = '你要带朕去哪儿？'
@@ -166,17 +167,17 @@ export default class DewormingAdd extends Component {
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('dewormingAddress', errMsg)
+      errMsgMap.set('inoculationAddress', errMsg)
       this.setState({
-        dewormingAddress: '',
+        inoculationAddress: '',
         errMsgMap: errMsgMap
       })
     } else {
       
       this.setState({
-        dewormingAddress: value
+        inoculationAddress: value
       })
-      errMsgMap.delete('dewormingAddress')
+      errMsgMap.delete('inoculationAddress')
     }
 
     return value
@@ -208,23 +209,23 @@ export default class DewormingAdd extends Component {
     return value
   }
 
-  onDewormingDateChange = (e) => {
+  onInoculationDateChange = (e) => {
     console.log(e.detail.value)
-    let dewormingDate = e.detail.value
+    let inoculationDate = e.detail.value
     
     this.setState({
-      dewormingDate: dewormingDate,
-      dewormingDateSel: dewormingDate
+      inoculationDate: inoculationDate,
+      inoculationDateSel: inoculationDate
     })
   }
 
-  onNextDewormingDateChange = (e) => {
+  onNextInoculationDateChange = (e) => {
     console.log(e.detail.value)
-    let nextDewormingDate = e.detail.value
+    let nextInoculationDate = e.detail.value
     
     this.setState({
-      nextDewormingDate: nextDewormingDate,
-      nextDewormingDateSel: nextDewormingDate
+      nextInoculationDate: nextInoculationDate,
+      nextInoculationDateSel: nextInoculationDate
     })
   }
 
@@ -251,14 +252,14 @@ export default class DewormingAdd extends Component {
       let petID = getCurrentInstance().router.params.petID
       var requestBody = {
         PetID: Number(petID),
-        Medication: this.state.medication,
-        DewormingType: this.state.dewormingType,
+        VaccineName: this.state.vaccineName,
+        VaccineType: this.state.vaccineType, // 0:母，1:公，2:未知
         Manufacturer: this.state.manufacturer,
         Dosage: this.state.dosage, 
-        DewormingDate: this.state.dewormingDate,
+        InoculationDate: this.state.inoculationDate,
         Weight: Number(this.state.weight),
-        NextDewormingDate: this.state.nextDewormingDate,
-        DewormingAddress: this.state.dewormingAddress,
+        NextInoculationDate: this.state.nextInoculationDate,
+        InoculationAddress: this.state.inoculationAddress, // 绝育标识 1:已绝育，0:未绝育
         Remind: this.state.remind,
         RemindTime: this.state.remindTime,
         Doctor: this.state.doctor
@@ -266,7 +267,7 @@ export default class DewormingAdd extends Component {
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/pet/deworming', requestBody, 'application/json')
+        'http://localhost:9669/pet/inoculation', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {
@@ -327,39 +328,49 @@ export default class DewormingAdd extends Component {
   render () {
     let petDetail = this.state.petDetail
     return (
+      // PetID               int64  `json:"petID"`
+      // VaccineName         string `json:"vaccineName"`
+      // VaccineType         int    `json:"vaccineType"`
+      // Manufacturer        string `json:"manufacturer"`
+      // Dosage              int    `json:"dosage"`
+      // InoculationDate     string `json:"inoculationDate"`
+      // NextInoculationDate string `json:"nextInoculationDate"`
+      // Remind              int    `json:"remind"`
+      // RemindTime          string `json:"remindTime"`
+      // InoculationAddress  string `json:"inoculationAddress"`
+      // Doctor              string `json:"doctor"`
       <View className='modify'>
-          <AtMessage /> 
-          <View className='center'>
-          <Picker class='picker' mode='selector' range={this.state.dewormingTypeSelector} onChange={this.onDewormingTypeChange.bind(this)}>
+        <AtMessage /> 
+        <View className='center'>
+          <AtInput class='rightInput' name='vaccineName' type='text' title='疫苗名称' border={true} adjustPosition={true} placeholder='请输入疫苗名称' value={this.state.vaccineName} onChange={this.onVaccineNameChange} />
+          
+          <Picker class='picker' mode='selector' range={this.state.vaccineTypeSelector} onChange={this.onVaccineTypeChange.bind(this)}>
             <AtList hasBorder={false}>
-              <AtListItem title='驱虫类型' hasBorder={true} extraText={this.state.dewormingTypeSelectorChecked} />
+              <AtListItem title='疫苗类型' hasBorder={true} extraText={this.state.vaccineTypeSelectorChecked} />
+            </AtList>
+          </Picker>
+
+          <Picker class='picker' mode='date' value={this.state.inoculationDate} onChange={this.onInoculationDateChange}>
+            <AtList hasBorder={false}>
+              <AtListItem title='接种日期' hasBorder={true} extraText={this.state.inoculationDateSel} />
             </AtList>
           </Picker>
           
-          <AtInput class='rightInput' name='medication' type='text' title='药物名称' border={true} adjustPosition={true} placeholder='请输入药物名称' value={this.state.medication} onChange={this.onMedicationChange} />
-          
-          <Picker class='picker' mode='date' value={this.state.dewormingDate} onChange={this.onDewormingDateChange}>
-            <AtList hasBorder={false}>
-              <AtListItem title='驱虫日期' hasBorder={true} extraText={this.state.dewormingDateSel} />
-            </AtList>
-          </Picker>
-          
-          <AtInput class='rightInput' name='manufacturer' type='text' title='生产厂商' border={true} adjustPosition={true} placeholder='请输入药物厂商' value={this.state.manufacturer} onChange={this.onManufacturerChange} />
+          <AtInput class='rightInput' name='manufacturer' type='text' title='生产厂商' border={true} adjustPosition={true} placeholder='请输入疫苗厂商' value={this.state.manufacturer} onChange={this.onManufacturerChange} />
 
           <AtInput class='rightInput' name='weight' type='number' title='当前体重' border={true} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange}/>
 
           <AtInput class='rightInput' name='dosage' type='text' title='用药剂量' border={true} adjustPosition={true} placeholder='请输入用药剂量' value={this.state.dosage} onChange={this.onDosageChange}/>
           
-          <AtInput class='rightInput' name='dewormingAddress' type='text' title='驱虫地点' border={true} adjustPosition={true} placeholder='请输入驱虫地点' value={this.state.dewormingAddress} onChange={this.onDewormingAddressChange}/>
+          <AtInput class='rightInput' name='inoculationAddress' type='text' title='接种地点' border={true} adjustPosition={true} placeholder='请输入驱虫地点' value={this.state.inoculationAddress} onChange={this.onInoculationAddressChange}/>
 
           <AtInput class='rightInput' name='doctor' type='text' title='宠物医师' border={true} adjustPosition={true} placeholder='请输入宠物医师' value={this.state.doctor} onChange={this.onDoctorChange}/>
           
-          <Picker class='picker' mode='date' value={this.state.nextDewormingDate} onChange={this.onNextDewormingDateChange}>
+          <Picker class='picker' mode='date' value={this.state.nextInoculationDate} onChange={this.onNextInoculationDateChange}>
             <AtList hasBorder={false}>
-              <AtListItem title='下次驱虫' hasBorder={false} extraText={this.state.nextDewormingDateSel} />
+              <AtListItem title='下次接种' hasBorder={false} extraText={this.state.nextInoculationDateSel} />
             </AtList>
           </Picker>
-
         </View>
         <AtButton className='confirm' type='primary' size='small' circle onClick={this.commit}>确认</AtButton>
         <AtButton className='cancel' type='primary' size='small' circle onClick={this.goback}>取消</AtButton>

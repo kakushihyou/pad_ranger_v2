@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '病例'
+  navigationBarTitleText: '病历'
 }

@@ -1,0 +1,57 @@
+@import "~taro-ui/dist/style/components/list.scss";
+@import "~taro-ui/dist/style/components/input.scss";
+@import "~taro-ui/dist/style/components/message.scss";
+
+.modify {
+  padding: 15px 40px 40px 40px;
+
+  .photo {
+    flex: 1;
+    margin: 0 auto;
+    padding-left: 38%;
+
+    .at-avatar {
+      width: 170px;
+      height: 166px;
+    }
+  }
+
+  .center {
+    margin-top: 3%;
+    // padding-left: 3%;
+    font-size: 30px;
+  }
+
+  .at-input input {
+    text-align: right;
+    margin-right: 5%;
+  }
+
+  .picker {
+    margin-left: 1%;
+    outline: none;
+    border: none;
+  }
+  
+
+  .confirm {
+    display: flex;
+    border: none;
+    margin-top: 25%;
+    background-color: #9BCEFA;
+  }
+
+  .cancel {
+    display: flex;
+    background-color: #FFC1C1;
+    border: none;
+    margin-top: 25px;
+  }
+
+}
+
+// .picker {
+//   bottom: 0px;
+// }
+
+

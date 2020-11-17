@@ -20,8 +20,6 @@ export default class PetDetail extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-
-
   componentDidShow () { 
     console.log(getCurrentInstance().router.params)
     // TODO 获取宠物详情

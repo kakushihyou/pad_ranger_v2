@@ -5,10 +5,10 @@ import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
 import { getVaccineTypeMemo, getCurrentDate} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './inoculationUpdate.scss'
+import './caseUpdate.scss'
 import Httpclient from '../../../httpclient/http'
 
-export default class InoculationUpdate extends Component {
+export default class CaseUpdate extends Component {
 
   constructor(props) {
     super(props)

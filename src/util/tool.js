@@ -96,6 +96,68 @@ const jsGetAge = (strBirthday) =>{
     
 }
 
+const getAgeSD = (strBirthday, strDate) =>{       
+  var returnAge;
+  var strBirthdayArr=strBirthday.split(" ")[0].split("-");
+  var birthYear = strBirthdayArr[0];
+  // console.log("year: " + birthYear)
+  var birthMonth = strBirthdayArr[1];
+  // console.log("month: " + birthMonth)
+  var birthDay = strBirthdayArr[2];
+  // console.log("day: " + birthDay)
+  
+  var strDateArr = strDate.split(" ")[0].split("-");
+  var nowYear = strDateArr[0];
+  // console.log("当前年：" + nowYear)
+  var nowMonth = strDateArr[1];
+  // console.log("当前月：" + nowMonth)
+  var nowDay = strDateArr[2];
+  // console.log("当前日：" + nowDay) 
+  
+  if(nowYear == birthYear)
+  {
+      returnAge = 0;//同年 则为0岁
+  }
+  else
+  {
+      var ageDiff = nowYear - birthYear ; //年之差
+      if(ageDiff > 0)
+      {
+          if(nowMonth == birthMonth)
+          {
+              var dayDiff = nowDay - birthDay;//日之差
+              if(dayDiff < 0)
+              {
+                  returnAge = ageDiff - 1;
+              }
+              else
+              {
+                  returnAge = ageDiff ;
+              }
+          }
+          else
+          {
+              var monthDiff = nowMonth - birthMonth;//月之差
+              if(monthDiff < 0)
+              {
+                  returnAge = ageDiff - 1;
+              }
+              else
+              {
+                  returnAge = ageDiff ;
+              }
+          }
+      }
+      else
+      {
+          returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+      }
+  }
+  
+  return returnAge;//返回周岁年龄
+  
+}
+
 // 获取性别
 const getGenderStr = (gender) => {
   let genderStr
@@ -189,4 +251,36 @@ const getVaccineTypeMemo = (vaccineType) => {
   return vaccineTypeMemo
 }
 
-export {getDefaultHeadImg, jsGetAge, getGenderStr, getSpeciesMemo, getSterilizationMemo, getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo}
+const getInitialDiagnosisMemo = (initial) => {
+  let initialMemo
+  switch (initial) {
+    case 1:
+      initialMemo = '初诊'
+      break;
+  
+    default:
+      initialMemo = '复诊'
+      break;
+  }
+
+  return initialMemo
+}
+
+const getDiagnosisTypeMemo = (diagnosisType) => {
+  let diagnosisTypeMemo
+  switch (diagnosisType) {
+    case 1:
+      diagnosisTypeMemo = '疾病'
+      break;
+  
+    default:
+      diagnosisTypeMemo = '体检'
+      break;
+  }
+
+  return diagnosisTypeMemo
+}
+
+export {getDefaultHeadImg, jsGetAge, getAgeSD, getGenderStr, getSpeciesMemo, getSterilizationMemo, 
+  getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo, getInitialDiagnosisMemo,
+  getDiagnosisTypeMemo}
