@@ -46,6 +46,9 @@ export default class InoculationUpdate extends Component {
 
   componentWillMount () { 
     console.log(getCurrentInstance().router.params)
+    this.setState({
+      changed: false
+    })
     // TODO 获取宠物详情
     Httpclient.get(
       'http://localhost:9669/pet/inoculation?ID=' + getCurrentInstance().router.params.inoculationID)

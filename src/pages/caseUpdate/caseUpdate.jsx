@@ -45,6 +45,9 @@ export default class CaseUpdate extends Component {
 
   componentWillMount () { 
     console.log(getCurrentInstance().router.params)
+    this.setState({
+      changed: false
+    })
     // TODO 获取宠物详情
     Httpclient.get(
       'http://localhost:9669/pet/case?ID=' + getCurrentInstance().router.params.caseID)
@@ -159,7 +162,7 @@ export default class CaseUpdate extends Component {
     caseDetail.preID = currentPreID
     this.setState({
       caseDetail: caseDetail,
-      isInitialSelectorChecked: content,
+      preDiagnosisSelectorChecked: content,
       changed: true
     })
   }
@@ -384,11 +387,11 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let inoculationDetail = this.state.inoculationDetail
-      inoculationDetail.doctor = value
+      let caseDetail = this.state.caseDetail
+      caseDetail.doctor = value
       this.setState({
         doctor: value,
-        inoculationDetail: inoculationDetail,
+        caseDetail: caseDetail,
         changed: true
       })
       errMsgMap.delete('doctor')
@@ -512,6 +515,9 @@ export default class CaseUpdate extends Component {
   }
 
   goback = () => {
+    if (!this.state.changed) {
+      return
+    }
     Taro.showModal({
       cancelText:'稍后再来',
       cancelColor:'#FFC1C1',

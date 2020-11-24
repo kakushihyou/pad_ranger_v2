@@ -2,77 +2,137 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getVaccineTypeMemo, getCurrentDate} from '../../util/tool'
+import { getVaccineTypeMemo, getCurrentDate, getDiagnosisTypeMemo, getInitialDiagnosisMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './caseAdd.scss'
 import Httpclient from '../../../httpclient/http'
 
-export default class CaseAdd extends Component {
+export default class CaseUpdate extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      vaccineType: 1,
-      vaccineTypeSelector: ['核心疫苗', '非核心疫苗'],
-      vaccineTypeSelectorChecked: '核心疫苗',
-      dosage: '',
+      caseDetail: {},
+      diagnosisTypeSelector: ['疾病', '体检'],
+      diagnosisTypeSelectorChecked: '疾病',
+      diagnosisAddress: '',
+      diagnosisDate: getCurrentDate(),
+      diagnosisDateSel: getCurrentDate(),
       weight: '',
-      vaccineName: '',
-      manufacturer: '',
-      inoculationAddress: '',
+      age: '',
+      isInitialSelector: ['初诊', '复诊'],
+      isInitialSelectorChecked: '初诊',
+      preDiagnosisSelector: [],
+      preDiagnosisSelectorChecked: '',
+      symptom: '',
+      diagnosisResult: '',
+      therapy: '',
+      medication: '',
       doctor: '',
-      inoculationDate: getCurrentDate(),
-      inoculationDateSel: getCurrentDate(),
-      nextInoculationDate: getCurrentDate(),
-      nextInoculationDateSel: getCurrentDate(),
+      revisit: getCurrentDate(),
+      revisitSel: getCurrentDate(),
+      saved: false,
       errMsgMap: new Map()
     }
     
     this.commit = this.commit.bind(this)
     this.goback = this.goback.bind(this)
-    this.onVaccineTypeChange = this.onVaccineTypeChange.bind(this)
-    this.onVaccineNameChange = this.onVaccineNameChange.bind(this)
-    this.onDosageChange = this.onDosageChange.bind(this)
-    this.onManufacturerChange =  this.onManufacturerChange.bind(this)
-    this.onInoculationAddressChange = this.onInoculationAddressChange.bind(this)
-    this.onDoctorChange = this.onDoctorChange.bind(this)
-    this.onWeightChange = this.onWeightChange.bind(this)
-    this.onInoculationDateChange = this.onInoculationDateChange.bind(this)
-    this.onNextInoculationDateChange = this.onNextInoculationDateChange.bind(this)
+    // this.onDoctorChange = this.onDoctorChange.bind(this)
+    // this.onWeightChange = this.onWeightChange.bind(this)
   }
 
-  onVaccineTypeChange = (e) => {
+  componentWillMount () { 
+    console.log(getCurrentInstance().router.params)
+
+    // TODO 获取之前的病历
+    Httpclient.get(
+      'http://localhost:9669/pet/case/history?petID=' + getCurrentInstance().router.params.petID + '&targetTime=' + getCurrentDate())
+      .then(res => {
+        console.log('历史病历')
+        console.log(res.Data)
+        if (res.Data.count > 0) {
+          let preDiagnosisList = []
+          res.Data.petCaseList.forEach((item) => {
+            preDiagnosisList.push(item.diagnosisDate.replace(/-/g, '') + '_' + item.diagnosisAddress + '_' + item.id)
+          })
+        
+          this.setState({
+            preDiagnosisSelector: preDiagnosisList
+          })
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        Taro.showToast({
+          title: '出错了？朕很生气！',
+          icon: "none"
+        })
+        return
+      })
+  }
+
+  onDiagnosisTypeChange = (e) => {
     console.log(e.detail.value)
-    let vaccineType = Number(e.detail.value) + 1
+    let diagnosisType = Number(e.detail.value) + 1
+    let caseDetail = this.state.caseDetail
     
+    caseDetail.diagnosisType = diagnosisType
     this.setState({
-      vaccineType: vaccineType,
-      vaccineTypeSelectorChecked: getVaccineTypeMemo(vaccineType)
+      caseDetail: caseDetail,
+      diagnosisTypeSelectorChecked: getDiagnosisTypeMemo(diagnosisType)
     })
   }
 
-  onVaccineNameChange = (value) => {
+  onInitialChange = (e) => {
+    console.log(e.detail.value)
+    let initial = Number(e.detail.value) + 1
+    let caseDetail = this.state.caseDetail
+    
+    caseDetail.isInitial = initial
+    this.setState({
+      caseDetail: caseDetail,
+      isInitialSelectorChecked: getInitialDiagnosisMemo(initial)
+    })
+  }
+
+  onPreDiagnosisChange = (e) => {
+    console.log(e.detail.value)
+    let content = this.state.preDiagnosisSelector[e.detail.value]
+    let contentArr = content.split('-')
+    let currentPreID = contentArr[contentArr.length - 1]
+    let caseDetail = this.state.caseDetail
+
+    caseDetail.preID = currentPreID
+    this.setState({
+      caseDetail: caseDetail,
+      preDiagnosisSelectorChecked: content
+    })
+  }
+
+  onDiagnosisAddressChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
-    let errMsg = '你给朕注射的什么药？'
+    let errMsg = '你带朕去哪了？'
     if (value == null || value == '') {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('vaccineName', errMsg)
+      errMsgMap.set('diagnosisAddress', errMsg)
       this.setState({
-        vaccineName: '',
+        diagnosisAddress: '',
         errMsgMap: errMsgMap
       })
     } else {
-      
+      let caseDetail = this.state.caseDetail
+      caseDetail.diagnosisAddress = value
       this.setState({
-        vaccineName: value
+        diagnosisAddress: value,
+        caseDetail: caseDetail
       })
-      errMsgMap.delete('vaccineName')
+      errMsgMap.delete('diagnosisAddress')
     }
 
     return value
@@ -95,9 +155,11 @@ export default class CaseAdd extends Component {
         weight: ''
       })
     } else {
-      
+      let caseDetail = this.state.caseDetail
+      caseDetail.weight = value
       this.setState({
-        weight: value
+        weight: value,
+        caseDetail: caseDetail
       })
       errMsgMap.delete('weight')
     }
@@ -105,79 +167,141 @@ export default class CaseAdd extends Component {
     return value
   }
 
-  onManufacturerChange = (value) => {
+  onAgeChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
-    let errMsg = '朕想知道这药是哪里生产的？'
+    let errMsg = '你忘了朕的年龄了？'
     if (value == null || value == '') {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('manufacturer', errMsg)
+      errMsgMap.set('age', errMsg)
       this.setState({
-        manufacturer: '',
+        age: '',
         errMsgMap: errMsgMap
       })
     } else {
-      
+      let caseDetail = this.state.caseDetail
+      caseDetail.age = value
       this.setState({
-        manufacturer: value
+        age: value,
+        caseDetail: caseDetail
       })
-      errMsgMap.delete('manufacturer')
+      errMsgMap.delete('age')
     }
 
     return value
   }
 
-  onDosageChange = (value) => {
+  onSymptomChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
-    let errMsg = '你给朕吃了多少？'
+    let errMsg = '朕看起来如何？'
     if (value == null || value == '') {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('dosage', errMsg)
+      errMsgMap.set('symptom', errMsg)
       this.setState({
-        dosage: '',
+        symptom: '',
         errMsgMap: errMsgMap
       })
     } else {
-      
+      let caseDetail = this.state.caseDetail
+      caseDetail.symptom = value
       this.setState({
-        dosage: value
+        symptom: value,
+        caseDetail: caseDetail
       })
-      errMsgMap.delete('dosage')
+      errMsgMap.delete('symptom')
     }
 
     return value
   }
 
-  onInoculationAddressChange = (value) => {
+  onDiagnosisResultChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
-    let errMsg = '你要带朕去哪儿？'
+    let errMsg = '御医怎么说？'
     if (value == null || value == '') {
       Taro.atMessage({
         message: errMsg,
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('inoculationAddress', errMsg)
+      errMsgMap.set('diagnosisResult', errMsg)
       this.setState({
-        inoculationAddress: '',
+        diagnosisResult: '',
         errMsgMap: errMsgMap
       })
     } else {
-      
+      let caseDetail = this.state.caseDetail
+      caseDetail.diagnosisResult = value
       this.setState({
-        inoculationAddress: value
+        diagnosisResult: value,
+        caseDetail: caseDetail
       })
-      errMsgMap.delete('inoculationAddress')
+      errMsgMap.delete('diagnosisResult')
+    }
+
+    return value
+  }
+
+  onTherapyChange = (value) => {
+    console.log(value)
+    let errMsgMap = this.state.errMsgMap
+    let errMsg = '朕可还有救？'
+    if (value == null || value == '') {
+      Taro.atMessage({
+        message: errMsg,
+        type: 'error',
+        duration: 2000
+      })
+      errMsgMap.set('therapy', errMsg)
+      this.setState({
+        therapy: '',
+        errMsgMap: errMsgMap
+      })
+    } else {
+      let caseDetail = this.state.caseDetail
+      caseDetail.therapy = value
+      this.setState({
+        therapy: value,
+        caseDetail: caseDetail
+      })
+      errMsgMap.delete('therapy')
+    }
+
+    return value
+  }
+
+  onMedicationChange = (value) => {
+    console.log(value)
+    let errMsgMap = this.state.errMsgMap
+    let errMsg = '御医给朕开了什么方子？'
+    if (value == null || value == '') {
+      Taro.atMessage({
+        message: errMsg,
+        type: 'error',
+        duration: 2000
+      })
+      errMsgMap.set('medication', errMsg)
+      this.setState({
+        medication: '',
+        errMsgMap: errMsgMap
+      })
+    } else {
+      let caseDetail = this.state.caseDetail
+      caseDetail.medication = value
+      this.setState({
+        medication: value,
+        caseDetail: caseDetail
+      })
+      errMsgMap.delete('medication')
     }
 
     return value
@@ -199,9 +323,11 @@ export default class CaseAdd extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      
+      let inoculationDetail = this.state.inoculationDetail
+      inoculationDetail.doctor = value
       this.setState({
-        doctor: value
+        doctor: value,
+        inoculationDetail: inoculationDetail
       })
       errMsgMap.delete('doctor')
     }
@@ -209,30 +335,36 @@ export default class CaseAdd extends Component {
     return value
   }
 
-  onInoculationDateChange = (e) => {
+  onDiagnosisDateChange = (e) => {
     console.log(e.detail.value)
-    let inoculationDate = e.detail.value
+    let diagnosisDate = e.detail.value
+    let caseDetail = this.state.caseDetail
     
+    caseDetail.diagnosisDate = diagnosisDate
     this.setState({
-      inoculationDate: inoculationDate,
-      inoculationDateSel: inoculationDate
+      caseDetail: caseDetail,
+      diagnosisDate: diagnosisDate,
+      diagnosisDateSel: diagnosisDate
     })
   }
 
-  onNextInoculationDateChange = (e) => {
+  onRevisitChange = (e) => {
     console.log(e.detail.value)
-    let nextInoculationDate = e.detail.value
-    
+    let revisitDate = e.detail.value
+    let caseDetail = this.state.caseDetail
+
+    caseDetail.revisit = revisitDate
     this.setState({
-      nextInoculationDate: nextInoculationDate,
-      nextInoculationDateSel: nextInoculationDate
+      caseDetail: caseDetail,
+      revisit: revisitDate,
+      revisitSel: revisitDate
     })
   }
 
   commit = (e) =>{
     console.log('提交')
     console.log(this.state.errMsgMap)
-    console.log(this.state.dewormingDetail)
+    console.log(this.state.caseDetail)
     let errMsgMap = this.state.errMsgMap
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
@@ -249,25 +381,30 @@ export default class CaseAdd extends Component {
         duration: 3000
       })
     } else {
-      let petID = getCurrentInstance().router.params.petID
+      
       var requestBody = {
-        PetID: Number(petID),
-        VaccineName: this.state.vaccineName,
-        VaccineType: this.state.vaccineType, // 0:母，1:公，2:未知
-        Manufacturer: this.state.manufacturer,
-        Dosage: this.state.dosage, 
-        InoculationDate: this.state.inoculationDate,
-        Weight: Number(this.state.weight),
-        NextInoculationDate: this.state.nextInoculationDate,
-        InoculationAddress: this.state.inoculationAddress, // 绝育标识 1:已绝育，0:未绝育
-        Remind: this.state.remind,
-        RemindTime: this.state.remindTime,
-        Doctor: this.state.doctor
+        // ID: this.state.caseDetail.id,
+        PetID: this.state.caseDetail.petID,
+        PreID: this.state.caseDetail.preID,
+        Age: Number(this.state.caseDetail.age), 
+        DiagnosisAddress: this.state.caseDetail.diagnosisAddress,
+        DiagnosisDate: this.state.caseDetail.diagnosisDate,
+        DiagnosisResult: this.state.caseDetail.diagnosisResult,
+        DiagnosisType: this.state.caseDetail.diagnosisType, 
+        IsInitial: this.state.caseDetail.isInitial,
+        Weight: Number(this.state.caseDetail.weight),
+        Medication: this.state.caseDetail.medication,
+        Revisit: this.state.caseDetail.revisit, 
+        Symptom: this.state.caseDetail.symptom, 
+        Revisit: this.state.caseDetail.revisit, 
+        Therapy: this.state.caseDetail.therapy,
+        RemindTime: this.state.caseDetail.remindTime,
+        Doctor: this.state.caseDetail.doctor
       }
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/pet/inoculation', requestBody, 'application/json')
+        'http://localhost:9669/pet/case', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {
@@ -328,47 +465,51 @@ export default class CaseAdd extends Component {
   render () {
     let petDetail = this.state.petDetail
     return (
-      // PetID               int64  `json:"petID"`
-      // VaccineName         string `json:"vaccineName"`
-      // VaccineType         int    `json:"vaccineType"`
-      // Manufacturer        string `json:"manufacturer"`
-      // Dosage              int    `json:"dosage"`
-      // InoculationDate     string `json:"inoculationDate"`
-      // NextInoculationDate string `json:"nextInoculationDate"`
-      // Remind              int    `json:"remind"`
-      // RemindTime          string `json:"remindTime"`
-      // InoculationAddress  string `json:"inoculationAddress"`
-      // Doctor              string `json:"doctor"`
       <View className='modify'>
         <AtMessage /> 
         <View className='center'>
-          <AtInput class='rightInput' name='vaccineName' type='text' title='疫苗名称' border={true} adjustPosition={true} placeholder='请输入疫苗名称' value={this.state.vaccineName} onChange={this.onVaccineNameChange} />
           
-          <Picker class='picker' mode='selector' range={this.state.vaccineTypeSelector} onChange={this.onVaccineTypeChange.bind(this)}>
+          <Picker class='picker' mode='selector' range={this.state.diagnosisTypeSelector} onChange={this.onDiagnosisTypeChange.bind(this)}>
             <AtList hasBorder={false}>
-              <AtListItem title='疫苗类型' hasBorder={true} extraText={this.state.vaccineTypeSelectorChecked} />
+              <AtListItem title='就医类型' hasBorder={true} extraText={this.state.diagnosisTypeSelectorChecked} />
             </AtList>
           </Picker>
 
-          <Picker class='picker' mode='date' value={this.state.inoculationDate} onChange={this.onInoculationDateChange}>
+          <AtInput class='rightInput' name='diagnosisAddress' type='text' title='就诊地点' border={true} adjustPosition={true} placeholder='请输入就诊地点' value={this.state.diagnosisAddress} onChange={this.onDiagnosisAddressChange.bind(this)} />
+
+          <Picker class='picker' mode='date' value={this.state.caseDetail.diagnosisDate} onChange={this.onDiagnosisDateChange.bind(this)}>
             <AtList hasBorder={false}>
-              <AtListItem title='接种日期' hasBorder={true} extraText={this.state.inoculationDateSel} />
+              <AtListItem title='就诊日期' hasBorder={true} extraText={this.state.diagnosisDateSel} />
             </AtList>
           </Picker>
           
-          <AtInput class='rightInput' name='manufacturer' type='text' title='生产厂商' border={true} adjustPosition={true} placeholder='请输入疫苗厂商' value={this.state.manufacturer} onChange={this.onManufacturerChange} />
-
-          <AtInput class='rightInput' name='weight' type='number' title='当前体重' border={true} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange}/>
-
-          <AtInput class='rightInput' name='dosage' type='text' title='用药剂量' border={true} adjustPosition={true} placeholder='请输入用药剂量' value={this.state.dosage} onChange={this.onDosageChange}/>
+          <AtInput class='rightInput' name='weight' type='number' title='当前体重' border={true} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange.bind(this)}/>
           
-          <AtInput class='rightInput' name='inoculationAddress' type='text' title='接种地点' border={true} adjustPosition={true} placeholder='请输入驱虫地点' value={this.state.inoculationAddress} onChange={this.onInoculationAddressChange}/>
+          <AtInput class='rightInput' name='age' type='text' title='就诊年龄' border={true} adjustPosition={true} placeholder='请输入就诊年龄' value={this.state.age} onChange={this.onAgeChange.bind(this)} />
 
-          <AtInput class='rightInput' name='doctor' type='text' title='宠物医师' border={true} adjustPosition={true} placeholder='请输入宠物医师' value={this.state.doctor} onChange={this.onDoctorChange}/>
-          
-          <Picker class='picker' mode='date' value={this.state.nextInoculationDate} onChange={this.onNextInoculationDateChange}>
+          <Picker class='picker' mode='selector' range={this.state.isInitialSelector} onChange={this.onInitialChange.bind(this)}>
             <AtList hasBorder={false}>
-              <AtListItem title='下次接种' hasBorder={false} extraText={this.state.nextInoculationDateSel} />
+              <AtListItem title='是否初诊' hasBorder={true} extraText={this.state.isInitialSelectorChecked} />
+            </AtList>
+          </Picker>
+
+          <Picker class='picker' mode='selector' range={this.state.preDiagnosisSelector} onChange={this.onPreDiagnosisChange.bind(this)}>
+            <AtList hasBorder={false}>
+              <AtListItem title='上次诊疗' hasBorder={true} extraText={this.state.preDiagnosisSelectorChecked} />
+            </AtList>
+          </Picker>
+
+          <AtInput class='rightInput' name='symptom' type='text' title='症状概述' border={true} adjustPosition={true} placeholder='请输入症状' value={this.state.symptom} onChange={this.onSymptomChange.bind(this)}/>
+          
+          <AtInput class='rightInput' name='diagnosisResult' type='text' title='诊断结果' border={true} adjustPosition={true} placeholder='请输入诊断结果' value={this.state.diagnosisResult} onChange={this.onDiagnosisResultChange.bind(this)}/>
+          <AtInput class='rightInput' name='therapy' type='text' title='治疗方法' border={true} adjustPosition={true} placeholder='请输入治疗方法' value={this.state.therapy} onChange={this.onTherapyChange.bind(this)}/>
+          <AtInput class='rightInput' name='medication' type='text' title='治疗用药' border={true} adjustPosition={true} placeholder='请输入治疗用药' value={this.state.medication} onChange={this.onMedicationChange.bind(this)}/>
+
+          <AtInput class='rightInput' name='doctor' type='text' title='宠物医师' border={true} adjustPosition={true} placeholder='请输入宠物医师' value={this.state.doctor} onChange={this.onDoctorChange.bind(this)}/>
+          
+          <Picker class='picker' mode='date' value={this.state.caseDetail.revisit} onChange={this.onRevisitChange.bind(this)}>
+            <AtList hasBorder={false}>
+              <AtListItem title='复诊日期' hasBorder={false} extraText={this.state.revisit} />
             </AtList>
           </Picker>
         </View>
