@@ -20,7 +20,7 @@ export default class PetCaseItem extends Component {
 
   trash = () => {
     console.log('开始删除')
-    let petDewormingItem = this.props.info
+    let petCaseItem = this.props.info
     Taro.showModal({
       cancelText:'点错了',
       cancelColor:'#FFC1C1',
@@ -33,7 +33,7 @@ export default class PetCaseItem extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/pet/deworming?ID=' + petDewormingItem.id)
+            Httpclient.delete('http://localhost:9669/pet/case?ID=' + petCaseItem.id)
             .then(res => {
               Taro.showToast({
                 title: '朕是不会生病的～',
@@ -68,9 +68,10 @@ export default class PetCaseItem extends Component {
 
   edit = () => {
     console.log('跳转到修改页面')
-    let dewormingID = this.props.info.id
+    let caseID = this.props.info.id
+    let petID = this.props.info.petID
     Taro.navigateTo({
-      url: '/pages/dewormingUpdate/dewormingUpdate?dewormingID=' + dewormingID
+      url: '/pages/caseUpdate/caseUpdate?caseID=' + caseID + '&petID=' + petID
     })
   }
 

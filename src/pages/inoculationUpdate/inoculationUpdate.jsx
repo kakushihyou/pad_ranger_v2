@@ -297,6 +297,7 @@ export default class InoculationUpdate extends Component {
       return
     }
 
+    inoculationDetail.nextInoculationDate = nextInoculationDate
     this.setState({
       inoculationDetail: inoculationDetail,
       nextInoculationDate: nextInoculationDate,

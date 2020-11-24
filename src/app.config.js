@@ -10,6 +10,8 @@ export default {
     'pages/dewormingAdd/dewormingAdd',
     'pages/inoculationAdd/inoculationAdd',
     'pages/inoculationUpdate/inoculationUpdate',
+    'pages/caseUpdate/caseUpdate',
+    'pages/caseAdd/caseAdd',
     'pages/diary/diary',
     'pages/mine/mine'
   ],
