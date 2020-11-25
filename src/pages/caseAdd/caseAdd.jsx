@@ -13,7 +13,7 @@ export default class CaseUpdate extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      caseDetail: {},
+      diagnosisType: '',
       diagnosisTypeSelector: ['疾病', '体检'],
       diagnosisTypeSelectorChecked: '疾病',
       diagnosisAddress: '',
@@ -21,8 +21,10 @@ export default class CaseUpdate extends Component {
       diagnosisDateSel: getCurrentDate(),
       weight: '',
       age: '',
+      isInitial: '',
       isInitialSelector: ['初诊', '复诊'],
       isInitialSelectorChecked: '初诊',
+      preDiagnosis: '',
       preDiagnosisSelector: [],
       preDiagnosisSelectorChecked: '',
       symptom: '',
@@ -33,6 +35,7 @@ export default class CaseUpdate extends Component {
       revisit: getCurrentDate(),
       revisitSel: getCurrentDate(),
       saved: false,
+      hasPreDiagnosis: false,
       errMsgMap: new Map()
     }
     
@@ -75,11 +78,9 @@ export default class CaseUpdate extends Component {
   onDiagnosisTypeChange = (e) => {
     console.log(e.detail.value)
     let diagnosisType = Number(e.detail.value) + 1
-    let caseDetail = this.state.caseDetail
     
-    caseDetail.diagnosisType = diagnosisType
     this.setState({
-      caseDetail: caseDetail,
+      diagnosisType: diagnosisType,
       diagnosisTypeSelectorChecked: getDiagnosisTypeMemo(diagnosisType)
     })
   }
@@ -87,13 +88,23 @@ export default class CaseUpdate extends Component {
   onInitialChange = (e) => {
     console.log(e.detail.value)
     let initial = Number(e.detail.value) + 1
-    let caseDetail = this.state.caseDetail
     
-    caseDetail.isInitial = initial
     this.setState({
-      caseDetail: caseDetail,
+      isInitial: initial,
       isInitialSelectorChecked: getInitialDiagnosisMemo(initial)
     })
+
+    console.log('是否是初诊' + initial)
+    if (initial === 1) {
+      this.setState({
+        preDiagnosisSelectorChecked: '',
+        hasPreDiagnosis: false
+      })
+    } else {
+      this.setState({
+        hasPreDiagnosis: true
+      })
+    }
   }
 
   onPreDiagnosisChange = (e) => {
@@ -101,11 +112,9 @@ export default class CaseUpdate extends Component {
     let content = this.state.preDiagnosisSelector[e.detail.value]
     let contentArr = content.split('-')
     let currentPreID = contentArr[contentArr.length - 1]
-    let caseDetail = this.state.caseDetail
 
-    caseDetail.preID = currentPreID
     this.setState({
-      caseDetail: caseDetail,
+      preDiagnosis: currentPreID,
       preDiagnosisSelectorChecked: content
     })
   }
@@ -126,11 +135,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.diagnosisAddress = value
+    
       this.setState({
-        diagnosisAddress: value,
-        caseDetail: caseDetail
+        diagnosisAddress: value
       })
       errMsgMap.delete('diagnosisAddress')
     }
@@ -155,11 +162,9 @@ export default class CaseUpdate extends Component {
         weight: ''
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.weight = value
+      
       this.setState({
-        weight: value,
-        caseDetail: caseDetail
+        weight: value
       })
       errMsgMap.delete('weight')
     }
@@ -183,11 +188,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.age = value
+      
       this.setState({
-        age: value,
-        caseDetail: caseDetail
+        age: value
       })
       errMsgMap.delete('age')
     }
@@ -211,11 +214,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.symptom = value
+      
       this.setState({
-        symptom: value,
-        caseDetail: caseDetail
+        symptom: value
       })
       errMsgMap.delete('symptom')
     }
@@ -239,11 +240,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.diagnosisResult = value
+      
       this.setState({
-        diagnosisResult: value,
-        caseDetail: caseDetail
+        diagnosisResult: value
       })
       errMsgMap.delete('diagnosisResult')
     }
@@ -267,11 +266,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.therapy = value
+      
       this.setState({
-        therapy: value,
-        caseDetail: caseDetail
+        therapy: value
       })
       errMsgMap.delete('therapy')
     }
@@ -295,11 +292,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let caseDetail = this.state.caseDetail
-      caseDetail.medication = value
+      
       this.setState({
-        medication: value,
-        caseDetail: caseDetail
+        medication: value
       })
       errMsgMap.delete('medication')
     }
@@ -323,11 +318,9 @@ export default class CaseUpdate extends Component {
         errMsgMap: errMsgMap
       })
     } else {
-      let inoculationDetail = this.state.inoculationDetail
-      inoculationDetail.doctor = value
+      
       this.setState({
-        doctor: value,
-        inoculationDetail: inoculationDetail
+        doctor: value
       })
       errMsgMap.delete('doctor')
     }
@@ -338,11 +331,8 @@ export default class CaseUpdate extends Component {
   onDiagnosisDateChange = (e) => {
     console.log(e.detail.value)
     let diagnosisDate = e.detail.value
-    let caseDetail = this.state.caseDetail
     
-    caseDetail.diagnosisDate = diagnosisDate
     this.setState({
-      caseDetail: caseDetail,
       diagnosisDate: diagnosisDate,
       diagnosisDateSel: diagnosisDate
     })
@@ -351,11 +341,8 @@ export default class CaseUpdate extends Component {
   onRevisitChange = (e) => {
     console.log(e.detail.value)
     let revisitDate = e.detail.value
-    let caseDetail = this.state.caseDetail
-
-    caseDetail.revisit = revisitDate
+   
     this.setState({
-      caseDetail: caseDetail,
       revisit: revisitDate,
       revisitSel: revisitDate
     })
@@ -384,22 +371,22 @@ export default class CaseUpdate extends Component {
       
       var requestBody = {
         // ID: this.state.caseDetail.id,
-        PetID: this.state.caseDetail.petID,
-        PreID: this.state.caseDetail.preID,
-        Age: Number(this.state.caseDetail.age), 
-        DiagnosisAddress: this.state.caseDetail.diagnosisAddress,
-        DiagnosisDate: this.state.caseDetail.diagnosisDate,
-        DiagnosisResult: this.state.caseDetail.diagnosisResult,
-        DiagnosisType: this.state.caseDetail.diagnosisType, 
-        IsInitial: this.state.caseDetail.isInitial,
-        Weight: Number(this.state.caseDetail.weight),
-        Medication: this.state.caseDetail.medication,
-        Revisit: this.state.caseDetail.revisit, 
-        Symptom: this.state.caseDetail.symptom, 
-        Revisit: this.state.caseDetail.revisit, 
-        Therapy: this.state.caseDetail.therapy,
-        RemindTime: this.state.caseDetail.remindTime,
-        Doctor: this.state.caseDetail.doctor
+        PetID: Number(getCurrentInstance().router.params.petID),
+        PreID: Number(this.state.preDiagnosis),
+        Age: Number(this.state.age), 
+        DiagnosisAddress: this.state.diagnosisAddress,
+        DiagnosisDate: this.state.diagnosisDate,
+        DiagnosisResult: this.state.diagnosisResult,
+        DiagnosisType: Number(this.state.diagnosisType), 
+        IsInitial: Number(this.state.isInitial),
+        Weight: Number(this.state.weight),
+        Medication: this.state.medication,
+        Revisit: this.state.revisit, 
+        Symptom: this.state.symptom, 
+        Revisit: this.state.revisit, 
+        Therapy: this.state.therapy,
+        RemindTime: this.state.remindTime,
+        Doctor: this.state.doctor
       }
 
       console.log(requestBody)
@@ -477,7 +464,7 @@ export default class CaseUpdate extends Component {
 
           <AtInput class='rightInput' name='diagnosisAddress' type='text' title='就诊地点' border={true} adjustPosition={true} placeholder='请输入就诊地点' value={this.state.diagnosisAddress} onChange={this.onDiagnosisAddressChange.bind(this)} />
 
-          <Picker class='picker' mode='date' value={this.state.caseDetail.diagnosisDate} onChange={this.onDiagnosisDateChange.bind(this)}>
+          <Picker class='picker' mode='date' value={this.state.diagnosisDate} onChange={this.onDiagnosisDateChange.bind(this)}>
             <AtList hasBorder={false}>
               <AtListItem title='就诊日期' hasBorder={true} extraText={this.state.diagnosisDateSel} />
             </AtList>
@@ -493,7 +480,7 @@ export default class CaseUpdate extends Component {
             </AtList>
           </Picker>
 
-          <Picker class='picker' mode='selector' range={this.state.preDiagnosisSelector} onChange={this.onPreDiagnosisChange.bind(this)}>
+          <Picker class='picker' mode='selector' disabled={!this.state.hasPreDiagnosis} range={this.state.preDiagnosisSelector} onChange={this.onPreDiagnosisChange.bind(this)}>
             <AtList hasBorder={false}>
               <AtListItem title='上次诊疗' hasBorder={true} extraText={this.state.preDiagnosisSelectorChecked} />
             </AtList>
@@ -507,7 +494,7 @@ export default class CaseUpdate extends Component {
 
           <AtInput class='rightInput' name='doctor' type='text' title='宠物医师' border={true} adjustPosition={true} placeholder='请输入宠物医师' value={this.state.doctor} onChange={this.onDoctorChange.bind(this)}/>
           
-          <Picker class='picker' mode='date' value={this.state.caseDetail.revisit} onChange={this.onRevisitChange.bind(this)}>
+          <Picker class='picker' mode='date' value={this.state.revisit} onChange={this.onRevisitChange.bind(this)}>
             <AtList hasBorder={false}>
               <AtListItem title='复诊日期' hasBorder={false} extraText={this.state.revisit} />
             </AtList>

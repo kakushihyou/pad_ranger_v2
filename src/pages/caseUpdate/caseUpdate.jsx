@@ -34,6 +34,7 @@ export default class CaseUpdate extends Component {
       revisitSel: getCurrentDate(),
       changed: false,
       saved: false,
+      hasPreDiagnosis: false,
       errMsgMap: new Map()
     }
     
@@ -93,9 +94,11 @@ export default class CaseUpdate extends Component {
                   preDiagnosis = item.diagnosisDate.replace(/-/g, '') + '_' + item.diagnosisAddress + '_' + item.id
                 }
               })
+              var preDiagnosisStatus = res.Data.isInitial != 1 && preDiagnosisList.length > 0
               this.setState({
                 preDiagnosisSelector: preDiagnosisList,
-                preDiagnosisSelectorChecked: preDiagnosis
+                preDiagnosisSelectorChecked: preDiagnosisStatus ? preDiagnosis : '',
+                hasPreDiagnosis: preDiagnosisStatus
               })
             }
           })
@@ -144,6 +147,19 @@ export default class CaseUpdate extends Component {
       isInitialSelectorChecked: getInitialDiagnosisMemo(initial),
       changed: true
     })
+
+    console.log('是否是初诊' + initial)
+    if (initial === 1) {
+      this.setState({
+        preDiagnosisSelectorChecked: '',
+        hasPreDiagnosis: false
+      })
+    } else {
+      this.setState({
+        // preDiagnosisSelectorChecked: '',
+        hasPreDiagnosis: true
+      })
+    }
   }
 
   onPreDiagnosisChange = (e) => {
@@ -573,7 +589,7 @@ export default class CaseUpdate extends Component {
             </AtList>
           </Picker>
 
-          <Picker class='picker' mode='selector' range={this.state.preDiagnosisSelector} onChange={this.onPreDiagnosisChange.bind(this)}>
+          <Picker class='picker' mode='selector' disabled={!this.state.hasPreDiagnosis} range={this.state.preDiagnosisSelector} onChange={this.onPreDiagnosisChange.bind(this)}>
             <AtList hasBorder={false}>
               <AtListItem title='上次诊疗' hasBorder={true} extraText={this.state.preDiagnosisSelectorChecked} />
             </AtList>
