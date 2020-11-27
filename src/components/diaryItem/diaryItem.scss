@@ -1,0 +1,18 @@
+.tips {
+  display: flex;
+  justify-content: space-between;
+  line-height: 40px;
+  .icons {
+    display: flex;
+    justify-content: space-around;
+    View {
+      padding: 0 20px;
+    }
+  }
+
+  .content {
+    line-height: 80px;
+    font-size: 34px;
+    text-indent: 2em;
+  }
+}

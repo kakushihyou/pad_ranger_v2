@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '日记'
+  navigationBarTitleText: '铲屎官日记'
 }

@@ -39,7 +39,7 @@ export default {
         pagePath: 'pages/diary/diary',
         iconPath: 'assets/icon/pet_diary.png',
         selectedIconPath: 'assets/icon/pet_diary.png',
-        text: '日记'
+        text: '屎记'
       },
       {
         pagePath: 'pages/mine/mine',
