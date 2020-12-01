@@ -1,18 +1,46 @@
 .tips {
-  display: flex;
+  display: flow-root;
   justify-content: space-between;
   line-height: 40px;
-  .icons {
-    display: flex;
-    justify-content: space-around;
+  padding: 0 20px;
+  margin: 20px;
+  border: 1px solid rgb(241, 241, 241);
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
+  .date-view {
+    text-align: center;
     View {
-      padding: 0 20px;
+      padding: 5px;
+    }
+
+    .day {
+      font-size: 50px;
+      font-weight: 800;
     }
   }
 
+  // .time {
+  //   padding: 10px;
+  //   display: flex;
+  // }
+
+  // .weather {
+  //   padding: 10px;
+  //   display: flex;
+  //   // float: left;
+  // }
+
+  // .mood  {
+  //   padding: 10px;
+  //   // display: flex;
+  //   float: left;
+  // }
+
   .content {
+    // float: left;
     line-height: 80px;
     font-size: 34px;
-    text-indent: 2em;
+    // text-indent: 2em;
   }
 }

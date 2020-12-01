@@ -281,6 +281,38 @@ const getDiagnosisTypeMemo = (diagnosisType) => {
   return diagnosisTypeMemo
 }
 
+const getWeekdayMemo = (weekday) => {
+  let weekdayMemo
+  switch (weekday) {
+    case 1:
+      weekdayMemo = '星期一'
+      break;
+    case 2:
+      weekdayMemo = '星期二'
+      break;
+    case 3:
+      weekdayMemo = '星期三'
+      break;
+    case 4:
+      weekdayMemo = '星期四'
+      break;
+    case 5:
+      weekdayMemo = '星期五'
+      break;
+    case 6:
+      weekdayMemo = '星期六'
+      break;
+    case 0:
+      weekdayMemo = '星期日'
+      break;
+    default:
+      weekdayMemo = ''
+      break;
+  }
+
+  return weekdayMemo
+}
+
 export {getDefaultHeadImg, jsGetAge, getAgeSD, getGenderStr, getSpeciesMemo, getSterilizationMemo, 
   getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo, getInitialDiagnosisMemo,
-  getDiagnosisTypeMemo}
+  getDiagnosisTypeMemo, getWeekdayMemo}
