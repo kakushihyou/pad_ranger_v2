@@ -11,21 +11,29 @@ export default class DiaryItem extends Component {
 
   constructor(props) {
     super(props)
+    
+  }
 
+  handleClick = () => {
+    console.log('跳转到日记详情页面')
+    console.log('日记ID是' + this.props.info.id)
+    Taro.navigateTo({
+      url:'/pages/diaryDetail/diaryDetail?ID=' + this.props.info.id
+    })
   }
 
   render () {
 
     let diaryDetail = this.props.info
     console.log(diaryDetail)
-    let year = diaryDetail.DiaryTime.split('-')[0]
-    let month = diaryDetail.DiaryTime.split('-')[1]
-    let day = diaryDetail.DiaryTime.split('-')[2].split(' ')[0]
-    let time = diaryDetail.DiaryTime.split(' ')[1]
+    let year = diaryDetail.diaryTime.split('-')[0]
+    let month = diaryDetail.diaryTime.split('-')[1]
+    let day = diaryDetail.diaryTime.split('-')[2].split(' ')[0]
+    let time = diaryDetail.diaryTime.split(' ')[1]
     let tipStyle = ''
-    if (diaryDetail.Mood < 40) {
+    if (diaryDetail.mood < 40) {
       tipStyle = 'color:#efc1c2'
-    } else if (diaryDetail.Mood < 70) {
+    } else if (diaryDetail.mood < 70) {
       tipStyle = 'color:#9BCEFA'
     } else {
       tipStyle = 'color:#afcd50'
@@ -33,16 +41,16 @@ export default class DiaryItem extends Component {
 
     return (
       
-      <View className='tips' style={tipStyle}>
+      <View className='tips' style={tipStyle} onClick={this.handleClick.bind(this)}>
         <View className='date-view'>
           <View className='year-month'>{year}-{month}</View>
           <View className='day'>{day}</View>
-          <View className='weekday'>{getWeekdayMemo(diaryDetail.Week)}</View>
+          <View className='weekday'>{getWeekdayMemo(diaryDetail.week)}</View>
         </View>
         {/* <View className='time'>{time}</View> */}
         {/* <View className='mood'>心情分: {diaryDetail.Mood}</View>  */}
         {/* <View className='weather'>{diaryDetail.Weather}</View> */}
-        <View className='content'>{diaryDetail.Content}</View>
+        <View className='content'>{diaryDetail.content}</View>
       </View>
     )
   }

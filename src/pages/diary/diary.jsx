@@ -39,17 +39,22 @@ export default class Diary extends Component {
     })
   }
 
-  onChange = () => {
-
+  onChange = (e) => {
+    console.log(e)
+    this.setState({
+      condition: e
+    })
   }
 
-  onActionClick = () => {
-
+  onActionClick = (e) => {
+    console.log(this.state.condition)
   }
 
   onButtonClick = () => {
-
+    console.log(e)
   }
+
+ 
 
   render () {
     console.log(this.state.diaryList.length)
@@ -61,7 +66,7 @@ export default class Diary extends Component {
             this.state.diaryList.length > 0 ? (
               this.state.diaryList.map((item) => {
                 return (
-                  <DiaryItem info={item}/>
+                  <DiaryItem info={item} />
                 )
               })
             ) : (<View /> )

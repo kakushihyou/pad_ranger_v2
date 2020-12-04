@@ -13,6 +13,7 @@ export default {
     'pages/caseUpdate/caseUpdate',
     'pages/caseAdd/caseAdd',
     'pages/diary/diary',
+    'pages/diaryDetail/diaryDetail',
     'pages/mine/mine'
   ],
   window: {
