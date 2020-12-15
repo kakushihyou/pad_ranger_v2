@@ -51,7 +51,10 @@ export default class Diary extends Component {
   }
 
   onButtonClick = () => {
-    console.log(e)
+    // TODO 跳转到新增日记页面
+    Taro.navigateTo({
+      url: '/pages/diaryAdd/diaryAdd?userID=' + this.state.userID
+    })
   }
 
  

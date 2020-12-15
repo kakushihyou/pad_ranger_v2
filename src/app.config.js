@@ -14,6 +14,8 @@ export default {
     'pages/caseAdd/caseAdd',
     'pages/diary/diary',
     'pages/diaryDetail/diaryDetail',
+    'pages/diaryUpdate/diaryUpdate',
+    'pages/diaryAdd/diaryAdd',
     'pages/mine/mine'
   ],
   window: {

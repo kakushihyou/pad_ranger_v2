@@ -61,7 +61,7 @@ export default class DiaryDetail extends Component {
   edit = () => {
     console.log('详情页跳转到修改页')
     Taro.navigateTo({
-      url: '/pages/petUpdate/petUpdate?petID=' + this.state.petDetail.id
+      url: '/pages/diaryUpdate/diaryUpdate?diaryID=' + this.state.diaryDetail.id
     })
   }
 
@@ -79,7 +79,7 @@ export default class DiaryDetail extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/pet?ID=' + diaryDetail.id)
+            Httpclient.delete('http://localhost:9669/diary?diaryID=' + diaryDetail.id)
             .then(res => {
               Taro.showToast({
                 title: '删除成功',
