@@ -7,7 +7,7 @@ import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizat
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diaryDetail.scss'
 import Httpclient from '../../../httpclient/http'
-import BackGroundPng from '../../assets/background/background_pig.png'
+import BackGroundPng from '../../assets/background/background_cat.png'
 
 export default class DiaryDetail extends Component {
 
@@ -113,8 +113,10 @@ export default class DiaryDetail extends Component {
     console.log(diaryDetail)
     let diaryTime = new Date(diaryDetail.diaryTime)
     return (
-      <View className='top'>
-        <Image class='background-image' src={BackGroundPng} ></Image>
+      <View className='top' >
+        <View class="op">
+          <Image class='background-image' src={BackGroundPng} ></Image>  
+        </View>
         <View className='detail'>
           <View className='header'>
             {/* TODO 日记内容 */}
