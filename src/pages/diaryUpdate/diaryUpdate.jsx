@@ -14,7 +14,7 @@ export default class DiaryUpdate extends Component {
     super(props)
     this.state = {
       diaryDetail: {},
-      mod: '',
+      mood: '',
       weather: '',
       content: '',
       changed: false,
@@ -32,7 +32,7 @@ export default class DiaryUpdate extends Component {
         console.log(res.Data)
         this.setState({
           diaryDetail: res.Data,
-          mod: res.Data.mod,
+          mood: res.Data.mood,
           weather: res.Data.weather,
           content: res.Data.content
         })
@@ -47,7 +47,7 @@ export default class DiaryUpdate extends Component {
       })
   }
 
-  onModChange = (value) => {
+  onmoodChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
     let errMsg = '试着给自己安排一种心情？'
@@ -57,20 +57,29 @@ export default class DiaryUpdate extends Component {
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('mod', errMsg)
+      errMsgMap.set('mood', errMsg)
       this.setState({
-        mod: '',
+        mood: '',
         errMsgMap: errMsgMap
       })
     } else {
-      let diaryDetail = this.state.diaryDetail
-      diaryDetail.mod = value
-      this.setState({
-        mod: value,
-        diaryDetail: diaryDetail,
-        changed: true
-      })
-      errMsgMap.delete('mod')
+      if (Number(value) > 100 || Number(value) < 0) {
+        Taro.atMessage({
+          message: '情绪太低落和太高涨都不太好噢～',
+          type: 'error',
+          duration: 2000
+        })
+        errMsgMap.set('mood', '情绪太低落和太高涨都不太好噢～')
+      } else {
+        let diaryDetail = this.state.diaryDetail
+        diaryDetail.mood = value
+        this.setState({
+          mood: value,
+          diaryDetail: diaryDetail,
+          changed: true
+        })
+        errMsgMap.delete('mood')
+      }
     }
 
     return value
@@ -156,9 +165,9 @@ export default class DiaryUpdate extends Component {
       var requestBody = {
         ID: this.state.diaryDetail.id,
         Title: this.state.diaryDetail.title,
-        DiaryTime: this.state.diaryDetail.diaryTime,
+        // DiaryTime: this.state.diaryDetail.diaryTime,
         Weather: this.state.diaryDetail.weather,
-        Mod: this.state.diaryDetail.mod,
+        Mood: this.state.diaryDetail.mood,
         Content: this.state.diaryDetail.content, 
         Images: this.state.diaryDetail.images
       }
@@ -200,7 +209,7 @@ export default class DiaryUpdate extends Component {
 
   goback = () => {
     if (this.state.changed) {
-      Taro.showModal({
+      Taro.showmoodal({
         cancelText:'稍后再来',
         cancelColor:'#FFC1C1',
         confirmText:'去保存',
@@ -241,11 +250,11 @@ export default class DiaryUpdate extends Component {
           <Image class='background-image' src={BackGroundPng} ></Image>  
         </View>
         <View className='detail'>
-          <View className='header'>
-            <AtInput class='rightInput' name='mod' type='text' title='心情分' border={true} adjustPosition={true} placeholder='请输入心情分' value={this.state.mod} onChange={this.onModChange.bind(this)} />
+          {/* <View className='header'> */}
+            <AtInput class='rightInput' name='mood' type='number' title='心情分' border={true} adjustPosition={true} placeholder='请输入心情分(0-100之间)' value={this.state.mood} onChange={this.onmoodChange.bind(this)} />
             <AtInput class='rightInput' name='weather' type='text' title='天气' border={true} adjustPosition={true} placeholder='请输入天气' value={this.state.weather} onChange={this.onWeatherChange.bind(this)}/>
-          </View>
-          <AtTextarea name='content' value={this.state.content} onChange={this.onContentChange.bind(this)} maxLength={500} placeholder='开始整理你的心情吧～' />
+          {/* </View> */}
+          <AtTextarea class='textarea' name='content' value={this.state.content} onChange={this.onContentChange.bind(this)} maxLength={500} placeholder='开始整理你的心情吧～' height='680'/>
           <AtButton className='confirm' type='primary' size='small' circle onClick={this.commit.bind(this)}>确认</AtButton>
           <AtButton className='cancel' type='primary' size='small' circle onClick={this.goback.bind(this)}>取消</AtButton>
         </View>

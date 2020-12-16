@@ -21,7 +21,7 @@ export default class DiaryDetail extends Component {
     this.edit = this.edit.bind(this)
   }
 
-  componentWillMount = () => { 
+  componentDidShow = () => { 
     console.log('getCurrentInstance().router.params')
     // TODO 获取宠物详情
     Httpclient.get(

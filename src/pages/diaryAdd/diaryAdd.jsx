@@ -14,7 +14,7 @@ export default class DiaryUpdate extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      mod: '',
+      mood: '',
       weather: '',
       content: '',
       saved: false,
@@ -22,7 +22,7 @@ export default class DiaryUpdate extends Component {
     }
   }
 
-  onModChange = (value) => {
+  onMoodChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap
     let errMsg = '试着给自己安排一种心情？'
@@ -32,16 +32,25 @@ export default class DiaryUpdate extends Component {
         type: 'error',
         duration: 2000
       })
-      errMsgMap.set('mod', errMsg)
+      errMsgMap.set('mood', errMsg)
       this.setState({
-        mod: '',
+        mood: '',
         errMsgMap: errMsgMap
       })
     } else {
-      this.setState({
-        mod: value
-      })
-      errMsgMap.delete('mod')
+      if (Number(value) > 100 || Number(value) < 0) {
+        Taro.atMessage({
+          message: '情绪太低落和太高涨都不太好噢～',
+          type: 'error',
+          duration: 2000
+        })
+        errMsgMap.set('mood', '情绪太低落和太高涨都不太好噢～')
+      } else {
+        this.setState({
+          mood: Number(value)
+        })
+        errMsgMap.delete('mood')
+      }
     }
 
     return value
@@ -116,11 +125,11 @@ export default class DiaryUpdate extends Component {
         duration: 3000
       })
     } else {
+      console.log('用户ID是' + getCurrentInstance().router.params.userID)
       var requestBody = {
-        UserID: getCurrentInstance().router.params.userID,
-        DiaryTime: getCurrentDate(),
+        UserID: Number(getCurrentInstance().router.params.userID),
         Weather: this.state.weather,
-        Mod: this.state.mod,
+        Mood: this.state.mood,
         Content: this.state.content
       }
 
@@ -160,7 +169,7 @@ export default class DiaryUpdate extends Component {
   }
 
   goback = () => {
-    Taro.showModal({
+    Taro.showmoodal({
       cancelText:'稍后再来',
       cancelColor:'#FFC1C1',
       confirmText:'去保存',
@@ -193,10 +202,10 @@ export default class DiaryUpdate extends Component {
           <Image class='background-image' src={BackGroundPng} ></Image>  
         </View>
         <View className='detail'>
-          <View className='header'>
-            <AtInput class='rightInput' name='mod' type='text' title='心情分' border={true} adjustPosition={true} placeholder='请输入心情分' value={this.state.mod} onChange={this.onModChange.bind(this)} />
+          {/* <View className='header'> */}
+            <AtInput class='rightInput' name='mood' type='number' title='心情分' border={true} adjustPosition={true} placeholder='请输入心情分(0-100之间)' value={this.state.mood} onChange={this.onMoodChange.bind(this)} />
             <AtInput class='rightInput' name='weather' type='text' title='天气' border={true} adjustPosition={true} placeholder='请输入天气' value={this.state.weather} onChange={this.onWeatherChange.bind(this)}/>
-          </View>
+          {/* </View> */}
           <AtTextarea class='textarea' name='content' value={this.state.content} onChange={this.onContentChange.bind(this)} maxLength={500} placeholder='开始整理你的心情吧～'  height='680' />
           <AtButton className='confirm' type='primary' size='small' circle onClick={this.commit.bind(this)}>确认</AtButton>
           <AtButton className='cancel' type='primary' size='small' circle onClick={this.goback.bind(this)}>取消</AtButton>

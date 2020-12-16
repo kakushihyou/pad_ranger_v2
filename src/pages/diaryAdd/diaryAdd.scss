@@ -28,36 +28,21 @@ page {
 .detail {
   // width: 100%;
   height: 90%;
-  padding: 40px 40px 40px 40px;
+  padding: 20px 20px 20px 20px;
   position: relative;
   color: #203c53;
 
-  .header {
-    display: flex;
-    margin-bottom: 15px;
-    font-size: 25px;
-    font-family: fantasy;
-    font-weight: 450;
-    // border-bottom: 3px solid #FFC1C1 ;
-    border-radius: 10px;
-    // background-color: #eccdce;
-    // border: 1px solid rgb(241, 241, 241);
-    // border-radius: 10px;
+  .at-input {
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #d6e4ef  ;
+  }  
 
-    .diaryTime {
-      padding-left: 8%;
-    }
+  .at-input__title {
+    margin-left: 40px;
+  }
 
-    .mood {
-      padding-left: 10%;
-    }
-
-    .weather {
-      padding-left: 10%;
-    }
-  } 
-
-  .content {
+  .textarea {
     text-indent:55px;
   }
 }
@@ -65,7 +50,7 @@ page {
 .confirm {
   display: flex;
   border: none;
-  margin-top: 15%;
+  margin-top: 7%;
   background-color: #9BCEFA;
   // bottom: -6%;
 }
