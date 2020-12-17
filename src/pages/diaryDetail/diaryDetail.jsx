@@ -120,7 +120,7 @@ export default class DiaryDetail extends Component {
         <View className='detail'>
           <View className='header'>
             {/* TODO 日记内容 */}
-            <View className='diaryTime'>{diaryTime.toLocaleDateString() + ' ' + diaryTime.toLocaleTimeString()}</View>
+            <View className='diaryTime'>{diaryTime.toLocaleString()}</View>
             <View className='mood'>心情分: {diaryDetail.mood}</View> 
             <View className='weather'>{diaryDetail.weather}</View>
           </View>
