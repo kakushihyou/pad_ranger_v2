@@ -1,3 +1,35 @@
+page {
+    height: 100%;
+}
+
 .index {
     margin-bottom: 120px;
+    flex: auto;
+    // display: flex;
+    position: relative;
+    flex-direction:column;
+    height: 100%;
+    bottom: 0;
+    top: 0;
+}
+
+.op {
+    opacity: 0.2
+}
+
+.background-image{
+    height : 100%;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+}
+
+.at-article {
+    padding-top: 60%;
+}
+
+.at-article__h1 {
+    text-indent:95px;
+    font-family: "STXingkai", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei";
 }

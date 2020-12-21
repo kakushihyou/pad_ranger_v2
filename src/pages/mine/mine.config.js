@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '主子'
+  navigationBarTitleText: '铲屎官'
 }
