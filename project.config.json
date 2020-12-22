@@ -1,8 +1,8 @@
 {
   "miniprogramRoot": "dist/",
   "projectname": "pad_ranger_v2",
-  "description": "宠物病例本",
-  "appid": "touristappid",
+  "description": "肉垫侠",
+  "appid": "wxb88330d6130ed56a",
   "setting": {
     "urlCheck": true,
     "es6": false,
