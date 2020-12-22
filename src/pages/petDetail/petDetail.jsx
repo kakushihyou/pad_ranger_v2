@@ -7,6 +7,7 @@ import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizat
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petDetail.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class PetDetail extends Component {
 
@@ -24,7 +25,7 @@ export default class PetDetail extends Component {
     console.log(getCurrentInstance().router.params)
     // TODO 获取宠物详情
     Httpclient.get(
-      'http://localhost:9669/pet/detail?ID=' + getCurrentInstance().router.params.petID)
+      Config.request_host + '/pet/detail?ID=' + getCurrentInstance().router.params.petID)
       .then(res => {
         console.log(res.Data)
         this.setState({
@@ -70,7 +71,7 @@ export default class PetDetail extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/pet?ID=' + petDetail.id)
+            Httpclient.delete(Config.request_host + '/pet?ID=' + petDetail.id)
             .then(res => {
               Taro.showToast({
                 title: petDetail.accompanyDays + '天，谢谢你',

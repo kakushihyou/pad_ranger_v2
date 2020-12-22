@@ -8,6 +8,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petAdd.scss'
 import Httpclient from '../../../httpclient/http'
 import AddIconBlank from '../../assets/icon/add_icon_blank.png'
+import Config from '../../config/globalConfig.json'
 
 export default class PetUpdate extends Component {
 
@@ -225,7 +226,7 @@ export default class PetUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/pet', requestBody, 'application/json')
+        Config.request_host + '/pet', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

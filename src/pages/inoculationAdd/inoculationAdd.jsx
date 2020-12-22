@@ -7,6 +7,7 @@ import { getVaccineTypeMemo, getCurrentDate} from '../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './inoculationAdd.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class InoculationAdd extends Component {
 
@@ -267,7 +268,7 @@ export default class InoculationAdd extends Component {
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/pet/inoculation', requestBody, 'application/json')
+        Config.request_host + '/pet/inoculation', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

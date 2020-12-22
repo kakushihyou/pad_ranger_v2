@@ -7,6 +7,7 @@ import { getVaccineTypeMemo, getCurrentDate, getDiagnosisTypeMemo, getInitialDia
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './caseAdd.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class CaseUpdate extends Component {
 
@@ -50,7 +51,7 @@ export default class CaseUpdate extends Component {
 
     // TODO 获取之前的病历
     Httpclient.get(
-      'http://localhost:9669/pet/case/history?petID=' + getCurrentInstance().router.params.petID + '&targetTime=' + getCurrentDate())
+      Config.request_host + '/pet/case/history?petID=' + getCurrentInstance().router.params.petID + '&targetTime=' + getCurrentDate())
       .then(res => {
         console.log('历史病历')
         console.log(res.Data)
@@ -391,7 +392,7 @@ export default class CaseUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/pet/case', requestBody, 'application/json')
+        Config.request_host + '/pet/case', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

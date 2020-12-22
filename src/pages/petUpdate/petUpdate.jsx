@@ -7,6 +7,7 @@ import {getDefaultHeadImg, getGenderStr, jsGetAge, getSpeciesMemo, getSterilizat
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petUpdate.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class PetUpdate extends Component {
 
@@ -52,7 +53,7 @@ export default class PetUpdate extends Component {
     })
     // TODO 获取宠物详情
     Httpclient.get(
-      'http://localhost:9669/pet/detail?ID=' + getCurrentInstance().router.params.petID)
+      Config.request_host + '/pet/detail?ID=' + getCurrentInstance().router.params.petID)
       .then(res => {
         console.log(res.Data)
         this.setState({
@@ -310,7 +311,7 @@ export default class PetUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.post(
-        'http://localhost:9669/pet', requestBody, 'application/json')
+        Config.request_host + '/pet', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

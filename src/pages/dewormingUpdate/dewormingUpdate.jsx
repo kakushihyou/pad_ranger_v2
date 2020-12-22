@@ -7,6 +7,7 @@ import { getDewormingTypeMemo } from '../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './dewormingUpdate.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class DewormingUpdate extends Component {
 
@@ -46,7 +47,7 @@ export default class DewormingUpdate extends Component {
     console.log(getCurrentInstance().router.params)
     // TODO 获取宠物详情
     Httpclient.get(
-      'http://localhost:9669/pet/deworming?ID=' + getCurrentInstance().router.params.dewormingID)
+      Config.request_host + '/pet/deworming?ID=' + getCurrentInstance().router.params.dewormingID)
       .then(res => {
         console.log(res.Data)
         this.setState({
@@ -354,7 +355,7 @@ export default class DewormingUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.post(
-        'http://localhost:9669/pet/deworming', requestBody, 'application/json')
+        Config.request_host + '/pet/deworming', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

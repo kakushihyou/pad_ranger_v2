@@ -6,6 +6,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diary.scss'
 import DiaryItem from '../../components/diaryItem/diaryItem'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class Diary extends Component {
 
@@ -24,7 +25,7 @@ export default class Diary extends Component {
 
   componentDidShow = () => {
     // 获取用户日记列表
-    Httpclient.get('http://localhost:9669/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -60,7 +61,7 @@ export default class Diary extends Component {
         pageNum: 1
       })
     }
-    Httpclient.get('http://localhost:9669//diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -105,7 +106,7 @@ export default class Diary extends Component {
     this.setState({
       pageNum: 1
     })
-    Httpclient.get('http://localhost:9669//diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       this.setState({

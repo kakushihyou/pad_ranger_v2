@@ -7,6 +7,7 @@ import "taro-ui/dist/style/components/button.scss"
 import "taro-ui/dist/style/components/swipe-action.scss";
 import './swipe.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class Swipe extends Component {
 
@@ -38,7 +39,7 @@ export default class Swipe extends Component {
             if(res.confirm)
             {
               console.log('删除')
-              Httpclient.delete('http://localhost:9669/pet?ID=' + petInfo.id)
+              Httpclient.delete(Config.request_host + '/pet?ID=' + petInfo.id)
               .then(res => {
                 Taro.showToast({
                   title: petInfo.accompanyDays + '天，谢谢你',

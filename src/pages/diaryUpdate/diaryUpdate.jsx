@@ -7,6 +7,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diaryUpdate.scss'
 import Httpclient from '../../../httpclient/http'
 import BackGroundPng from '../../assets/background/background_cat.png'
+import Config from '../../config/globalConfig.json'
 
 export default class DiaryUpdate extends Component {
 
@@ -27,7 +28,7 @@ export default class DiaryUpdate extends Component {
     console.log('getCurrentInstance().router.params')
     // TODO 获取宠物详情
     Httpclient.get(
-      'http://localhost:9669/diary/detail?diaryID=' + getCurrentInstance().router.params.diaryID)
+      Config.request_host + '/diary/detail?diaryID=' + getCurrentInstance().router.params.diaryID)
       .then(res => {
         console.log(res.Data)
         this.setState({
@@ -174,7 +175,7 @@ export default class DiaryUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.post(
-        'http://localhost:9669/diary', requestBody, 'application/json')
+        Config.request_host + '/diary', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

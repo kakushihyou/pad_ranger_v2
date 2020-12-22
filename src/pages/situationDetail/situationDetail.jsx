@@ -10,6 +10,7 @@ import { getCurrentInstance } from '@tarojs/taro'
 import Httpclient from '../../../httpclient/http'
 import PetCaseList from '../../components/petCaseList/petCaseList'
 import PetCaseDetail from '../../components/petCaseDetail/petCaseDetail'
+import Config from '../../config/globalConfig.json'
 
 export default class SituationDetail extends Component {
 
@@ -58,7 +59,7 @@ export default class SituationDetail extends Component {
 
   getInoculationList = () => {
     // TODO 获取疫苗记录
-    Httpclient.get('http://localhost:9669/pet/inoculation/list?petID=' + getCurrentInstance().router.params.petID)
+    Httpclient.get(Config.request_host + '/pet/inoculation/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -79,7 +80,7 @@ export default class SituationDetail extends Component {
 
   getDewormingList = () => {
     // TODO 获取驱虫记录
-    Httpclient.get('http://localhost:9669/pet/deworming/list?petID=' + getCurrentInstance().router.params.petID)
+    Httpclient.get(Config.request_host + '/pet/deworming/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -100,7 +101,7 @@ export default class SituationDetail extends Component {
 
   getCaseList = () => {
     // TODO 获取病历记录
-    Httpclient.get('http://localhost:9669/pet/case/list?petID=' + getCurrentInstance().router.params.petID)
+    Httpclient.get(Config.request_host + '/pet/case/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -180,7 +181,7 @@ export default class SituationDetail extends Component {
     })
 
     console.log('前次诊疗ID' + caseID)
-    Httpclient.get('http://localhost:9669/pet/case?ID=' + caseID)
+    Httpclient.get(Config.request_host + '/pet/case?ID=' + caseID)
     .then(res => {
       console.log(res.Data)
       this.setState({

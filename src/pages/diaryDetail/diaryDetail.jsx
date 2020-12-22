@@ -8,6 +8,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diaryDetail.scss'
 import Httpclient from '../../../httpclient/http'
 import BackGroundPng from '../../assets/background/background_cat.png'
+import Config from '../../config/globalConfig.json'
 
 export default class DiaryDetail extends Component {
 
@@ -25,7 +26,7 @@ export default class DiaryDetail extends Component {
     console.log('getCurrentInstance().router.params')
     // TODO 获取宠物详情
     Httpclient.get(
-      'http://localhost:9669/diary/detail?diaryID=' + getCurrentInstance().router.params.ID)
+      Config.request_host + '/diary/detail?diaryID=' + getCurrentInstance().router.params.ID)
       .then(res => {
         console.log(res.Data)
         let today = new Date()
@@ -79,7 +80,7 @@ export default class DiaryDetail extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/diary?diaryID=' + diaryDetail.id)
+            Httpclient.delete(Config.request_host + '/diary?diaryID=' + diaryDetail.id)
             .then(res => {
               Taro.showToast({
                 title: '删除成功',

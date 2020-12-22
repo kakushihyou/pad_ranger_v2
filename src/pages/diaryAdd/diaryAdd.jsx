@@ -8,6 +8,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diaryAdd.scss'
 import Httpclient from '../../../httpclient/http'
 import BackGroundPng from '../../assets/background/background_cat.png'
+import Config from '../../config/globalConfig.json'
 
 export default class DiaryUpdate extends Component {
 
@@ -135,7 +136,7 @@ export default class DiaryUpdate extends Component {
 
       console.log(requestBody)
       Httpclient.put(
-        'http://localhost:9669/diary', requestBody, 'application/json')
+        Config.request_host + '/diary', requestBody, 'application/json')
       .then(res => {
         console.log(res)
         if (res.Success) {

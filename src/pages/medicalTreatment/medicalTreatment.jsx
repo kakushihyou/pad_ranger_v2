@@ -6,6 +6,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './medicalTreatment.scss'
 import Httpclient from '../../../httpclient/http'
 import PetGeneralSituation from '../../components/petGeneralSituation/petGeneralSituation'
+import Config from '../../config/globalConfig.json'
 
 export default class Case extends Component {
 
@@ -19,7 +20,7 @@ export default class Case extends Component {
 
   componentDidShow = () => {
     // TODO 获取宠物概要列表
-    Httpclient.get('http://localhost:9669/pet/total?userID=' + this.state.userID)
+    Httpclient.get(Config.request_host + '/pet/total?userID=' + this.state.userID)
     .then(res => {
       console.log(res.Data)
 

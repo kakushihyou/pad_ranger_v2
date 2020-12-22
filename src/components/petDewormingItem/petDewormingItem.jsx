@@ -7,6 +7,7 @@ import {getDewormingTypeMemo} from '../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petDewormingItem.scss'
 import Httpclient from '../../../httpclient/http'
+import Config from '../../config/globalConfig.json'
 
 export default class PetDewormingItem extends Component {
 
@@ -29,7 +30,7 @@ export default class PetDewormingItem extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/pet/deworming?ID=' + petDewormingItem.id)
+            Httpclient.delete(Config.request_host + '/pet/deworming?ID=' + petDewormingItem.id)
             .then(res => {
               Taro.showToast({
                 title: '朕是不会生病的～',

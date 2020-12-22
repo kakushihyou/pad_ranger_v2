@@ -8,6 +8,7 @@ import './index.scss'
 import Httpclient from '../../../httpclient/http'
 import SignlePetResume  from "../../components/singlePetResume/singlePetResume";
 import Swip from '../../components/swipe/swipe'
+import Config from '../../config/globalConfig.json'
 
 export default class Index extends Component {
 
@@ -111,7 +112,7 @@ export default class Index extends Component {
    getPetList() {
     // TODO 获取用户的宠物列表结果示例  
     let petResumeListInfo 
-    Httpclient.get('http://localhost:9669/pet/list?userID=' + this.state.userID)
+    Httpclient.get(Config.request_host + '/pet/list?userID=' + this.state.userID)
     .then(res => {
       // console.log(res.Data)
 

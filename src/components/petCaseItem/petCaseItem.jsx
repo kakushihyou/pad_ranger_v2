@@ -8,6 +8,7 @@ import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petCaseItem.scss'
 import Httpclient from '../../../httpclient/http'
 import PetCaseDetail from '../petCaseDetail/petCaseDetail'
+import Config from '../../config/globalConfig.json'
 
 export default class PetCaseItem extends Component {
 
@@ -30,7 +31,7 @@ export default class PetCaseItem extends Component {
           if(res.confirm)
           {
             console.log('删除')
-            Httpclient.delete('http://localhost:9669/pet/case?ID=' + petCaseItem.id)
+            Httpclient.delete(Config.request_host + '/pet/case?ID=' + petCaseItem.id)
             .then(res => {
               Taro.showToast({
                 title: '朕是不会生病的～',
