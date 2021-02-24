@@ -234,6 +234,30 @@ export default class DewormingAdd extends Component {
     console.log(this.state.errMsgMap)
     console.log(this.state.dewormingDetail)
     let errMsgMap = this.state.errMsgMap
+    if (this.state.medication == null || this.state.medication.length == 0) {
+      errMsgMap.set('medication', '你给朕吃的什么药？')
+    }
+
+    if (this.state.weight == null || this.state.weight.length == 0 || this.state.weight <= 0) {
+      errMsgMap.set('weight', '难道朕在你心里没有重量吗？')
+    }
+
+    if (this.state.manufacturer == null || this.state.manufacturer.length == 0) {
+      errMsgMap.set('manufacturer', '朕想知道这药是哪里生产的？')
+    }
+
+    if (this.state.dosage == null || this.state.dosage.length == 0) {
+      errMsgMap.set('dosage', '你给朕吃了多少？')
+    }
+
+    if (this.state.dewormingAddress == null || this.state.dewormingAddress.length == 0) {
+      errMsgMap.set('dewormingAddress', '你要带朕去哪儿？')
+    }
+
+    if (this.state.doctor == null || this.state.doctor.length == 0) {
+      errMsgMap.set('doctor', '朕的御医呢？')
+    }
+
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
       let msgList = []

@@ -177,7 +177,7 @@ export default class PetUpdate extends Component {
     
     this.setState({
       adoptDate: adoptDate,
-      adoptDateSel: AdoptDate
+      adoptDateSel: adoptDate
     })
   }
 
@@ -195,6 +195,17 @@ export default class PetUpdate extends Component {
     console.log('提交')
     console.log(this.state.errMsgMap)
     let errMsgMap = this.state.errMsgMap
+    if (this.state.nickName == null || this.state.nickName.length == 0) {
+      errMsgMap.set('nickName', '朕不配拥有姓名吗？')
+    }
+
+    if (this.state.colour == null || this.state.colour.length == 0) {
+      errMsgMap.set('colour', '难道朕没有颜色吗？')
+    }
+
+    if (this.state.weight == null || this.state.weight.length == 0 || this.state.weight <= 0) {
+      errMsgMap.set('weight', '难道朕在你心里没有重量吗？')
+    }
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
       let msgList = []

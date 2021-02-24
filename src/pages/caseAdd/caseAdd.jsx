@@ -354,6 +354,38 @@ export default class CaseUpdate extends Component {
     console.log(this.state.errMsgMap)
     console.log(this.state.caseDetail)
     let errMsgMap = this.state.errMsgMap
+    if (this.state.age == null || this.state.age.length == 0 || this.state.age == 0) {
+      errMsgMap.set('age', '你忘了朕的年龄了？')
+    }
+
+    if (this.state.weight == null || this.state.weight.length == 0 || this.state.weight <= 0) {
+      errMsgMap.set('weight', '难道朕在你心里没有重量吗？')
+    }
+
+    if (this.state.symptom == null || this.state.symptom.length == 0) {
+      errMsgMap.set('symptom', '朕看起来如何？')
+    }
+
+    if (this.state.diagnosisResult == null || this.state.diagnosisResult.length == 0) {
+      errMsgMap.set('diagnosisResult', '御医怎么说？')
+    }
+
+    if (this.state.therapy == null || this.state.therapy.length == 0) {
+      errMsgMap.set('therapy', '朕可还有救？')
+    }
+
+    if (this.state.diagnosisAddress == null || this.state.diagnosisAddress.length == 0) {
+      errMsgMap.set('diagnosisAddress', '你带朕去哪了？')
+    }
+
+    if (this.state.medication == null || this.state.medication.length == 0) {
+      errMsgMap.set('medication', '御医给朕开了什么方子？')
+    }
+
+    if (this.state.doctor == null || this.state.doctor.length == 0) {
+      errMsgMap.set('doctor', '朕的御医呢？')
+    }
+
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
       let msgList = []

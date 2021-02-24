@@ -26,12 +26,16 @@ const getCurrentDate = () => {
     // console.log("当前月：" + nowMonth)
     var nowDay = d.getDate();
     var nowDayStr = String(nowDay)
+    var nowMonthStr = String(nowMonth)
     console.log(nowDay)
+    if (nowMonth < 10) {
+      nowMonthStr = '0' + nowMonthStr
+    }
     if (nowDay < 10) {
       
       nowDayStr = '0' + nowDayStr
     }
-    return nowYear + '-' + nowMonth + '-' + nowDayStr
+    return nowYear + '-' + nowMonthStr + '-' + nowDayStr
 }
 
 const jsGetAge = (strBirthday) =>{       

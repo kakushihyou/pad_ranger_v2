@@ -111,6 +111,18 @@ export default class DiaryUpdate extends Component {
     console.log('提交')
     console.log(this.state.errMsgMap)
     let errMsgMap = this.state.errMsgMap
+    if (this.state.weather == null || this.state.weather.length == 0) {
+      errMsgMap.set('weather', '选一个合适的天气？')
+    }
+
+    if (this.state.mood == null || this.state.mood.length == 0) {
+      errMsgMap.set('content', '试着给自己安排一种心情？')
+    }
+
+    if (this.state.content == null || this.state.content.length == 0) {
+      errMsgMap.set('content', '试着整理一下心情？')
+    }
+    
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
       let msgList = []
@@ -170,7 +182,7 @@ export default class DiaryUpdate extends Component {
   }
 
   goback = () => {
-    Taro.showmoodal({
+    Taro.showModal({
       cancelText:'稍后再来',
       cancelColor:'#FFC1C1',
       confirmText:'去保存',

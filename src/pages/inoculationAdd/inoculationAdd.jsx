@@ -235,6 +235,30 @@ export default class InoculationAdd extends Component {
     console.log(this.state.errMsgMap)
     console.log(this.state.dewormingDetail)
     let errMsgMap = this.state.errMsgMap
+    if (this.state.vaccineName == null || this.state.vaccineName.length == 0) {
+      errMsgMap.set('vaccineName', '你给朕注射的什么药？')
+    }
+
+    if (this.state.weight == null || this.state.weight.length == 0 || this.state.weight <= 0) {
+      errMsgMap.set('weight', '难道朕在你心里没有重量吗？')
+    }
+
+    if (this.state.manufacturer == null || this.state.manufacturer.length == 0) {
+      errMsgMap.set('manufacturer', '朕想知道这药是哪里生产的？')
+    }
+
+    if (this.state.dosage == null || this.state.dosage.length == 0) {
+      errMsgMap.set('dosage', '你给朕吃了多少？')
+    }
+
+    if (this.state.inoculationAddress == null || this.state.inoculationAddress.length == 0) {
+      errMsgMap.set('inoculationAddress', '你要带朕去哪儿？')
+    }
+
+    if (this.state.doctor == null || this.state.doctor.length == 0) {
+      errMsgMap.set('doctor', '朕的御医呢？')
+    }
+
     if (errMsgMap != null && errMsgMap.size != 0) {
       console.log('有错误')
       let msgList = []
