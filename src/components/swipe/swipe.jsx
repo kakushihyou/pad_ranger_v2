@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import { AtButton, AtAvatar, AtSwipeAction } from 'taro-ui'
-import Taro, { getCurrentPages } from '@tarojs/taro'
+import { View } from '@tarojs/components'
+import { AtSwipeAction } from 'taro-ui'
+import Taro, { getCurrentPages, getSystemInfo } from '@tarojs/taro'
 
 import "taro-ui/dist/style/components/button.scss"
-import "taro-ui/dist/style/components/swipe-action.scss";
+import "taro-ui/dist/style/components/swipe-action.scss"
 import './swipe.scss'
 import Httpclient from '../../../httpclient/http'
 import Config from '../../config/globalConfig.json'
@@ -18,7 +18,6 @@ export default class Swipe extends Component {
 
   handleClick(e) {
     console.log(e)
-    let modifyUrl = this.props.modify_url
     let petInfo = this.props.info
     if (e.text === '修改') {
       
@@ -73,23 +72,34 @@ export default class Swipe extends Component {
   }
 
   render () {
+    let currentAreaWidth
+    Taro.getSystemInfo({
+      success: function (res) {
+        currentAreaWidth = res.screenWidth
+      }
+    })
     return (
-      <AtSwipeAction onClick={this.handleClick} options={[
-        {
-          text: '修改',
-          style: {
-            backgroundColor: '#9BCEFA'
+      // <View>
+        <AtSwipeAction className='withBorder' onClick={this.handleClick} areaWidth={currentAreaWidth} maxDistance={140}
+        options={[
+          {
+            text: '修改',
+            style: {
+              width: 32,
+              backgroundColor: '#9BCEFA'
+            }
+          },
+          {
+            text: '删除',
+            style: {
+              width: 32,
+              backgroundColor: '#FFC1C1'
+            }
           }
-        },
-        {
-          text: '删除',
-          style: {
-            backgroundColor: '#FFC1C1'
-          }
-        }
-      ]}>
-        <View className='normal'>{this.props.content}</View>
-      </AtSwipeAction>
+        ]}>
+          <View className='normal'>{this.props.content}</View>
+        </AtSwipeAction>
+      // </View>
     )
   }
 }
