@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
-import { AtButton, AtAvatar, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
+import { AtButton, AtAvatar, AtList, AtListItem, AtInput, AtMessage, AtActivityIndicator } from 'taro-ui'
 import {getDefaultHeadImg, getGenderStr, getCurrentDate, getSpeciesMemo, getSterilizationMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -310,9 +310,12 @@ export default class PetUpdate extends Component {
         })
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
         let tempFilePaths = res.tempFilePaths;
+        console.log(res.tempFiles)
+        console.log(tempFilePaths)
         // TODO 上传图片到腾讯COS对象存储，获取存储路径
         this.setState({
           headImg: tempFilePaths[0],
+          uploading: false
         },()=>{
           console.log(tempFilePaths);
         })
@@ -357,7 +360,7 @@ export default class PetUpdate extends Component {
           </Picker>
           
           <Picker class='picker' mode='date' value={this.state.adoptDate} onChange={this.onAdoptDateChange}>
-            <AtList hasBorder={true}>
+            <AtList hasBorder={false}>
               <AtListItem title='接驾日期' hasBorder={false} extraText={this.state.adoptDateSel} />
             </AtList>
           </Picker>
