@@ -1,0 +1,60 @@
+@import "~taro-ui/dist/style/components/icon.scss";
+page {
+  height: 100%;
+}
+
+.top {
+  flex: auto;
+  position: relative;
+  flex-direction:column;
+  height: 100%;
+  bottom: 0;
+  top: 0;
+}
+
+.op {
+  opacity: 0.45
+}
+
+.background-image{
+  height : 100%;
+  position: absolute;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+}
+
+.detail {
+  height: 90%;
+  padding: 40px 40px 40px 40px;
+  position: relative;
+  color: #203c53;
+
+  .at-input {
+    margin-left: 0px;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #d6e4ef  ;
+  }  
+
+  .at-input__title {
+    margin-left: 40px;
+  }
+
+  .textarea {
+    text-indent:55px;
+  }
+} 
+
+.confirm {
+  display: flex;
+  border: none;
+  margin-top: 7%;
+  background-color: #9BCEFA;
+}
+
+.cancel {
+  display: flex;
+  background-color: #FFC1C1;
+  border: none;
+  margin-top: 25px;
+}

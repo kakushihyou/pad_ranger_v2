@@ -18,7 +18,7 @@ export default class DiaryItem extends Component {
     console.log('跳转到日记详情页面')
     console.log('日记ID是' + this.props.info.id)
     Taro.navigateTo({
-      url:'/pages/diaryDetail/diaryDetail?ID=' + this.props.info.id
+      url:'/diary/pages/diaryDetail/diaryDetail?ID=' + this.props.info.id
     })
   }
 

@@ -4,7 +4,6 @@ import { AtButton, AtAvatar } from 'taro-ui'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './mine.scss'
-import Httpclient from '../../../httpclient/http'
 import  BackGroundPng  from "../../assets/background/backgroud_ranger.png";
 
 export default class Mine extends Component {
@@ -34,7 +33,7 @@ export default class Mine extends Component {
               Hey！
             </View>
             <View>
-              我(们)将一直在守在你身边，直到生命的最后一刻。从现在起就做你的专属侠客，守护你的心灵，不离不弃。我(们)就是你的肉垫侠，用小肉垫来温热你的心灵，抵抗内心的黑暗。
+              我将一直守在你身边，直到生命的最后一刻。从现在起，做你的专属侠客，守护你的心灵，不离不弃。我就是你的肉垫侠，用小肉垫来温热你的心灵，抵抗内心的黑暗。
             </View>
           </View>
         </View>

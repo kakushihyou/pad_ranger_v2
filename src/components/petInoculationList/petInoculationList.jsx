@@ -7,7 +7,6 @@ import BlankPage from '../blankPage/blankPage'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petInoculationList.scss'
-import Httpclient from '../../../httpclient/http'
 
 
 export default class PetInoculationList extends Component {

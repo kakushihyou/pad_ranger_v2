@@ -67,7 +67,7 @@ export default class PetDewormingItem extends Component {
     console.log('跳转到修改页面')
     let dewormingID = this.props.info.id
     Taro.navigateTo({
-      url: '/pages/dewormingUpdate/dewormingUpdate?dewormingID=' + dewormingID
+      url: '/case/pages/dewormingUpdate/dewormingUpdate?dewormingID=' + dewormingID
     })
   }
 

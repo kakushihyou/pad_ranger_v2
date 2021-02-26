@@ -23,7 +23,7 @@ export default class Swipe extends Component {
       
       console.log('修改')
       Taro.navigateTo({
-        url: '/pages/petUpdate/petUpdate?petID=' + petInfo.id
+        url: '/pet/pages/petUpdate/petUpdate?petID=' + petInfo.id
       })
     } else if (e.text === '删除') {
       Taro.showModal({

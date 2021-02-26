@@ -126,22 +126,16 @@ export default class Diary extends Component {
   onButtonClick = () => {
     // 跳转到新增日记页面
     Taro.navigateTo({
-      url: '/pages/diaryAdd/diaryAdd?userID=' + this.state.userID
+      url: '/diary/pages/diaryAdd/diaryAdd?userID=' + this.state.userID
     })
   }
 
  
 
   render () {
-    // console.log(this.state.diaryList.length)
     return (
       <View className='diary'>
         <AtSearchBar placeholder="请输入要搜索的日记内容关键词" fixed={true} showActionButton={false} inputType='number' value={this.state.condition} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
-        {/* <Picker class='picker' mode='date' value={this.state.conditionDate} onChange={this.onConditionDateChange.bind(this)} fields='month'>
-          <AtList hasBorder={false}>
-            <AtListItem title='点击选择日期 > ' hasBorder={false} extraText={this.state.conditionDateSel} />
-          </AtList>
-        </Picker> */}
         <View className='list'>
           {
             (this.state.diaryList != null && this.state.diaryList.length > 0) ? (

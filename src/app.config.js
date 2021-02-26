@@ -1,22 +1,39 @@
 export default {
   pages: [
     'pages/index/index',
-    'pages/petDetail/petDetail',
-    'pages/petUpdate/petUpdate',
-    'pages/petAdd/petAdd',
     'pages/medicalTreatment/medicalTreatment',
-    'pages/situationDetail/situationDetail',
-    'pages/dewormingUpdate/dewormingUpdate',
-    'pages/dewormingAdd/dewormingAdd',
-    'pages/inoculationAdd/inoculationAdd',
-    'pages/inoculationUpdate/inoculationUpdate',
-    'pages/caseUpdate/caseUpdate',
-    'pages/caseAdd/caseAdd',
     'pages/diary/diary',
-    'pages/diaryDetail/diaryDetail',
-    'pages/diaryUpdate/diaryUpdate',
-    'pages/diaryAdd/diaryAdd',
     'pages/mine/mine'
+  ],
+  subpackages: [
+    {
+      root: "case",
+      pages: [
+        'pages/situationDetail/situationDetail',
+        'pages/dewormingUpdate/dewormingUpdate',
+        'pages/dewormingAdd/dewormingAdd',
+        'pages/inoculationAdd/inoculationAdd',
+        'pages/inoculationUpdate/inoculationUpdate',
+        'pages/caseUpdate/caseUpdate',
+        'pages/caseAdd/caseAdd'
+      ]
+    },
+    {
+      root: "diary",
+      pages: [
+        'pages/diaryDetail/diaryDetail',
+        'pages/diaryUpdate/diaryUpdate',
+        'pages/diaryAdd/diaryAdd'
+      ]
+    },
+    {
+      root: "pet",
+      pages: [
+        'pages/petDetail/petDetail',
+        'pages/petUpdate/petUpdate',
+        'pages/petAdd/petAdd'
+      ]
+    }
   ],
   window: {
     backgroundTextStyle: 'light',

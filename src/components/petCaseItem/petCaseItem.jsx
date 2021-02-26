@@ -7,7 +7,6 @@ import {getInitialDiagnosisMemo, getDiagnosisTypeMemo} from '../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petCaseItem.scss'
 import Httpclient from '../../../httpclient/http'
-import PetCaseDetail from '../petCaseDetail/petCaseDetail'
 import Config from '../../config/globalConfig.json'
 
 export default class PetCaseItem extends Component {
@@ -69,7 +68,7 @@ export default class PetCaseItem extends Component {
     let caseID = this.props.info.id
     let petID = this.props.info.petID
     Taro.navigateTo({
-      url: '/pages/caseUpdate/caseUpdate?caseID=' + caseID + '&petID=' + petID
+      url: '/case/pages/caseUpdate/caseUpdate?caseID=' + caseID + '&petID=' + petID
     })
   }
 

@@ -21,7 +21,7 @@ export default class PetGeneralSituation extends Component {
     console.log('进入详情页面')
 
     Taro.navigateTo({
-      url:'/pages/situationDetail/situationDetail?petID=' + petID
+      url:'/case/pages/situationDetail/situationDetail?petID=' + petID
     })
   }
 

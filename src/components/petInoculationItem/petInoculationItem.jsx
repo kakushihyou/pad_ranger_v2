@@ -67,7 +67,7 @@ export default class PetInoculationItem extends Component {
     console.log('跳转到修改页面')
     let inoculationID = this.props.info.id
     Taro.navigateTo({
-      url: '/pages/inoculationUpdate/inoculationUpdate?inoculationID=' + inoculationID
+      url: '/case/pages/inoculationUpdate/inoculationUpdate?inoculationID=' + inoculationID
     })
   }
 

@@ -114,7 +114,6 @@ export default class Index extends Component {
     let petResumeListInfo 
     Httpclient.get(Config.request_host + '/pet/list?userID=' + this.state.userID)
     .then(res => {
-      // console.log(res.Data)
 
       if (res.Data.count < 1) {
         console.log('未找到宠物信息')
@@ -131,7 +130,6 @@ export default class Index extends Component {
         petResumeList: petResumeListInfo,
       })
 
-      // console.log(this.state.petResumeList)
     })
     .catch(err => {
       console.error(err)
@@ -145,12 +143,11 @@ export default class Index extends Component {
 
   onButtonClick = () => {
     Taro.navigateTo({
-      url: '/pages/petAdd/petAdd?userID=' + this.state.userID
+      url: '/pet/pages/petAdd/petAdd?userID=' + this.state.userID
     })
   } 
 
   render () {
-    // console.log('开始渲染页面' + JSON.stringify(this.state.petResumeList))
     return (
       <View className='page'>
         <View className='list'>

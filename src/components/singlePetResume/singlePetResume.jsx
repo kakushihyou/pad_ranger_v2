@@ -19,7 +19,7 @@ export default class SinglePetResume extends Component {
     console.log('进入详情页面')
     let petID = this.props.petResume.id
     Taro.navigateTo({
-      url:'/pages/petDetail/petDetail?petID=' + petID
+      url:'/pet/pages/petDetail/petDetail?petID=' + petID
     })
   }
 

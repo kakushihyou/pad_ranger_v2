@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "pad_ranger_v2",
   "description": "肉垫侠",
-  "appid": "wxded110af0fd6c68f",
+  "appid": "wxb88330d6130ed56a",
   "setting": {
     "urlCheck": false,
     "es6": false,
@@ -23,6 +23,7 @@
     "compileHotReLoad": false,
     "useMultiFrameRuntime": true,
     "useApiHook": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
@@ -36,8 +37,7 @@
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
-    "minifyWXSS": true,
-    "useApiHostProcess": true
+    "minifyWXSS": true
   },
   "compileType": "miniprogram",
   "simulatorType": "wechat",
