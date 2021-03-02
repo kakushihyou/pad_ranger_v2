@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
-
+import Taro from '@tarojs/taro'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './medicalTreatment.scss'
 import Httpclient from '../../../httpclient/http'
@@ -13,14 +12,14 @@ export default class Case extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userID: '1000000002',
+      // userID: '1000000002',
       petGeneralSituationList: []
     }
   }
 
   componentDidShow = () => {
-    // TODO 获取宠物概要列表
-    Httpclient.get(Config.request_host + '/pet/total?userID=' + this.state.userID)
+    // 获取宠物概要列表
+    Httpclient.get(Config.request_host + '/pet/total?userID=' + Taro.getStorageSync('userID'))
     .then(res => {
       console.log(res.Data)
 

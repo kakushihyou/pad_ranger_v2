@@ -15,104 +15,89 @@ export default class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      petResumeList: [],
-      // TODO
-      userID: '1000000002'
+      petResumeList: []
     }
+
+    // this.getPetList = this.getPetList.bind(this)
   }
 
   componentWillMount () {
-    // TODO Test
-    Taro.setStorage({
-      key: 'userID',
-      Data: '1000000002'
-    })
-
-
-    // TODO 判断是否需要微信授权
-
-    // console.log('index222222222')
-    // TODO 微信登录
-    // Taro.login({
-    //   success(res) {
-    //     var code = res.code
-    //     console.log(code)
-    //     Httpclient.post(
-    //       'http://localhost:9669/login', {code: code}, 'application/json')
-    //       .then(res => {
-    //         console.log(res.Data)
-    //         var userId = res.Data
-    //         // TODO 将userId存入缓存
-    //         Taro.setStorage({
-    //            key: 'userID',
-    //            Data: userId
-    //          })
-    //         // TODO 获取用户授权
-    //         Taro.getSetting({
-    //           success(res) {
-    //             console.log(res.authSetting["scope.userInfo"])
-    //             if (!res.authSetting["scope.userInfo"]) {
-    //               Taro.authorize({
-    //                 scope: 'scope.userInfo',
-    //                 success() {
-    //                   console.log('获取授权成功')
-    //                 },
-    //                 fail() {
-    //                   console.error('微信授权失败')
-    //                 }
-    //               })
-    //             }
-
-    //             Taro.getUserInfo({
-    //               success: function(res) {
-    //                 var jsonData = {
-    //                   UserID : userId,
-    //                   RawData : res.rawData,
-    //                   Signature : res.signature,
-    //                   EncryptedData : res.encryptedData,
-    //                   Iv : res.iv
-    //                 }
-    //                 Taro.setStorage({
-    //                   key: 'userInfo',
-    //                   Data: jsonData
-    //                 })
-    //                 console.log(jsonData)
-    //                 Httpclient.post('http://localhost:9669/analysisWxUserInfo', jsonData, 'application/json')
-    //                   .then(res => {
-    //                     console.log(res)
-    //                   })
-    //                   .catch(err => {
-    //                     console.error(err)
-    //                   })
-    //               }
-    //             })
-    //           }
-    //         })
-
-    //       })
-    //       .catch(err => {
-    //         console.error(err)
-    //         alert('微信登录失败')
-    //         return
-    //       })
-    //   },
-    //   fail(res) {
-    //     alert("微信登录失败")
-    //     return
-    //   }
-    // }).catc((error) => {
-    //   console.error(error)
-    // })
-   }
-
-  componentDidShow () {
-    this.getPetList()
+    
   }
 
-   getPetList() {
-    // TODO 获取用户的宠物列表结果示例  
+  componentDidShow () {
+
+    // 微信登录
+    let userID = Taro.getStorageSync('userID')
+
+    if (!userID) {
+      Taro.login({
+        success(res) {
+          var code = res.code
+          console.log(code)
+          Httpclient.post(
+            Config.request_host + '/login', {code: code}, 'application/json')
+            .then(res => {
+              userID = res.Data
+              // 将userId存入缓存
+              Taro.setStorageSync('userID', userID)
+              
+            })
+            .catch(err => {
+              console.error(err)
+              alert('微信登录失败')
+            })
+        },
+        fail(res) {
+          alert("微信登录失败")
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    } 
+
+    // 用户授权
+    Taro.getSetting({
+      success(res) {
+        if (!res.authSetting["scope.userInfo"]) {
+            
+          console.error('获取微信用户信息授权失败')
+          Taro.navigateTo({
+            url: '/pages/wxLogin/wxLogin'
+          })
+        } else {
+          Taro.getUserInfo({
+            success: function(res) {
+              var jsonData = {
+                UserID : Taro.getStorageSync('userID'),
+                RawData : res.rawData,
+                Signature : res.signature,
+                EncryptedData : res.encryptedData,
+                Iv : res.iv
+              }
+              Taro.setStorageSync('userInfo', jsonData)
+              console.log(jsonData)
+              Httpclient.post(Config.request_host + '/analysisWxUserInfo', jsonData, 'application/json')
+                .then(res => {
+                  console.log(res)
+                })
+                .catch(err => {
+                  console.error(err)
+                })
+            }
+          })
+        }
+      }
+    })
+    this.getPetList(Taro.getStorageSync('userID'))
+    
+  }
+
+  getPetList = (userID) => {
+    // 获取用户的宠物列表结果示例  
     let petResumeListInfo 
-    Httpclient.get(Config.request_host + '/pet/list?userID=' + this.state.userID)
+    Httpclient.get(Config.request_host + '/pet/list?userID=' + userID)
     .then(res => {
 
       if (res.Data.count < 1) {

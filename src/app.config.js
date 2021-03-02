@@ -3,7 +3,8 @@ export default {
     'pages/index/index',
     'pages/medicalTreatment/medicalTreatment',
     'pages/diary/diary',
-    'pages/mine/mine'
+    'pages/mine/mine',
+    'pages/wxLogin/wxLogin'
   ],
   subpackages: [
     {

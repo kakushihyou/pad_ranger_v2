@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, Picker } from '@tarojs/components'
-import { AtList, AtListItem, AtFab, AtSearchBar} from 'taro-ui'
-import Taro, {getCurrentInstance} from '@tarojs/taro'
+import { View, Text} from '@tarojs/components'
+import {AtFab, AtSearchBar} from 'taro-ui'
+import Taro from '@tarojs/taro'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diary.scss'
 import DiaryItem from '../../components/diaryItem/diaryItem'
@@ -13,7 +13,7 @@ export default class Diary extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userID: '1000000002',
+      // userID: '1000000002',
       condition: '',
       conditionDate: '',
       conditionDateSel: '',
@@ -25,7 +25,7 @@ export default class Diary extends Component {
 
   componentDidShow = () => {
     // 获取用户日记列表
-    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID') + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
