@@ -1,3 +1,6 @@
 {
-    "request_host": "https://api.padranger.com"
+    "request_host": "https://api.padranger.com",
+    "Bucket": "padranger-1256694197",
+    "Region": "ap-shanghai"
+
 }
