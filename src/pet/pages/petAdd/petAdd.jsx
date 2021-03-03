@@ -366,7 +366,7 @@ export default class PetUpdate extends Component {
                   'Content-Type': '',
                   'method': 'POST'
                 },
-                success: function (res) {
+                success: (res) => {
                   console.log(res)
                   url = staticPrefix + camSafeName;
                   if (res.statusCode === 200) {
@@ -385,13 +385,20 @@ export default class PetUpdate extends Component {
                   console.log('上传完毕')
                   console.log(res.statusCode);
                   console.log(url);
+                  this.setState({
+                    headImg: url,
+                    uploading: false
+                  })
                 },
-                fail: function (res) {
+                fail: (res) => {
                   console.error(res)
                   Taro.atMessage({
                     message: '头像上传失败',
                     type: 'error',
                     duration: 3000
+                  })
+                  this.setState({
+                    uploading: false
                   })
                 }
               })
@@ -401,14 +408,13 @@ export default class PetUpdate extends Component {
                 type: 'error',
                 duration: 3000
               })
-              return
+              this.setState({
+                uploading: false
+              })
             }
           })
 
-        this.setState({
-          headImg: url,
-          uploading: false
-        })
+        
       }
     })
   }
