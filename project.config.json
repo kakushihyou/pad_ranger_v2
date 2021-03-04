@@ -4,8 +4,8 @@
   "description": "肉垫侠",
   "appid": "wxb88330d6130ed56a",
   "setting": {
-    "urlCheck": false,
-    "es6": false,
+    "urlCheck": true,
+    "es6": true,
     "enhance": false,
     "postcss": false,
     "preloadBackgroundData": false,

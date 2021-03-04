@@ -44,8 +44,14 @@ export default class Index extends Component {
             })
             .catch(err => {
               console.error(err)
+              Taro.showModal({
+                confirmText:'确实忘了',
+                confirmColor:'#9BCEFA',
+                content: err,
+                showCancel: false,  //是否显示取消按钮
+              })
               Taro.showToast({
-                title: "微信登录失败",
+                title: "微信登录失败1",
                 icon: 'none'
               })
 
@@ -54,7 +60,7 @@ export default class Index extends Component {
         },
         fail: () => {
           Taro.showToast({
-            title: "微信登录失败",
+            title: "微信登录失败2",
             icon: 'none'
           })
 

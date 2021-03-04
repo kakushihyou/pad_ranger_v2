@@ -74,5 +74,6 @@ export default {
     backgroundColor: '#feffff',
     borderStyle: 'white',
     position: 'bottom'
-  }
+  },
+  debug: true
 }
