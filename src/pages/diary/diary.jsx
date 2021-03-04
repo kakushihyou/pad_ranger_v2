@@ -61,7 +61,7 @@ export default class Diary extends Component {
         pageNum: 1
       })
     }
-    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID') + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
@@ -106,7 +106,7 @@ export default class Diary extends Component {
     this.setState({
       pageNum: 1
     })
-    Httpclient.get(Config.request_host + '/diary/list?userID=' + this.state.userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID') + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       this.setState({
@@ -126,7 +126,7 @@ export default class Diary extends Component {
   onButtonClick = () => {
     // 跳转到新增日记页面
     Taro.navigateTo({
-      url: '/diary/pages/diaryAdd/diaryAdd?userID=' + this.state.userID
+      url: '/diary/pages/diaryAdd/diaryAdd?userID=' + Taro.getStorageSync('userID')
     })
   }
 

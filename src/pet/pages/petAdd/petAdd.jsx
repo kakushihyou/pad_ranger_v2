@@ -224,6 +224,7 @@ export default class PetUpdate extends Component {
       })
     } else {
       let userID  = getCurrentInstance().router.params.userID
+      console.log('要添加的头像是' + this.state.headImg)
       var requestBody = {
         UserID: Number(userID),
         NickName: this.state.nickName,
@@ -234,7 +235,8 @@ export default class PetUpdate extends Component {
         Weight: this.state.weight,
         AdoptDate: this.state.adoptDate,
         SterilizationFlag: this.state.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
-        SterilizationDate: this.state.sterilizationDate
+        SterilizationDate: this.state.sterilizationDate,
+        HeadImg: this.state.headImg,
       }
 
       console.log(requestBody)
@@ -415,6 +417,10 @@ export default class PetUpdate extends Component {
           })
 
         
+      },
+      fail: (e) => {
+        console.log(e)
+        console.log('上传文件失败')
       }
     })
   }

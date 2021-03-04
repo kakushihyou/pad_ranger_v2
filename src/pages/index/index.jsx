@@ -128,7 +128,7 @@ export default class Index extends Component {
 
   onButtonClick = () => {
     Taro.navigateTo({
-      url: '/pet/pages/petAdd/petAdd?userID=' + this.state.userID
+      url: '/pet/pages/petAdd/petAdd?userID=' + Taro.getStorageSync('userID')
     })
   } 
 
