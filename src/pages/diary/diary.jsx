@@ -24,8 +24,14 @@ export default class Diary extends Component {
   }
 
   componentDidShow = () => {
+    let userID = Taro.getStorageSync('userID') 
+    if (!userID) {
+      Taro.navigateTo({
+        url: '/pages/wxLogin/wxLogin'
+      })
+    }
     // 获取用户日记列表
-    Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID') + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+    Httpclient.get(Config.request_host + '/diary/list?userID=' + userID + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {

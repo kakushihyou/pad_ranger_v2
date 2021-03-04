@@ -18,8 +18,14 @@ export default class Case extends Component {
   }
 
   componentDidShow = () => {
+    let userID = Taro.getStorageSync('userID') 
+    if (!userID) {
+      Taro.navigateTo({
+        url: '/pages/wxLogin/wxLogin'
+      })
+    }
     // 获取宠物概要列表
-    Httpclient.get(Config.request_host + '/pet/total?userID=' + Taro.getStorageSync('userID'))
+    Httpclient.get(Config.request_host + '/pet/total?userID=' + userID)
     .then(res => {
       console.log(res.Data)
 
