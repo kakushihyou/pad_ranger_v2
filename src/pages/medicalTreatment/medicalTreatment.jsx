@@ -23,9 +23,10 @@ export default class Case extends Component {
       Taro.navigateTo({
         url: '/pages/wxLogin/wxLogin'
       })
+      return
     }
     // 获取宠物概要列表
-    Httpclient.get(Config.request_host + '/pet/total?userID=' + userID)
+    Httpclient.get(Config.request_host + '/pet/total?userID=' + Taro.getStorageSync('userID'))
     .then(res => {
       console.log(res.Data)
 

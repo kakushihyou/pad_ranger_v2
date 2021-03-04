@@ -17,13 +17,57 @@ export default class Index extends Component {
 
   bindUserInfo = (e) => {
     console.log(e)
-    let res = e.detail
+    let detail = e.detail
+    // 微信登录
+    let userID = Taro.getStorageSync('userID')
+
+    if (!userID) {
+      Taro.login({
+        success: (loginRes) => {
+          var code = loginRes.code
+          console.log(code)
+          Httpclient.post(
+            Config.request_host + '/login', {code: code}, 'application/json')
+            .then(res => {
+              userID = res.Data
+              // 将userId存入缓存
+              Taro.setStorageSync('userID', userID)
+              this.analysisWxuserInfo(detail)
+            })
+            .catch((err) => {
+              console.error(err)
+              Taro.showToast({
+                title: "微信登录失败",
+                icon: 'none'
+              })
+            })
+        },
+        fail: () => {
+          Taro.showToast({
+            title: "微信登录失败",
+            icon: 'none'
+          })
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    } else {
+      this.analysisWxuserInfo(detail)
+    }
+
+    Taro.switchTab({
+      url: '../../pages/index/index'
+    })
+  }
+
+  analysisWxuserInfo = (info) => {
     var jsonData = {
       UserID : Taro.getStorageSync('userID'),
-      RawData : res.rawData,
-      Signature : res.signature,
-      EncryptedData : res.encryptedData,
-      Iv : res.iv
+      RawData : info.rawData,
+      Signature : info.signature,
+      EncryptedData : info.encryptedData,
+      Iv : info.iv
     }
     Taro.setStorageSync('userInfo', jsonData)
     console.log(jsonData)
@@ -34,10 +78,6 @@ export default class Index extends Component {
       .catch(err => {
         console.error(err)
       })
-
-    Taro.switchTab({
-      url: '../../pages/index/index'
-    })
   }
 
   render () {

@@ -32,8 +32,8 @@ export default class Index extends Component {
 
     if (!userID) {
       Taro.login({
-        success(res) {
-          var code = res.code
+        success: (loginRes) => {
+          var code = loginRes.code
           console.log(code)
           Httpclient.post(
             Config.request_host + '/login', {code: code}, 'application/json')
@@ -41,15 +41,24 @@ export default class Index extends Component {
               userID = res.Data
               // 将userId存入缓存
               Taro.setStorageSync('userID', userID)
-              
             })
             .catch(err => {
               console.error(err)
-              alert('微信登录失败')
+              Taro.showToast({
+                title: "微信登录失败",
+                icon: 'none'
+              })
+
+              return
             })
         },
-        fail(res) {
-          alert("微信登录失败")
+        fail: () => {
+          Taro.showToast({
+            title: "微信登录失败",
+            icon: 'none'
+          })
+
+          return
         }
       })
       .catch((error) => {
@@ -66,7 +75,9 @@ export default class Index extends Component {
           Taro.navigateTo({
             url: '/pages/wxLogin/wxLogin'
           })
-        } else {
+          return
+        } 
+        else {
           Taro.getUserInfo({
             success: function(res) {
               var jsonData = {
@@ -90,12 +101,15 @@ export default class Index extends Component {
         }
       }
     })
+
     this.getPetList(Taro.getStorageSync('userID'))
-    
   }
 
   getPetList = (userID) => {
     // 获取用户的宠物列表结果示例  
+    if (!userID) {
+      return
+    }
     let petResumeListInfo 
     Httpclient.get(Config.request_host + '/pet/list?userID=' + userID)
     .then(res => {
