@@ -46,20 +46,25 @@ export default class Case extends Component {
 
       if (res.Data.count < 1) {
         console.log('未找到宠物信息')
-        return (
-          <View className='noData'>
-            <Text>主人，啥也没找到</Text> 
-          </View>
-        )
+        Taro.showToast({
+          title: "请先添加宠物信息",
+          icon: 'none',
+          duration: 3000
+        })
+
+        this.setState({
+          petGeneralSituationList: []
+        })
+      } else {
+        let petGeneralSituationList = res.Data.petGeneralSituationList
+
+        console.log('设置到state中')
+        this.setState({
+          petGeneralSituationList: petGeneralSituationList
+        })
+  
+        console.log(this.state.petGeneralSituationList)
       }
-      let petGeneralSituationList = res.Data.petGeneralSituationList
-
-      console.log('设置到state中')
-      this.setState({
-        petGeneralSituationList: petGeneralSituationList
-      })
-
-      console.log(this.state.petGeneralSituationList)
     })
     .catch(err => {
       console.error(err)

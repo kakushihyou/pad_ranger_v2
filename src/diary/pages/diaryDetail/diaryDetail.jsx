@@ -89,7 +89,7 @@ export default class DiaryDetail extends Component {
               })
 
               Taro.switchTab({
-                url: '../../pages/diary/diary'
+                url: '../../../pages/diary/diary'
               })
             })
             .catch(err => {
@@ -120,8 +120,8 @@ export default class DiaryDetail extends Component {
         </View>
         <View className='detail'>
           <View className='header'>
-            {/* <View className='diaryTime'>{diaryTime.toLocaleDateString() + "  " + diaryTime.toLocaleTimeString()}</View> */}
-            <View className='diaryTime'>{diaryDetail.diaryTimeStr}</View>
+            <View className='diaryTime'>{diaryTime.toLocaleDateString()}</View>
+            {/* <View className='diaryTime'>{diaryDetail.diaryTimeStr}</View> */}
             <View className='mood'>心情分: {diaryDetail.mood}</View> 
             <View className='weather'>{diaryDetail.weather}</View>
           </View>

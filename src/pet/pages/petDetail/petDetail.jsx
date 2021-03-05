@@ -80,7 +80,7 @@ export default class PetDetail extends Component {
               })
 
               Taro.switchTab({
-                url: '../../pages/index/index'
+                url: '../../../pages/index/index'
               })
             })
             .catch(err => {

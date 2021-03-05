@@ -44,7 +44,7 @@ export default class Diary extends Component {
         }
       }
     })
-     
+
     // 获取用户日记列表
     Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID')  + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
@@ -156,7 +156,7 @@ export default class Diary extends Component {
   render () {
     return (
       <View className='diary'>
-        <AtSearchBar placeholder="请输入要搜索的日记内容关键词" fixed={true} showActionButton={false} inputType='number' value={this.state.condition} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
+        <AtSearchBar placeholder="请输入要搜索的日记内容关键词" fixed={true} showActionButton={false} inputType='text' value={this.state.condition} onChange={this.onChange.bind(this)} onActionClick={this.onActionClick.bind(this)} />
         <View className='list'>
           {
             (this.state.diaryList != null && this.state.diaryList.length > 0) ? (

@@ -126,19 +126,17 @@ export default class Index extends Component {
 
       if (res.Data.count < 1) {
         console.log('未找到宠物信息')
-        return (
-          <View className='noData'>
-            <Text>主人，啥也没找到</Text> 
-          </View>
-        )
+        this.setState({
+          petResumeList: [],
+        })
+      } else {
+        petResumeListInfo = res.Data.userPetList
+
+        console.log('设置到state中')
+        this.setState({
+          petResumeList: petResumeListInfo,
+        })
       }
-      petResumeListInfo = res.Data.userPetList
-
-      console.log('设置到state中')
-      this.setState({
-        petResumeList: petResumeListInfo,
-      })
-
     })
     .catch(err => {
       console.error(err)
