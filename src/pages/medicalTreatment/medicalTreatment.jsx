@@ -25,6 +25,20 @@ export default class Case extends Component {
       })
       return
     }
+
+    Taro.getSetting({
+      success(res) {
+        if (!res.authSetting["scope.userInfo"]) {
+            
+          console.error('获取微信用户信息授权失败')
+          Taro.navigateTo({
+            url: '/pages/wxLogin/wxLogin'
+          })
+          return
+        }
+      }
+    })
+    
     // 获取宠物概要列表
     Httpclient.get(Config.request_host + '/pet/total?userID=' + Taro.getStorageSync('userID'))
     .then(res => {

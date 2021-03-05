@@ -31,45 +31,49 @@ export default class Index extends Component {
     let userID = Taro.getStorageSync('userID')
 
     if (!userID) {
-      Taro.login({
-        success: (loginRes) => {
-          var code = loginRes.code
-          console.log(code)
-          Httpclient.post(
-            Config.request_host + '/login', {code: code}, 'application/json')
-            .then(res => {
-              userID = res.Data
-              // 将userId存入缓存
-              Taro.setStorageSync('userID', userID)
-            })
-            .catch(err => {
-              console.error(err)
-              Taro.showModal({
-                confirmText:'确实忘了',
-                confirmColor:'#9BCEFA',
-                content: err,
-                showCancel: false,  //是否显示取消按钮
-              })
-              Taro.showToast({
-                title: "微信登录失败1",
-                icon: 'none'
-              })
-
-              return
-            })
-        },
-        fail: () => {
-          Taro.showToast({
-            title: "微信登录失败2",
-            icon: 'none'
-          })
-
-          return
-        }
+      Taro.navigateTo({
+        url: '/pages/wxLogin/wxLogin'
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      return
+      // Taro.login({
+      //   success: (loginRes) => {
+      //     var code = loginRes.code
+      //     console.log(code)
+      //     Httpclient.post(
+      //       Config.request_host + '/login', {code: code}, 'application/json')
+      //       .then(res => {
+      //         userID = res.Data
+      //         // 将userId存入缓存
+      //         Taro.setStorageSync('userID', userID)
+      //       })
+      //       .catch(err => {
+      //         console.error(err)
+      //         Taro.showModal({
+      //           confirmText:'确实忘了',
+      //           confirmColor:'#9BCEFA',
+      //           content: err,
+      //           showCancel: false,  //是否显示取消按钮
+      //         })
+      //         Taro.showToast({
+      //           title: "微信登录失败1",
+      //           icon: 'none'
+      //         })
+
+      //         return
+      //       })
+      //   },
+      //   fail: () => {
+      //     Taro.showToast({
+      //       title: "微信登录失败2",
+      //       icon: 'none'
+      //     })
+
+      //     return
+      //   }
+      // })
+      // .catch((error) => {
+      //   console.error(error)
+      // })
     } 
 
     // 用户授权

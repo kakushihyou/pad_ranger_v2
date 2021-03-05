@@ -19,45 +19,39 @@ export default class Index extends Component {
     console.log(e)
     let detail = e.detail
     // 微信登录
-    let userID = Taro.getStorageSync('userID')
-
-    if (!userID) {
-      Taro.login({
-        success: (loginRes) => {
-          var code = loginRes.code
-          console.log(code)
-          Httpclient.post(
-            Config.request_host + '/login', {code: code}, 'application/json')
-            .then(res => {
-              userID = res.Data
-              // 将userId存入缓存
-              Taro.setStorageSync('userID', userID)
-              this.analysisWxuserInfo(detail)
+    Taro.login({
+      success: (loginRes) => {
+        var code = loginRes.code
+        console.log(code)
+        Httpclient.post(
+          Config.request_host + '/login', {code: code}, 'application/json')
+          .then(res => {
+            let userID = res.Data
+            console.log('微信授权页面登陆获取userID是' + userID)
+            // 将userId存入缓存
+            Taro.setStorageSync('userID', userID)
+            this.analysisWxuserInfo(detail)
+            Taro.switchTab({
+              url: '../../pages/index/index'
             })
-            .catch((err) => {
-              console.error(err)
-              Taro.showToast({
-                title: "微信登录失败3",
-                icon: 'none'
-              })
-            })
-        },
-        fail: () => {
-          Taro.showToast({
-            title: "微信登录失败4",
-            icon: 'none'
           })
-        }
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-    } else {
-      this.analysisWxuserInfo(detail)
-    }
-
-    Taro.switchTab({
-      url: '../../pages/index/index'
+          .catch((err) => {
+            console.error(err)
+            Taro.showToast({
+              title: "微信登录失败3",
+              icon: 'none'
+            })
+          })
+      },
+      fail: () => {
+        Taro.showToast({
+          title: "微信登录失败4",
+          icon: 'none'
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error)
     })
   }
 
