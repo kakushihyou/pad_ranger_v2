@@ -555,11 +555,15 @@ export default class PetUpdate extends Component {
             </AtList>
           </Picker>
           {/* <View>是否绝育：{getSterilizationMemo(petDetail.sterilizationFlag)}</View> */}
-          <Picker class='picker' mode='date' value={this.state.petDetail.sterilizationDate} onChange={this.onSterilizationDateChange}>
-            <AtList hasBorder={false}>
-              <AtListItem title='绝育日期' hasBorder={false} extraText={this.state.sterilizationDateSel} />
-            </AtList>
-          </Picker>
+          {
+            !this.state.sterilizationSelectorChecked | this.state.sterilizationSelectorChecked == '未绝育' ? '' : (
+              <Picker class='picker' mode='date' value={this.state.petDetail.sterilizationDate} onChange={this.onSterilizationDateChange}>
+                <AtList hasBorder={false}>
+                  <AtListItem title='绝育日期' hasBorder={false} extraText={this.state.sterilizationDateSel} />
+                </AtList>
+              </Picker>
+            )
+          }
         </View>
         <AtButton className='confirm' type='primary' size='small' circle onClick={this.commit}>确认</AtButton>
         <AtButton className='cancel' type='primary' size='small' circle onClick={this.goback}>取消</AtButton>

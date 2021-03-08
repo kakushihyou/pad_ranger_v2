@@ -376,7 +376,7 @@ export default class InoculationAdd extends Component {
 
           <AtInput class='rightInput' name='dosage' type='text' title='用药剂量' border={true} adjustPosition={true} placeholder='请输入用药剂量' value={this.state.dosage} onChange={this.onDosageChange}/>
           
-          <AtInput class='rightInput' name='inoculationAddress' type='text' title='接种地点' border={true} adjustPosition={true} placeholder='请输入驱虫地点' value={this.state.inoculationAddress} onChange={this.onInoculationAddressChange}/>
+          <AtInput class='rightInput' name='inoculationAddress' type='text' title='接种地点' border={true} adjustPosition={true} placeholder='请输入接种地点' value={this.state.inoculationAddress} onChange={this.onInoculationAddressChange}/>
 
           <AtInput class='rightInput' name='doctor' type='text' title='宠物医师' border={true} adjustPosition={true} placeholder='请输入宠物医师' value={this.state.doctor} onChange={this.onDoctorChange}/>
           
