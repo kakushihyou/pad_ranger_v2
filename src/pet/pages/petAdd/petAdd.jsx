@@ -194,15 +194,6 @@ export default class PetUpdate extends Component {
   }
 
   commit = (e) =>{
-    // Taro.showModal({
-    //     title: "测试",
-    //     content: "测试",
-    //     confirmText: "确定",
-    //     cancelText: "取消",
-    //     success: (res) => {
-    //       console.log(res)
-    //     }
-    //   })
     console.log('提交')
     console.log(this.state.errMsgMap)
     let errMsgMap = this.state.errMsgMap
@@ -231,26 +222,26 @@ export default class PetUpdate extends Component {
         type: 'error',
         duration: 3000
       })
+
+      return false
+    }
+    
+    console.log('要添加的头像是' + this.state.headImg)
+    // 上传图片到腾讯COS对象存储，获取存储路径
+    let headImg = this.state.headImg
+    let fileName = headImg.substr(headImg.lastIndexOf('/') + 1);
+    console.log(fileName)
+    if (fileName === 'add_icon_blank.png') {
+      this.addPet('')
     } else {
-      
-      console.log('要添加的头像是' + this.state.headImg)
       // 上传图片到腾讯COS对象存储，获取存储路径
-      let url 
-      let headImg = this.state.headImg
-      let fileName = headImg.substr(headImg.lastIndexOf('/') + 1);
-      console.log(fileName)
-      if (fileName === 'add_icon_blank.png') {
-        this.addPet('')
-      } else {
-        // 上传图片到腾讯COS对象存储，获取存储路径
-        this.setState({
-          uploading: true
-        })
-        uploadFile(headImg, this.addPet)
-        this.setState({
-          uploading: false
-        })
-      }
+      this.setState({
+        uploading: true
+      })
+      uploadFile(headImg, this.addPet)
+      this.setState({
+        uploading: false
+      })
     }
   }
 
