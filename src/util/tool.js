@@ -1,6 +1,5 @@
 import DefaultCatHeadImg from "../assets/headimg/cat_default.png";
 import DefaultDogHeadImg from "../assets/headimg/dog_default.png";
-import Taro from '@tarojs/taro'
 
 const getDefaultHeadImg = (species) => {
     let headImg 

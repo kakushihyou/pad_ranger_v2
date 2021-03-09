@@ -330,11 +330,7 @@ export default class PetUpdate extends Component {
                 .then(res => {
                   console.log(res)
                   if (res.Success) {
-                    Taro.requestSubscribeMessage({
-                      tmplIds: [],
-                      success: (smRes) => {
-                        console.log(smRes)
-                      }})
+                    
                     Taro.showToast({
                       title: '干的漂亮！',
                       duration: 3200,
@@ -387,8 +383,6 @@ export default class PetUpdate extends Component {
             return false
           }
         })
-
-      
     }
   }
 
