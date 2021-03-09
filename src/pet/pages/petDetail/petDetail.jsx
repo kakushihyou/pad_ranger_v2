@@ -122,7 +122,9 @@ export default class PetDetail extends Component {
           <View>接驾日期：{petDetail.adoptDate}</View>
           <View>体重：{petDetail.weight}KG</View>
           <View>是否绝育：{getSterilizationMemo(petDetail.sterilizationFlag)}</View>
-          <View>绝育时间：{petDetail.sterilizationDate}</View>
+          {
+            petDetail.sterilizationFlag ? (<View>绝育时间：{petDetail.sterilizationDate}</View>) : ''
+          }
           <View>是否接种疫苗：{getInoculationMemo(petDetail.inoculationFlag)}</View>
           <View>接种详情：<Text className='clickLook' onClick={this.handleClick}>点击查看</Text></View>
         </View>

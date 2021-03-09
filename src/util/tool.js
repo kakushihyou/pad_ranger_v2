@@ -1,5 +1,9 @@
 import DefaultCatHeadImg from "../assets/headimg/cat_default.png";
 import DefaultDogHeadImg from "../assets/headimg/dog_default.png";
+import Httpclient from '../../httpclient/http'
+import Config from '../config/globalConfig.json'
+import CosAuth from '../../cos/cos-auth'
+import Taro from '@tarojs/taro'
 
 const getDefaultHeadImg = (species) => {
     let headImg 
@@ -316,6 +320,87 @@ const getWeekdayMemo = (weekday) => {
   return weekdayMemo
 }
 
+const uploadFile = (filePath, callback) => {
+  let url
+  let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+  let secretId
+  let secretKey
+  let sessionToken
+  Httpclient.get(
+    Config.request_host + '/cos/credential?fileName=' + fileName)
+    .then(res => {
+      console.log('请求密钥结束')
+      console.log(res)
+      if(res.Success) {
+        secretId = res.Data.Credentials.TmpSecretId
+        secretKey = res.Data.Credentials.TmpSecretKey
+        sessionToken = res.Data.Credentials.Token
+
+        let prefix = 'https://' + Config.Bucket + '.cos.' + Config.Region + '.myqcloud.com/'
+        let staticPrefix = 'https://' + Config.Bucket + '.cos-website.' + Config.Region + '.myqcloud.com/'
+        let AuthData = {
+              XCosSecurityToken: sessionToken,
+              Authorization: CosAuth({
+                  SecretId: secretId,
+                  SecretKey: secretKey,
+                  Method: 'POST',
+                  Pathname: '/',
+              })
+            }
+        console.log(AuthData)
+        let camSafeName = encodeURIComponent(fileName)
+                          .replace(/!/g, '%21')
+                          .replace(/'/g, '%27')
+                          .replace(/\(/g, '%28')
+                          .replace(/\)/g, '%29')
+                          .replace(/\*/g, '%2A')
+                          .replace(/%2F/g, '/');
+
+        console.log('Key是' + camSafeName)
+        console.log('filePath是' + filePath)
+        console.log('Url是' + prefix)
+        Taro.uploadFile({
+          url: prefix,
+          name: 'file',
+          filePath: filePath,
+          header: {
+            'Content-Type': 'multipart/form-data'
+          },  
+          formData: {
+            'key': camSafeName,
+            'success_action_status': 200,
+            'Signature': AuthData.Authorization,
+            'x-cos-security-token': AuthData.XCosSecurityToken,
+            'Content-Type': '',
+            'method': 'POST'
+          },
+          success: (res) => {
+            console.log(res)
+            url = staticPrefix + camSafeName;
+            if (res.statusCode === 200) {
+              Taro.atMessage({
+                message: '头像上传成功',
+                type: 'success',
+                duration: 3000
+              })
+            } else {
+              Taro.atMessage({
+                message: '头像上传失败',
+                type: 'error',
+                duration: 3000
+              })
+              return false
+            }
+            console.log('上传完毕')
+            console.log(res.statusCode);
+            console.log(url);
+            callback(url)
+          }
+        })
+      }
+    })
+}
+
 export {getDefaultHeadImg, jsGetAge, getAgeSD, getGenderStr, getSpeciesMemo, getSterilizationMemo, 
   getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo, getInitialDiagnosisMemo,
-  getDiagnosisTypeMemo, getWeekdayMemo}
+  getDiagnosisTypeMemo, getWeekdayMemo, uploadFile}

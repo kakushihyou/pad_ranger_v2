@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtAvatar, AtList, AtListItem, AtInput, AtMessage, AtActivityIndicator } from 'taro-ui'
-import {getDefaultHeadImg, getGenderStr, getCurrentDate, getSpeciesMemo, getSterilizationMemo} from '../../../util/tool'
+import {uploadFile, getGenderStr, getCurrentDate, getSpeciesMemo, getSterilizationMemo} from '../../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petAdd.scss'
@@ -194,6 +194,15 @@ export default class PetUpdate extends Component {
   }
 
   commit = (e) =>{
+    // Taro.showModal({
+    //     title: "测试",
+    //     content: "测试",
+    //     confirmText: "确定",
+    //     cancelText: "取消",
+    //     success: (res) => {
+    //       console.log(res)
+    //     }
+    //   })
     console.log('提交')
     console.log(this.state.errMsgMap)
     let errMsgMap = this.state.errMsgMap
@@ -223,167 +232,77 @@ export default class PetUpdate extends Component {
         duration: 3000
       })
     } else {
-      let userID  = getCurrentInstance().router.params.userID
+      
       console.log('要添加的头像是' + this.state.headImg)
       // 上传图片到腾讯COS对象存储，获取存储路径
       let url 
       let headImg = this.state.headImg
       let fileName = headImg.substr(headImg.lastIndexOf('/') + 1);
       console.log(fileName)
-      // 上传图片到腾讯COS对象存储，获取存储路径
-      this.setState({
-        uploading: true
-      })
-      let secretId
-      let secretKey
-      let sessionToken
-      Httpclient.get(
-        Config.request_host + '/cos/credential?fileName=' + fileName)
-        .then(res => {
-          console.log('请求密钥结束')
-          console.log(res)
-          if(res.Success) {
-            secretId = res.Data.Credentials.TmpSecretId
-            secretKey = res.Data.Credentials.TmpSecretKey
-            sessionToken = res.Data.Credentials.Token
+      if (fileName === 'add_icon_blank.png') {
+        this.addPet('')
+      } else {
+        // 上传图片到腾讯COS对象存储，获取存储路径
+        this.setState({
+          uploading: true
+        })
+        uploadFile(headImg, this.addPet)
+        this.setState({
+          uploading: false
+        })
+      }
+    }
+  }
 
-            let prefix = 'https://' + Config.Bucket + '.cos.' + Config.Region + '.myqcloud.com/'
-            let staticPrefix = 'https://' + Config.Bucket + '.cos-website.' + Config.Region + '.myqcloud.com/'
-            let AuthData = {
-                  XCosSecurityToken: sessionToken,
-                  Authorization: CosAuth({
-                      SecretId: secretId,
-                      SecretKey: secretKey,
-                      Method: 'POST',
-                      Pathname: '/',
-                  })
-                }
-            console.log(AuthData)
-            let camSafeName = encodeURIComponent(fileName)
-                              .replace(/!/g, '%21')
-                              .replace(/'/g, '%27')
-                              .replace(/\(/g, '%28')
-                              .replace(/\)/g, '%29')
-                              .replace(/\*/g, '%2A')
-                              .replace(/%2F/g, '/');
+  addPet = (headImg) => {
+    let userID  = getCurrentInstance().router.params.userID
+    var requestBody = {
+      UserID: Number(userID),
+      NickName: this.state.nickName,
+      Gender: this.state.gender, // 0:母，1:公，2:未知
+      Birthday: this.state.birthday,
+      Species: this.state.species, // 物种 1:猫，2:狗
+      Colour: this.state.colour,
+      Weight: this.state.weight,
+      AdoptDate: this.state.adoptDate,
+      SterilizationFlag: this.state.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
+      SterilizationDate: this.state.sterilizationDate,
+      HeadImg: headImg,
+    }
 
-            console.log('Key是' + camSafeName)
-            console.log('filePath是' + headImg)
-            console.log('Url是' + prefix)
-            Taro.uploadFile({
-              url: prefix,
-              name: 'file',
-              filePath: headImg,
-              header: {
-                'Content-Type': 'multipart/form-data'
-              },  
-              formData: {
-                'key': camSafeName,
-                'success_action_status': 200,
-                'Signature': AuthData.Authorization,
-                'x-cos-security-token': AuthData.XCosSecurityToken,
-                'Content-Type': '',
-                'method': 'POST'
-              },
-              success: (res) => {
-                console.log(res)
-                url = staticPrefix + camSafeName;
-                if (res.statusCode === 200) {
-                  Taro.atMessage({
-                    message: '头像上传成功',
-                    type: 'success',
-                    duration: 3000
-                  })
-                } else {
-                  Taro.atMessage({
-                    message: '头像上传失败',
-                    type: 'error',
-                    duration: 3000
-                  })
-                  return false
-                }
-                console.log('上传完毕')
-                console.log(res.statusCode);
-                console.log(url);
-                this.setState({
-                  headImg: url,
-                  uploading: false
-                })
-
-                var requestBody = {
-                  UserID: Number(userID),
-                  NickName: this.state.nickName,
-                  Gender: this.state.gender, // 0:母，1:公，2:未知
-                  Birthday: this.state.birthday,
-                  Species: this.state.species, // 物种 1:猫，2:狗
-                  Colour: this.state.colour,
-                  Weight: this.state.weight,
-                  AdoptDate: this.state.adoptDate,
-                  SterilizationFlag: this.state.sterilizationFlag, // 绝育标识 1:已绝育，0:未绝育
-                  SterilizationDate: this.state.sterilizationDate,
-                  HeadImg: this.state.headImg,
-                }
-          
-                console.log(requestBody)
-                Httpclient.put(
-                  Config.request_host + '/pet', requestBody, 'application/json')
-                .then(res => {
-                  console.log(res)
-                  if (res.Success) {
-                    
-                    Taro.showToast({
-                      title: '干的漂亮！',
-                      duration: 3200,
-                      icon: "none",
-                      complete: function() {
-                        Taro.navigateBack({
-                          delta: 1
-                        })
-                      }
-                    })
-                  } else {
-                    Taro.atMessage({
-                      message: res.Message,
-                      type: 'error',
-                      duration: 3000
-                    })
-                  }
-                })
-                .catch(err => {
-                  console.error(err)
-                  Taro.atMessage({
-                    message: '出错了？朕很生气！',
-                    type: 'error',
-                    duration: 3000
-                  })
-                })
-              },
-              fail: (res) => {
-                console.error(res)
-                Taro.atMessage({
-                  message: '头像上传失败',
-                  type: 'error',
-                  duration: 3000
-                })
-                this.setState({
-                  uploading: false
-                })
-                return false
-              }
+    console.log(requestBody)
+    Httpclient.put(
+      Config.request_host + '/pet', requestBody, 'application/json')
+    .then(res => {
+      console.log(res)
+      if (res.Success) {
+        
+        Taro.showToast({
+          title: '干的漂亮！',
+          duration: 3200,
+          icon: "none",
+          complete: function() {
+            Taro.navigateBack({
+              delta: 1
             })
-          } else {
-            Taro.atMessage({
-              message: '暂时无法上传',
-              type: 'error',
-              duration: 3000
-            })
-            this.setState({
-              uploading: false
-            })
-            return false
           }
         })
-    }
+      } else {
+        Taro.atMessage({
+          message: res.Message,
+          type: 'error',
+          duration: 3000
+        })
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.atMessage({
+        message: '出错了？朕很生气！',
+        type: 'error',
+        duration: 3000
+      })
+    })
   }
 
   goback = () => {
@@ -431,143 +350,6 @@ export default class PetUpdate extends Component {
       }
     })
   }
-
-  // uploadFile = (filePath) => {
-  //   let url 
-
-  //   let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
-  //   console.log(fileName)
-  //   // 上传图片到腾讯COS对象存储，获取存储路径
-  //   let secretId
-  //   let secretKey
-  //   let sessionToken
-  //   let startTime
-  //   let expiredTime
-  //   Httpclient.get(
-  //     Config.request_host + '/cos/credential?fileName=' + fileName)
-  //     .then(res => {
-  //       if(res.success) {
-  //         console.log('TTTT')
-  //         console.log(res)
-  //         secretId = res.Data.Credentials.TmpSecretId
-  //         secretKey = res.Data.Credentials.TmpSecretKey
-  //         sessionToken = res.Data.Credentials.Token
-  //         startTime = res.Data.StartTime
-  //         expiredTime = res.Data.ExpiredTime
-
-  //         let prefix = 'https://' + Config.Bucket + '.cos.' + Config.Region + '.myqcloud.com/';
-  //         let Key = filePath.substr(filePath.lastIndexOf('/') + 1); 
-  //         console.log('HAHAH')
-  //         console.log(CreData)
-  //         let AuthData = this.getAuthorization(secretId, secretKey, sessionToken)
-  //         let camSafeUrl = encodeURIComponent(Key)
-  //                           .replace(/!/g, '%21')
-  //                           .replace(/'/g, '%27')
-  //                           .replace(/\(/g, '%28')
-  //                           .replace(/\)/g, '%29')
-  //                           .replace(/\*/g, '%2A')
-  //                           .replace(/%2F/g, '/');
-  //         Taro.uploadFile({
-  //           url: prefix,
-  //           name: 'file',
-  //           filePath: filePath,
-  //           formData: {
-  //               'key': Key,
-  //               'success_action_status': 200,
-  //               'Signature': AuthData.Authorization,
-  //               'x-cos-security-token': AuthData.XCosSecurityToken,
-  //               'Content-Type': '',
-  //           },
-  //           success: function (res) {
-  //               url = prefix + camSafeUrl;
-  //               if (res.statusCode === 200) {
-  //                 Taro.atMessage({
-  //                   message: '头像上传成功',
-  //                   type: 'success',
-  //                   duration: 3000
-  //                 })
-  //               } else {
-  //                 Taro.atMessage({
-  //                   message: '头像上传失败',
-  //                   type: 'error',
-  //                   duration: 3000
-  //                 })
-  //               }
-  //               console.log(res.statusCode);
-  //               console.log(url);
-  //           },
-  //           fail: function (res) {
-  //             console.error(res)
-  //             Taro.atMessage({
-  //               message: '头像上传失败',
-  //               type: 'error',
-  //               duration: 3000
-  //             })
-  //           }
-  //         })
-  //       } else {
-  //         Taro.atMessage({
-  //           message: '暂时无法上传',
-  //           type: 'error',
-  //           duration: 3000
-  //         })
-  //         return
-  //       }
-  //     })
-
-  //   return url
-  // }
-
-  // getCredentials = (filePath) => {
-  //   let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
-  //   console.log(fileName)
-  //   // 上传图片到腾讯COS对象存储，获取存储路径
-  //   let secretId
-  //   let secretKey
-  //   let sessionToken
-  //   let startTime
-  //   let expiredTime
-  //   Httpclient.get(
-  //     Config.request_host + '/cos/credential?fileName=' + fileName)
-  //     .then(res => {
-  //       if(res.success) {
-  //         console.log('TTTT')
-  //         console.log(res)
-  //         secretId = res.Data.Credentials.TmpSecretId
-  //         secretKey = res.Data.Credentials.TmpSecretKey
-  //         sessionToken = res.Data.Credentials.Token
-  //         startTime = res.Data.StartTime
-  //         expiredTime = res.Data.ExpiredTime
-  //       } else {
-  //         Taro.atMessage({
-  //           message: '暂时无法上传',
-  //           type: 'error',
-  //           duration: 3000
-  //         })
-  //         return
-  //       }
-  //     })
-    
-  //   return {
-  //     SecretId: secretId,
-  //     SecretKey: secretKey,
-  //     SessionToken: sessionToken,
-  //     StartTime: startTime,
-  //     ExpiredTime: expiredTime
-  //   }
-  // }
-
-  // getAuthorization = (secretId, secretKey, sessionToken) => {
-  //   return {
-  //     XCosSecurityToken: sessionToken,
-  //     Authorization: CosAuth({
-  //         SecretId: secretId,
-  //         SecretKey: secretKey,
-  //         Method: 'POST',
-  //         Pathname: '/',
-  //     })
-  //   }
-  // }
 
   render () {
     return (
