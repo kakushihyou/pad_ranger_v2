@@ -71,8 +71,8 @@ export default {
     ],
     color: '#bbc0ca',
     selectedColor: '1f83e1',
-    backgroundColor: '#feffff',
-    borderStyle: 'white',
+    backgroundColor: '#f7f7f7',
+    borderStyle: 'black',
     position: 'bottom'
   },
   debug: true

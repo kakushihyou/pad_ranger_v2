@@ -126,6 +126,12 @@ export default class Index extends Component {
 
       if (res.Data.count < 1) {
         console.log('未找到宠物信息')
+        Taro.showToast({
+          title: '没有宠物信息，快去添加吧',
+          icon: 'none',
+          duration: 3500
+        })
+
         this.setState({
           petResumeList: [],
         })
