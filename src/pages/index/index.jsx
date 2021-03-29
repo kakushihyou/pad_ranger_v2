@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text} from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { AtButton, AtAvatar, AtFab} from 'taro-ui'
+import { AtModal, AtFab} from 'taro-ui'
 import 'taro-ui/dist/style/index.scss'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.scss'
@@ -15,7 +15,8 @@ export default class Index extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      petResumeList: []
+      petResumeList: [],
+      showModal: false
     }
 
     // this.getPetList = this.getPetList.bind(this)
@@ -27,92 +28,67 @@ export default class Index extends Component {
 
   componentDidShow () {
 
+    this.setState({
+      showModal: false
+    })
+
     // 微信登录
     let userID = Taro.getStorageSync('userID')
 
-    if (!userID) {
-      Taro.navigateTo({
-        url: '/pages/wxLogin/wxLogin'
-      })
-      return
-      // Taro.login({
-      //   success: (loginRes) => {
-      //     var code = loginRes.code
-      //     console.log(code)
-      //     Httpclient.post(
-      //       Config.request_host + '/login', {code: code}, 'application/json')
-      //       .then(res => {
-      //         userID = res.Data
-      //         // 将userId存入缓存
-      //         Taro.setStorageSync('userID', userID)
-      //       })
-      //       .catch(err => {
-      //         console.error(err)
-      //         Taro.showModal({
-      //           confirmText:'确实忘了',
-      //           confirmColor:'#9BCEFA',
-      //           content: err,
-      //           showCancel: false,  //是否显示取消按钮
-      //         })
-      //         Taro.showToast({
-      //           title: "微信登录失败1",
-      //           icon: 'none'
-      //         })
-
-      //         return
-      //       })
-      //   },
-      //   fail: () => {
-      //     Taro.showToast({
-      //       title: "微信登录失败2",
-      //       icon: 'none'
-      //     })
-
-      //     return
-      //   }
-      // })
-      // .catch((error) => {
-      //   console.error(error)
-      // })
-    } 
-
-    // 用户授权
-    Taro.getSetting({
-      success(res) {
-        if (!res.authSetting["scope.userInfo"]) {
-            
-          console.error('获取微信用户信息授权失败')
-          Taro.navigateTo({
-            url: '/pages/wxLogin/wxLogin'
-          })
-          return
-        } 
-        else {
-          Taro.getUserInfo({
-            success: function(res) {
-              var jsonData = {
-                UserID : Taro.getStorageSync('userID'),
-                RawData : res.rawData,
-                Signature : res.signature,
-                EncryptedData : res.encryptedData,
-                Iv : res.iv
+    if (userID) {
+    //   Taro.navigateTo({
+    //     url: '/pages/wxLogin/wxLogin'
+    //   })
+    //   return
+    // } else {
+      // 用户授权
+      Taro.getSetting({
+        success(res) {
+          if (!res.authSetting["scope.userInfo"]) {
+              
+            console.error('获取微信用户信息授权失败')
+            Taro.navigateTo({
+              url: '/pages/wxLogin/wxLogin'
+            })
+            return
+          } 
+          else {
+            Taro.getUserInfo({
+              success: function(res) {
+                var jsonData = {
+                  UserID : Taro.getStorageSync('userID'),
+                  RawData : res.rawData,
+                  Signature : res.signature,
+                  EncryptedData : res.encryptedData,
+                  Iv : res.iv
+                }
+                Taro.setStorageSync('userInfo', jsonData)
+                console.log(jsonData)
+                Httpclient.post(Config.request_host + '/analysisWxUserInfo', jsonData, 'application/json')
+                  .then(res => {
+                    console.log(res)
+                  })
+                  .catch(err => {
+                    console.error(err)
+                  })
               }
-              Taro.setStorageSync('userInfo', jsonData)
-              console.log(jsonData)
-              Httpclient.post(Config.request_host + '/analysisWxUserInfo', jsonData, 'application/json')
-                .then(res => {
-                  console.log(res)
-                })
-                .catch(err => {
-                  console.error(err)
-                })
-            }
-          })
+            })
+          }
         }
-      }
-    })
+      })
 
-    this.getPetList(Taro.getStorageSync('userID'))
+      this.getPetList(Taro.getStorageSync('userID'))
+    } else {
+      Taro.showToast({
+        title: '没有宠物信息，快去添加吧',
+        icon: 'none',
+        duration: 3500
+      })
+
+      this.setState({
+        petResumeList: [],
+      })
+    }
   }
 
   getPetList = (userID) => {
@@ -155,14 +131,54 @@ export default class Index extends Component {
    }
 
   onButtonClick = () => {
-    Taro.navigateTo({
-      url: '/pet/pages/petAdd/petAdd?userID=' + Taro.getStorageSync('userID')
-    })
+    let userID = Taro.getStorageSync('userID')
+    if (userID) {
+      Taro.navigateTo({
+        url: '/pet/pages/petAdd/petAdd?userID=' + userID
+      })
+    } else {
+      this.setState({
+        showModal: true
+      })
+    }
   } 
+
+  refuseLogin = () => {
+    console.log('拒绝登录')
+    Taro.showToast({
+      title: '等你哟～',
+      icon: "none"
+    })
+
+    this.setState({
+      showModal: false
+    })
+  }
+
+  confirmLogin = () => {
+    console.log('同意登录')
+    Taro.navigateTo({
+      url: '/pages/wxLogin/wxLogin'
+    })
+  }
 
   render () {
     return (
       <View className='page'>
+        <View className='modal'>
+          {
+            this.state.showModal ? (
+              <AtModal isOpened 
+                title='登录'
+                cancelText='暂不登录'
+                confirmText='马上登录'
+                content='登录后才能添加宠物信息喔~'
+                onCancel={this.refuseLogin.bind(this)}
+                onConfirm={this.confirmLogin.bind(this)}
+              />
+            ) : ''
+          }
+        </View>
         <View className='list'>
           {
             this.state.petResumeList.map((item) => {

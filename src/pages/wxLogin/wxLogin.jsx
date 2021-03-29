@@ -31,8 +31,11 @@ export default class Index extends Component {
             // 将userId存入缓存
             Taro.setStorageSync('userID', userID)
             this.analysisWxuserInfo(detail)
-            Taro.switchTab({
-              url: '../../pages/index/index'
+            // Taro.switchTab({
+            //   url: '../../pages/index/index'
+            // })
+            Taro.navigateBack({
+              delta: 1
             })
           })
           .catch((err) => {
