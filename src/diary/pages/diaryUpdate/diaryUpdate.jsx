@@ -73,9 +73,9 @@ export default class DiaryUpdate extends Component {
         errMsgMap.set('mood', '情绪太低落和太高涨都不太好噢～')
       } else {
         let diaryDetail = this.state.diaryDetail
-        diaryDetail.mood = value
+        diaryDetail.mood = Number(value)
         this.setState({
-          mood: value,
+          mood: Number(value),
           diaryDetail: diaryDetail,
           changed: true
         })
@@ -163,6 +163,9 @@ export default class DiaryUpdate extends Component {
         duration: 3000
       })
     } else {
+      let diaryDetail = this.state.diaryDetail
+      console.log('需要修改')
+      console.log(diaryDetail)
       var requestBody = {
         ID: this.state.diaryDetail.id,
         Title: this.state.diaryDetail.title,
@@ -183,8 +186,17 @@ export default class DiaryUpdate extends Component {
             duration: 3200,
             icon: "none",
             complete: function() {
-              Taro.navigateBack({
-                delta: 1
+              var newDiary = {
+                id: diaryDetail.id,
+                diaryTime: diaryDetail.diaryTimeStr,
+                content: diaryDetail.content.substring(0, 16) + '...',
+                mood: diaryDetail.mood,
+                week: diaryDetail.week,
+                weather: diaryDetail.weather
+              }
+              Taro.setStorageSync('updateDiaryInfo', newDiary)
+              Taro.switchTab({
+                url: '../../../pages/diary/diary'
               })
             }
           })

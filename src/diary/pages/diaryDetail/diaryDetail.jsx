@@ -87,7 +87,7 @@ export default class DiaryDetail extends Component {
                 duration: 3200,
                 icon: "none"
               })
-
+              Taro.setStorageSync('deleteDiaryID', diaryDetail.id)
               Taro.switchTab({
                 url: '../../../pages/diary/diary'
               })

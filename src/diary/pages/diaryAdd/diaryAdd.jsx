@@ -157,8 +157,9 @@ export default class DiaryUpdate extends Component {
             duration: 3200,
             icon: "none",
             complete: function() {
-              Taro.navigateBack({
-                delta: 1
+              Taro.setStorageSync('needRefresh', true)
+              Taro.switchTab({
+                url: '../../../pages/diary/diary' 
               })
             }
           })

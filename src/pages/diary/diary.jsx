@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text} from '@tarojs/components'
 import {AtFab, AtSearchBar, AtModal} from 'taro-ui'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './diary.scss'
 import DiaryItem from '../../components/diaryItem/diaryItem'
@@ -24,6 +24,10 @@ export default class Diary extends Component {
   }
 
   componentDidShow = () => {
+    let needRefresh = Taro.getStorageSync('needRefresh')
+    let updateDiaryInfo = Taro.getStorageSync('updateDiaryInfo')
+    let deleteDiaryID = Taro.getStorageSync('deleteDiaryID')
+    let dataList = this.state.diaryList
     this.setState({
       showModal: false
     })
@@ -43,34 +47,65 @@ export default class Diary extends Component {
         }
       })
 
-      // 获取用户日记列表
-      Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID')  + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
-      .then(res => {
-        console.log(res.Data)
-        if (res.Data.count > 0) {
-          this.setState({
-            diaryList: res.Data.diaryList
-          })
-        } else {
-          Taro.showToast({
-            title: "快去写日记吧～",
-            icon: 'none',
-            duration: 3000
-          })
-
-          this.setState({
-            diaryList: []
-          })
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        Taro.showToast({
-          title: '出错了？朕很生气！',
-          icon: "none"
+      if (needRefresh || (dataList == null || dataList.length == 0)) {
+        this.setState({
+          pageNum: 1
         })
-        return
-      })
+        // 获取用户日记列表
+        Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID')  + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
+        .then(res => {
+          console.log(res.Data)
+          if (res.Data.count > 0) {
+            // dataList.push(...res.Data.diaryList)
+            this.setState({
+              diaryList: res.Data.diaryList
+            })
+            Taro.removeStorageSync('needRefresh')
+          } else {
+            Taro.showToast({
+              title: "快去写日记吧～",
+              icon: 'none',
+              duration: 3000
+            })
+
+            this.setState({
+              diaryList: []
+            })
+          }
+        })
+        .catch(err => {
+          console.error(err)
+          Taro.showToast({
+            title: '出错了？朕很生气！',
+            icon: "none"
+          })
+          return
+        })
+      } else if (updateDiaryInfo) {
+        var newList = [] 
+        dataList.forEach((item, index) => {
+          if (item.id == updateDiaryInfo.id) {
+            newList.push(updateDiaryInfo)
+          } else {
+            newList.push(item)
+          }
+        })
+
+        this.setState({
+          diaryList: newList
+        })
+      } else if (deleteDiaryID) {
+        let newList = []
+        dataList.forEach((item, index) => {
+          if (item.id != deleteDiaryID) {
+            newList.push(item)
+          }
+        })
+
+        this.setState({
+          diaryList: newList
+        })        
+      }
     } else {
       //   Taro.navigateTo({
       //     url: '/pages/wxLogin/wxLogin'
@@ -98,8 +133,8 @@ export default class Diary extends Component {
     this.search()
   }
 
-  search = function() {
-
+  search = () => {
+    let dataList = this.state.diaryList
     if (this.state.condition == null && this.state.condition == "") {
       this.setState({
         pageNum: 1
@@ -109,10 +144,14 @@ export default class Diary extends Component {
     .then(res => {
       console.log(res.Data)
       if (res.Data.count > 0) {
-        let list = this.state.diaryList
-        list.push(res.Data.diaryList)
+        dataList.push(...res.Data.diaryList)
         this.setState({
-          diaryList: list
+          diaryList: dataList
+        })
+      } else {
+        let pageNum = this.state.pageNum
+        this.setState({
+          pageNum: pageNum - 1
         })
       }
     })
