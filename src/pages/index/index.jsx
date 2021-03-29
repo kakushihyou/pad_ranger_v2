@@ -133,6 +133,7 @@ export default class Index extends Component {
   onButtonClick = () => {
     let userID = Taro.getStorageSync('userID')
     if (userID) {
+      // console.log('userID是' + userID)
       Taro.navigateTo({
         url: '/pet/pages/petAdd/petAdd?userID=' + userID
       })

@@ -71,6 +71,9 @@ export default class Case extends Component {
       //   })
       //   return
       // }
+      this.setState({
+        petGeneralSituationList: []
+      })
 
       Taro.showToast({
         title: "请先添加宠物信息",
