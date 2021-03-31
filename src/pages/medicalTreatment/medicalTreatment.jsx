@@ -18,7 +18,9 @@ export default class Case extends Component {
   }
 
   componentDidShow = () => {
-    if (Taro.getStorageSync('userID') ) {
+    let userID = Taro.getStorageSync('userID') 
+    console.log('UserID是' + userID)
+    if (userID) {
 
       Taro.getSetting({
         success(res) {
@@ -50,6 +52,7 @@ export default class Case extends Component {
             petGeneralSituationList: []
           })
         } else {
+          console.log()
           let petGeneralSituationList = res.Data.petGeneralSituationList
 
           console.log('设置到state中')

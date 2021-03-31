@@ -32,7 +32,8 @@ export default class Diary extends Component {
       showModal: false
     })
     let userID = Taro.getStorageSync('userID') 
-    if (Taro.getStorageSync('userID')) {
+    console.log('UserID是' + userID)
+    if (userID) {
 
       Taro.getSetting({
         success(res) {
@@ -56,7 +57,7 @@ export default class Diary extends Component {
         .then(res => {
           console.log(res.Data)
           if (res.Data.count > 0) {
-            // dataList.push(...res.Data.diaryList)
+            console.log('日记列表不为空')
             this.setState({
               diaryList: res.Data.diaryList
             })
