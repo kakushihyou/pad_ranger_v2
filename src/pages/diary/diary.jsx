@@ -62,6 +62,7 @@ export default class Diary extends Component {
             })
             Taro.removeStorageSync('needRefresh')
           } else {
+            console.log('查询到的日记列表为空')
             Taro.showToast({
               title: "快去写日记吧～",
               icon: 'none',
@@ -113,6 +114,7 @@ export default class Diary extends Component {
       //   })
       //   return
       // }
+      console.log('日记列表页面，用户未登录')
       this.setState({
         diaryList: []
       })

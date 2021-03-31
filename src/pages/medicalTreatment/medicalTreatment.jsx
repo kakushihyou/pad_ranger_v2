@@ -71,6 +71,8 @@ export default class Case extends Component {
       //   })
       //   return
       // }
+
+      console.log('宠物概要信息页面，用户未登录')
       this.setState({
         petGeneralSituationList: []
       })
