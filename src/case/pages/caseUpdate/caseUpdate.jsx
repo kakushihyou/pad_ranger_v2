@@ -578,7 +578,7 @@ export default class CaseUpdate extends Component {
           
           <AtInput class='rightInput' name='weight' type='number' title='当前体重' border={true} adjustPosition={true} placeholder='请输入体重(KG)' value={this.state.weight} onChange={this.onWeightChange.bind(this)}/>
           
-          <AtInput class='rightInput' name='age' type='text' title='就诊年龄' border={true} adjustPosition={true} placeholder='请输入就诊年龄' value={this.state.age} onChange={this.onAgeChange.bind(this)} />
+          <AtInput class='rightInput' name='age' type='number' title='就诊年龄' border={true} adjustPosition={true} placeholder='请输入就诊年龄' value={this.state.age} onChange={this.onAgeChange.bind(this)} />
 
           <Picker class='picker' mode='selector' range={this.state.isInitialSelector} onChange={this.onInitialChange.bind(this)}>
             <AtList hasBorder={false}>
