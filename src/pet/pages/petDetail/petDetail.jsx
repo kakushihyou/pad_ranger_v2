@@ -23,7 +23,8 @@ export default class PetDetail extends Component {
 
   componentDidShow () { 
     console.log(getCurrentInstance().router.params)
-    // TODO 获取宠物详情
+    Taro.hideToast()
+    // 获取宠物详情
     Httpclient.get(
       Config.request_host + '/pet/detail?ID=' + getCurrentInstance().router.params.petID)
       .then(res => {

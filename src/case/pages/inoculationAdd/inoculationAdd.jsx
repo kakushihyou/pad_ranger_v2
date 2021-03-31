@@ -43,6 +43,10 @@ export default class InoculationAdd extends Component {
     this.onNextInoculationDateChange = this.onNextInoculationDateChange.bind(this)
   }
 
+  componentDidShow() {
+    Taro.hideToast()
+  }
+  
   onVaccineTypeChange = (e) => {
     console.log(e.detail.value)
     let vaccineType = Number(e.detail.value) + 1

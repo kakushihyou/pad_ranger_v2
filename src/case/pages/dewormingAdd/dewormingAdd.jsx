@@ -43,6 +43,10 @@ export default class DewormingAdd extends Component {
     this.onNextDewormingDateChange = this.onNextDewormingDateChange.bind(this)
   }
 
+  componentDidShow() {
+    Taro.hideToast()
+  }
+
   onDewormingTypeChange = (e) => {
     console.log(e.detail.value)
     let dewormingType = Number(e.detail.value) + 1

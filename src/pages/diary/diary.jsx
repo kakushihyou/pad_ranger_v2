@@ -23,7 +23,8 @@ export default class Diary extends Component {
 
   }
 
-  componentDidShow = () => {
+  componentDidShow() {
+    Taro.hideToast()
     let needRefresh = Taro.getStorageSync('needRefresh')
     let updateDiaryInfo = Taro.getStorageSync('updateDiaryInfo')
     let deleteDiaryID = Taro.getStorageSync('deleteDiaryID')
@@ -55,7 +56,7 @@ export default class Diary extends Component {
         // 获取用户日记列表
         Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID')  + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
         .then(res => {
-          console.log(res.Data)
+          // console.log(res.Data)
           if (res.Data.count > 0) {
             console.log('日记列表不为空')
             this.setState({
@@ -64,13 +65,11 @@ export default class Diary extends Component {
             Taro.removeStorageSync('needRefresh')
           } else {
             console.log('查询到的日记列表为空')
+            
             Taro.showToast({
-              title: "快去写日记吧～",
+              title: '快去写日记吧～',
               icon: 'none',
               duration: 1200,
-              // complete: () => {
-              //   Taro.hideToast()
-              // }
             })
 
             this.setState({
@@ -113,28 +112,20 @@ export default class Diary extends Component {
         })        
       }
     } else {
-      //   Taro.navigateTo({
-      //     url: '/pages/wxLogin/wxLogin'
-      //   })
-      //   return
-      // }
       console.log('日记列表页面，用户未登录')
-      this.setState({
-        diaryList: []
-      })
+     
       Taro.showToast({
         title: "快去写日记吧～",
         icon: 'none',
         duration: 1200,
-        // complete: () => {
-        //   Taro.hideToast()
-        // }
+      })
+      this.setState({
+        diaryList: []
       })
     }
   }
 
   onReachBottom = () => {
-    console.log('hahah')
     let pageNum = this.state.pageNum
     this.setState({
       pageNum: pageNum + 1
@@ -152,7 +143,7 @@ export default class Diary extends Component {
     }
     Httpclient.get(Config.request_host + '/diary/list?userID=' + Taro.getStorageSync('userID') + '&pageNum=' + this.state.pageNum + '&keyword=' + this.state.condition)
     .then(res => {
-      console.log(res.Data)
+      // console.log(res.Data)
       if (res.Data.count > 0) {
         dataList.push(...res.Data.diaryList)
         this.setState({

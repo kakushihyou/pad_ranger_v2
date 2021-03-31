@@ -23,6 +23,11 @@ export default class DiaryUpdate extends Component {
     }
   }
 
+  componentDidShow () { 
+    console.log(this.state)
+    Taro.hideToast()
+  }
+
   onMoodChange = (value) => {
     console.log(value)
     let errMsgMap = this.state.errMsgMap

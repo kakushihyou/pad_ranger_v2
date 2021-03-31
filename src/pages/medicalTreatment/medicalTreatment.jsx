@@ -17,7 +17,8 @@ export default class Case extends Component {
     }
   }
 
-  componentDidShow = () => {
+  componentDidShow() {
+    Taro.hideToast()
     let userID = Taro.getStorageSync('userID') 
     console.log('UserID是' + userID)
     if (userID) {
@@ -43,12 +44,9 @@ export default class Case extends Component {
         if (res.Data.count < 1) {
           console.log('未找到宠物信息')
           Taro.showToast({
-            title: "请先添加宠物信息",
+            title: '请先添加宠物信息',
             icon: 'none',
             duration: 1200,
-            // complete: () => {
-            //   Taro.hideToast()
-            // }
           })
 
           this.setState({
@@ -71,25 +69,16 @@ export default class Case extends Component {
         return
       })
     } else {
-      //   Taro.navigateTo({
-      //     url: '/pages/wxLogin/wxLogin'
-      //   })
-      //   return
-      // }
 
       console.log('宠物概要信息页面，用户未登录')
-      this.setState({
-        petGeneralSituationList: []
-      })
-
       Taro.showToast({
-        title: "请先添加宠物信息",
+        title: '请先添加宠物信息',
         icon: 'none',
         duration: 1200,
-        // complete: () => {
-        //   Taro.hideToast()
-        // }
+      })
 
+      this.setState({
+        petGeneralSituationList: []
       })
     }
   }

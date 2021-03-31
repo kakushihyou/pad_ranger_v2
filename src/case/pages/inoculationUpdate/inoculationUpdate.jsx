@@ -45,12 +45,13 @@ export default class InoculationUpdate extends Component {
     this.onNextInoculationDateChange = this.onNextInoculationDateChange.bind(this)
   }
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(getCurrentInstance().router.params)
+    Taro.hideToast()
     this.setState({
       changed: false
     })
-    // TODO 获取宠物详情
+    // 获取宠物详情
     Httpclient.get(
       Config.request_host + '/pet/inoculation?ID=' + getCurrentInstance().router.params.inoculationID)
       .then(res => {

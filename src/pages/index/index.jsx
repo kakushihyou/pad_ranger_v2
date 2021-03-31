@@ -28,27 +28,29 @@ export default class Index extends Component {
 
   componentDidShow () {
 
+    Taro.hideToast()
     this.setState({
       showModal: false
     })
 
     // 微信登录
     let userID = Taro.getStorageSync('userID')
-
+    console.log("首页获取的userID是" + userID)
     if (userID) {
-    //   Taro.navigateTo({
-    //     url: '/pages/wxLogin/wxLogin'
-    //   })
-    //   return
-    // } else {
       // 用户授权
       Taro.getSetting({
         success(res) {
           if (!res.authSetting["scope.userInfo"]) {
               
             console.error('获取微信用户信息授权失败')
-            Taro.navigateTo({
-              url: '/pages/wxLogin/wxLogin'
+            // Taro.navigateTo({
+            //   url: '/pages/wxLogin/wxLogin'
+            // })
+            // return
+            Taro.showToast({
+              title: '获取微信信息异常，请稍后再试',
+              icon: 'none',
+              duration: 1200
             })
             return
           } 

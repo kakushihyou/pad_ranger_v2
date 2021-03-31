@@ -35,6 +35,7 @@ export default class SituationDetail extends Component {
 
   componentDidShow = () => {
     console.log('当前是详情页')
+    Taro.hideToast()
     this.switchTab()
     
   }
@@ -59,7 +60,7 @@ export default class SituationDetail extends Component {
   }
 
   getInoculationList = () => {
-    // TODO 获取疫苗记录
+    // 获取疫苗记录
     Httpclient.get(Config.request_host + '/pet/inoculation/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)
@@ -81,7 +82,7 @@ export default class SituationDetail extends Component {
   }
 
   getDewormingList = () => {
-    // TODO 获取驱虫记录
+    // 获取驱虫记录
     Httpclient.get(Config.request_host + '/pet/deworming/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)
@@ -103,7 +104,7 @@ export default class SituationDetail extends Component {
   }
 
   getCaseList = () => {
-    // TODO 获取病历记录
+    // 获取病历记录
     Httpclient.get(Config.request_host + '/pet/case/list?petID=' + getCurrentInstance().router.params.petID)
     .then(res => {
       console.log(res.Data)

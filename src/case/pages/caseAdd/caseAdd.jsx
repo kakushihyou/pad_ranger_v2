@@ -44,10 +44,10 @@ export default class CaseUpdate extends Component {
     this.goback = this.goback.bind(this)
   }
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(getCurrentInstance().router.params)
-
-    // TODO 获取之前的病历
+    Taro.hideToast()
+    // 获取之前的病历
     Httpclient.get(
       Config.request_host + '/pet/case/history?petID=' + getCurrentInstance().router.params.petID + '&targetTime=' + getCurrentDate())
       .then(res => {

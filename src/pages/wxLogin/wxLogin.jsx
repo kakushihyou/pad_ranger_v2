@@ -31,9 +31,6 @@ export default class Index extends Component {
             // 将userId存入缓存
             Taro.setStorageSync('userID', userID)
             this.analysisWxuserInfo(detail)
-            // Taro.switchTab({
-            //   url: '../../pages/index/index'
-            // })
             Taro.navigateBack({
               delta: 1
             })
@@ -41,7 +38,7 @@ export default class Index extends Component {
           .catch((err) => {
             console.error(err)
             Taro.showToast({
-              title: "微信登录失败3",
+              title: "微信登录失败",
               icon: 'none',
               duration: 1200
             })
@@ -49,7 +46,7 @@ export default class Index extends Component {
       },
       fail: () => {
         Taro.showToast({
-          title: "微信登录失败4",
+          title: "微信登录失败",
           icon: 'none',
           duration: 1200
         })

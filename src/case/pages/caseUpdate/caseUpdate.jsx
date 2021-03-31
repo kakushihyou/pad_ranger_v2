@@ -43,12 +43,13 @@ export default class CaseUpdate extends Component {
     this.goback = this.goback.bind(this)
   }
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(getCurrentInstance().router.params)
+    Taro.hideToast()
     this.setState({
       changed: false
     })
-    // TODO 获取宠物详情
+    // 获取宠物详情
     Httpclient.get(
       Config.request_host + '/pet/case?ID=' + getCurrentInstance().router.params.caseID)
       .then(res => {
@@ -73,7 +74,7 @@ export default class CaseUpdate extends Component {
         })
 
         console.log(this.state.diagnosisDate)
-        // TODO 获取之前的病历
+        //  获取之前的病历
         Httpclient.get(
           Config.request_host + '/pet/case/history?petID=' + getCurrentInstance().router.params.petID + '&targetTime=' + this.state.diagnosisDate)
           .then(res => {

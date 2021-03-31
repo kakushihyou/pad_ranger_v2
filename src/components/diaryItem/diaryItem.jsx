@@ -25,7 +25,7 @@ export default class DiaryItem extends Component {
   render () {
 
     let diaryDetail = this.props.info
-    console.log(diaryDetail)
+    // console.log(diaryDetail)
     let year = diaryDetail.diaryTime.split('-')[0]
     let month = diaryDetail.diaryTime.split('-')[1]
     let day = diaryDetail.diaryTime.split('-')[2].split(' ')[0]

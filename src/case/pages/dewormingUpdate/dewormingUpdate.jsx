@@ -43,9 +43,10 @@ export default class DewormingUpdate extends Component {
     this.onNextDewormingDateChange = this.onNextDewormingDateChange.bind(this)
   }
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(getCurrentInstance().router.params)
-    // TODO 获取宠物详情
+    Taro.hideToast()
+    // 获取宠物详情
     Httpclient.get(
       Config.request_host + '/pet/deworming?ID=' + getCurrentInstance().router.params.dewormingID)
       .then(res => {

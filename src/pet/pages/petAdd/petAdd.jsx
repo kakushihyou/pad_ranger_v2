@@ -52,8 +52,9 @@ export default class PetUpdate extends Component {
     this.imageSelect = this.imageSelect.bind(this)
   }
 
-  componentWillMount () { 
+  componentDidShow () { 
     console.log(this.state)
+    Taro.hideToast()
   }
 
   onGenderChange = (e) => {

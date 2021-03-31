@@ -24,7 +24,8 @@ export default class DiaryDetail extends Component {
 
   componentDidShow = () => { 
     console.log('getCurrentInstance().router.params')
-    // TODO 获取宠物详情
+    Taro.hideToast()
+    // 获取宠物详情
     Httpclient.get(
       Config.request_host + '/diary/detail?diaryID=' + getCurrentInstance().router.params.ID)
       .then(res => {

@@ -49,6 +49,7 @@ export default class PetUpdate extends Component {
 
   componentWillMount () { 
     console.log(getCurrentInstance().router.params)
+    Taro.hideToast()
     this.setState({
       changed: false
     })
