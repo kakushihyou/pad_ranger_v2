@@ -45,7 +45,10 @@ export default class Case extends Component {
           Taro.showToast({
             title: "请先添加宠物信息",
             icon: 'none',
-            duration: 1200
+            duration: 1200,
+            // complete: () => {
+            //   Taro.hideToast()
+            // }
           })
 
           this.setState({
@@ -82,7 +85,11 @@ export default class Case extends Component {
       Taro.showToast({
         title: "请先添加宠物信息",
         icon: 'none',
-        duration: 1200
+        duration: 1200,
+        // complete: () => {
+        //   Taro.hideToast()
+        // }
+
       })
     }
   }

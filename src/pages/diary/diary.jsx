@@ -67,7 +67,10 @@ export default class Diary extends Component {
             Taro.showToast({
               title: "快去写日记吧～",
               icon: 'none',
-              duration: 1200
+              duration: 1200,
+              // complete: () => {
+              //   Taro.hideToast()
+              // }
             })
 
             this.setState({
@@ -122,7 +125,10 @@ export default class Diary extends Component {
       Taro.showToast({
         title: "快去写日记吧～",
         icon: 'none',
-        duration: 1200
+        duration: 1200,
+        // complete: () => {
+        //   Taro.hideToast()
+        // }
       })
     }
   }

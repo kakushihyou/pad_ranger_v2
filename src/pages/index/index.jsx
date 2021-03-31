@@ -82,7 +82,7 @@ export default class Index extends Component {
       Taro.showToast({
         title: '没有宠物信息，快去添加吧',
         icon: 'none',
-        duration: 1200
+        duration: 1200,
       })
 
       this.setState({
@@ -105,7 +105,10 @@ export default class Index extends Component {
         Taro.showToast({
           title: '没有宠物信息，快去添加吧',
           icon: 'none',
-          duration: 1200
+          duration: 1200,
+          // complete: () => {
+          //   Taro.hideToast()
+          // }
         })
 
         this.setState({
