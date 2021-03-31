@@ -102,7 +102,8 @@ export default class CaseUpdate extends Component {
         console.error(err)
         Taro.showToast({
           title: '出错了？朕很生气！',
-          icon: "none"
+          icon: "none",
+          duration: 1200
         })
         return
       })
@@ -498,7 +499,7 @@ export default class CaseUpdate extends Component {
         if (res.Success) {
           Taro.showToast({
             title: '干的漂亮！',
-            duration: 3200,
+            duration: 1200,
             icon: "none",
             complete: function() {
               Taro.navigateBack({

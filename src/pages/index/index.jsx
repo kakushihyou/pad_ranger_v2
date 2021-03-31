@@ -82,7 +82,7 @@ export default class Index extends Component {
       Taro.showToast({
         title: '没有宠物信息，快去添加吧',
         icon: 'none',
-        duration: 3500
+        duration: 1200
       })
 
       this.setState({
@@ -105,7 +105,7 @@ export default class Index extends Component {
         Taro.showToast({
           title: '没有宠物信息，快去添加吧',
           icon: 'none',
-          duration: 3500
+          duration: 1200
         })
 
         this.setState({
@@ -124,7 +124,8 @@ export default class Index extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -148,7 +149,8 @@ export default class Index extends Component {
     console.log('拒绝登录')
     Taro.showToast({
       title: '等你哟～',
-      icon: "none"
+      icon: "none",
+      duration: 1200
     })
 
     this.setState({

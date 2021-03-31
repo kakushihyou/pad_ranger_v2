@@ -53,7 +53,8 @@ export default class DiaryDetail extends Component {
         console.error(err)
         Taro.showToast({
           title: '出错了？朕很生气！',
-          icon: "none"
+          icon: "none",
+          duration: 1200
         })
         return
       })
@@ -84,7 +85,7 @@ export default class DiaryDetail extends Component {
             .then(res => {
               Taro.showToast({
                 title: '删除成功',
-                duration: 3200,
+                duration: 1200,
                 icon: "none"
               })
               Taro.setStorageSync('deleteDiaryID', diaryDetail.id)
@@ -96,7 +97,8 @@ export default class DiaryDetail extends Component {
               console.error(err)
               Taro.showToast({
                 title: '咋还删不掉了呢',
-                icon: "none"
+                icon: "none",
+                duration: 1200
               })
               return
             })

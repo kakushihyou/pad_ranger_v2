@@ -34,7 +34,7 @@ export default class PetDewormingItem extends Component {
             .then(res => {
               Taro.showToast({
                 title: '朕是不会生病的～',
-                duration: 3200,
+                duration: 1200,
                 icon: "none",
                 complete: function() {
                   var page = getCurrentPages().pop()
@@ -50,7 +50,8 @@ export default class PetDewormingItem extends Component {
               console.error(err)
               Taro.showToast({
                 title: '咋还删不掉了呢～',
-                icon: "none"
+                icon: "none",
+                duration: 1200
               })
               return
             })

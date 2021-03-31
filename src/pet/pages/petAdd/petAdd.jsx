@@ -270,7 +270,7 @@ export default class PetUpdate extends Component {
         
         Taro.showToast({
           title: '干的漂亮！',
-          duration: 3200,
+          duration: 1200,
           icon: "none",
           complete: function() {
             Taro.navigateBack({

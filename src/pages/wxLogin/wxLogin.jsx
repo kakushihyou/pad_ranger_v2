@@ -42,14 +42,16 @@ export default class Index extends Component {
             console.error(err)
             Taro.showToast({
               title: "微信登录失败3",
-              icon: 'none'
+              icon: 'none',
+              duration: 1200
             })
           })
       },
       fail: () => {
         Taro.showToast({
           title: "微信登录失败4",
-          icon: 'none'
+          icon: 'none',
+          duration: 1200
         })
       }
     })

@@ -65,7 +65,7 @@ export default class Diary extends Component {
             Taro.showToast({
               title: "快去写日记吧～",
               icon: 'none',
-              duration: 3000
+              duration: 1200
             })
 
             this.setState({
@@ -77,7 +77,8 @@ export default class Diary extends Component {
           console.error(err)
           Taro.showToast({
             title: '出错了？朕很生气！',
-            icon: "none"
+            icon: "none",
+            duration: 1200
           })
           return
         })
@@ -118,7 +119,7 @@ export default class Diary extends Component {
       Taro.showToast({
         title: "快去写日记吧～",
         icon: 'none',
-        duration: 3000
+        duration: 1200
       })
     }
   }
@@ -159,7 +160,8 @@ export default class Diary extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -208,7 +210,8 @@ export default class Diary extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -233,7 +236,8 @@ export default class Diary extends Component {
     console.log('拒绝登录')
     Taro.showToast({
       title: '等你哟～',
-      icon: "none"
+      icon: "none",
+      duration: 1200
     })
     this.setState({
       showModal: false

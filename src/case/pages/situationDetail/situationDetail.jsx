@@ -52,7 +52,8 @@ export default class SituationDetail extends Component {
     } else {
       Taro.showToast({
         title: '别闹，朕困～',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
     }
   }
@@ -72,7 +73,8 @@ export default class SituationDetail extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -93,7 +95,8 @@ export default class SituationDetail extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -114,7 +117,8 @@ export default class SituationDetail extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })
@@ -152,7 +156,7 @@ export default class SituationDetail extends Component {
         Taro.showToast({
           title: '别闹，朕困～',
           icon: 'none',
-          duration: 2000
+          duration: 1200
         }
       )
     }
@@ -192,7 +196,8 @@ export default class SituationDetail extends Component {
       console.error(err)
       Taro.showToast({
         title: '出错了？朕很生气！',
-        icon: "none"
+        icon: "none",
+        duration: 1200
       })
       return
     })

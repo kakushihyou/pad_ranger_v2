@@ -42,7 +42,7 @@ export default class Swipe extends Component {
               .then(res => {
                 Taro.showToast({
                   title: petInfo.accompanyDays + '天，谢谢你',
-                  duration: 3200,
+                  duration: 1200,
                   icon: "none",
                   complete: function() {
                     var page = getCurrentPages().pop()
@@ -58,7 +58,8 @@ export default class Swipe extends Component {
                 console.error(err)
                 Taro.showToast({
                   title: '再陪你一会儿',
-                  icon: "none"
+                  icon: "none",
+                  duration: 1200
                 })
                 return
               })

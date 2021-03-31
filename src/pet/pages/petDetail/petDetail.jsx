@@ -36,7 +36,8 @@ export default class PetDetail extends Component {
         console.error(err)
         Taro.showToast({
           title: '出错了？朕很生气！',
-          icon: "none"
+          icon: "none",
+          duration: 1200
         })
         return
       })
@@ -75,7 +76,7 @@ export default class PetDetail extends Component {
             .then(res => {
               Taro.showToast({
                 title: petDetail.accompanyDays + '天，谢谢你',
-                duration: 3200,
+                duration: 1200,
                 icon: "none"
               })
 
@@ -87,7 +88,8 @@ export default class PetDetail extends Component {
               console.error(err)
               Taro.showToast({
                 title: '再陪你一会儿',
-                icon: "none"
+                icon: "none",
+                duration: 1200
               })
               return
             })

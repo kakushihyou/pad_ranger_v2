@@ -298,7 +298,7 @@ export default class InoculationAdd extends Component {
         if (res.Success) {
           Taro.showToast({
             title: '干的漂亮！',
-            duration: 3200,
+            duration: 1200,
             icon: "none",
             complete: function() {
               Taro.navigateBack({
