@@ -32,7 +32,7 @@ export default class Diary extends Component {
       showModal: false
     })
     let userID = Taro.getStorageSync('userID') 
-    if (userID) {
+    if (Taro.getStorageSync('userID')) {
 
       Taro.getSetting({
         success(res) {

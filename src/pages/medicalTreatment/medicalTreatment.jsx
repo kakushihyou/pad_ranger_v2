@@ -18,8 +18,7 @@ export default class Case extends Component {
   }
 
   componentDidShow = () => {
-    let userID = Taro.getStorageSync('userID') 
-    if (userID) {
+    if (Taro.getStorageSync('userID') ) {
 
       Taro.getSetting({
         success(res) {

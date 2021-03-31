@@ -35,7 +35,7 @@ export default class Index extends Component {
     // 微信登录
     let userID = Taro.getStorageSync('userID')
 
-    if (userID) {
+    if (Taro.getStorageSync('userID')) {
     //   Taro.navigateTo({
     //     url: '/pages/wxLogin/wxLogin'
     //   })
