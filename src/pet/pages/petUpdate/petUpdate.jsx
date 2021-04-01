@@ -307,7 +307,7 @@ export default class PetUpdate extends Component {
           uploading: false
         })
       } else {
-        this.updatePet()
+        this.updatePet(this.state.headImg)
       }
     }
   }
