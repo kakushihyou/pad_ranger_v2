@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text} from '@tarojs/components'
 import Taro from '@tarojs/taro'
-import { AtModal, AtFab} from 'taro-ui'
+import { AtModal, AtFab, AtCurtain} from 'taro-ui'
 import 'taro-ui/dist/style/index.scss'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './index.scss'
@@ -9,6 +9,7 @@ import Httpclient from '../../../httpclient/http'
 import SignlePetResume  from "../../components/singlePetResume/singlePetResume";
 import Swip from '../../components/swipe/swipe'
 import Config from '../../config/globalConfig.json'
+import {getNextDayTime} from '../../util/tool'
 
 export default class Index extends Component {
 
@@ -16,14 +17,17 @@ export default class Index extends Component {
     super(props)
     this.state = {
       petResumeList: [],
-      showModal: false
+      showModal: false,
+      showCurtain: false,
+      curtainImg: '',
+      curtainLinkUrl: ''
     }
 
     // this.getPetList = this.getPetList.bind(this)
   }
 
   componentWillMount () {
-    
+
   }
 
   componentDidShow () {
@@ -32,6 +36,37 @@ export default class Index extends Component {
     this.setState({
       showModal: false
     })
+
+    let curtainDueTime = Taro.getStorageSync("curtainDueTime")
+    if (!curtainDueTime || curtainDueTime == 0) {
+      Httpclient.get(Config.request_host + '/curtain')
+      .then(res => {
+        if (res.Data) {
+          this.setState({
+            showCurtain: true,
+            curtainImg: res.Data.CurtainImg,
+            curtainLinkUrl: res.Data.LinkUrl
+          })
+
+          Taro.setStorageSync("curtainDueTime", getNextDayTime().getTime())
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    } else {
+      var currentTime = new Date().getTime()
+      if (currentTime - curtainDueTime >= 0) {
+        Taro.setStorageSync("curtainDueTime", getNextDayTime().getTime())
+        this.setState({
+          showCurtain: true
+        })
+      } else {
+        this.setState({
+          showCurtain: false
+        })
+      }
+    }
 
     // 微信登录
     let userID = Taro.getStorageSync('userID')
@@ -170,6 +205,18 @@ export default class Index extends Component {
     })
   }
 
+  clickCurtainImg = () => {
+    console.log('点击幕帘，跳转到相应的活动页面')
+    // TODO 个人版小程序暂不支持webView，等切换到企业小程序后补全
+  }
+
+  closeCurtain = () => {
+    console.log('关闭幕帘')
+    this.setState({
+      showCurtain: false
+    })
+  }
+
   render () {
     return (
       <View className='page'>
@@ -184,6 +231,18 @@ export default class Index extends Component {
                 onCancel={this.refuseLogin.bind(this)}
                 onConfirm={this.confirmLogin.bind(this)}
               />
+            ) : ''
+          }
+        </View>
+        <View className='curtain'>
+          {
+            this.state.showCurtain ? (
+              <AtCurtain 
+                isOpened={this.state.showCurtain} 
+                onClose={this.closeCurtain.bind(this)} 
+                closeBtnPosition='bottom'> 
+                <Image src={this.state.curtainImg} onClick={this.clickCurtainImg.bind(this)}></Image>
+              </AtCurtain>
             ) : ''
           }
         </View>

@@ -401,6 +401,16 @@ const uploadFile = (filePath, callback) => {
     })
 }
 
+const getNextDayTime = () => {
+  var nextDay = new Date()
+  nextDay = nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
+  nextDay.setHours(0)
+  nextDay.setMinutes(0)
+  nextDay.setSeconds(0)
+  nextDay.setMilliseconds(0)
+  return nextDay
+}
+
 export {getDefaultHeadImg, jsGetAge, getAgeSD, getGenderStr, getSpeciesMemo, getSterilizationMemo, 
   getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo, getInitialDiagnosisMemo,
-  getDiagnosisTypeMemo, getWeekdayMemo, uploadFile}
+  getDiagnosisTypeMemo, getWeekdayMemo, uploadFile, getNextDayTime}
