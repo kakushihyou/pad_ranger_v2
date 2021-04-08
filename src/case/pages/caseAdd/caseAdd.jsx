@@ -400,58 +400,103 @@ export default class CaseUpdate extends Component {
       })
     } else {
       
-      var requestBody = {
-        PetID: Number(getCurrentInstance().router.params.petID),
-        PreID: Number(this.state.preDiagnosis),
-        Age: Number(this.state.age), 
-        DiagnosisAddress: this.state.diagnosisAddress,
-        DiagnosisDate: this.state.diagnosisDate,
-        DiagnosisResult: this.state.diagnosisResult,
-        DiagnosisType: Number(this.state.diagnosisType), 
-        IsInitial: Number(this.state.isInitial),
-        Weight: Number(this.state.weight),
-        Medication: this.state.medication,
-        Revisit: this.state.revisit, 
-        Symptom: this.state.symptom, 
-        Revisit: this.state.revisit, 
-        Therapy: this.state.therapy,
-        RemindTime: this.state.remindTime,
-        Doctor: this.state.doctor
-      }
-
-      console.log(requestBody)
-      Httpclient.put(
-        Config.request_host + '/pet/case', requestBody, 'application/json')
-      .then(res => {
-        console.log(res)
-        if (res.Success) {
-          Taro.showToast({
-            title: '干的漂亮！',
-            duration: 1200,
-            icon: "none",
-            complete: function() {
-              Taro.navigateBack({
-                delta: 1
-              })
+      // TODO 查看是否已经接受消息推送
+      var needRequestSubscription = true
+      Taro.getSetting({
+        withSubscriptions: true,
+        success: (res) => {
+          console.log(res.subscriptionsSetting)
+          if (res.subscriptionsSetting.mainSwitch) {
+            console.log(res.subscriptionsSetting)
+            if (res.subscriptionsSetting.itemSettings != nil && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
+              needRequestSubscription = false
             }
-          })
-        } else {
-          Taro.atMessage({
-            message: res.Message,
-            type: 'error',
-            duration: 3000
-          })
+          } else {
+            needRequestSubscription = false
+          }
+        },
+        fail: () => {
+          console.log('获取用户权限失败')
         }
       })
-      .catch(err => {
-        console.error(err)
+
+      if (needRequestSubscription) {
+        var remind = 0
+        Taro.requestSubscribeMessage({
+          tmplIds: [Config.msgTmpId],
+          success: (res) => {
+            console.log('用户授权成功')
+            if (res[Config.msgTmpId] == 'accept') {
+              console.log('同意订阅')
+              remind = 1
+            } else {
+              console.log('订阅失败')
+            }
+            this.requestAddPet(remind)
+          },
+          fail: (e) => {
+            console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
+            console.log('订阅失败')
+            this.requestAddPet(remind)
+          }
+        })
+      }
+    }
+  }
+
+  requestAddPet = (remind) => {
+    var requestBody = {
+      PetID: Number(getCurrentInstance().router.params.petID),
+      PreID: Number(this.state.preDiagnosis),
+      Age: Number(this.state.age), 
+      DiagnosisAddress: this.state.diagnosisAddress,
+      DiagnosisDate: this.state.diagnosisDate,
+      DiagnosisResult: this.state.diagnosisResult,
+      DiagnosisType: Number(this.state.diagnosisType), 
+      IsInitial: Number(this.state.isInitial),
+      Weight: Number(this.state.weight),
+      Medication: this.state.medication,
+      Revisit: this.state.revisit, 
+      Symptom: this.state.symptom, 
+      Revisit: this.state.revisit, 
+      Therapy: this.state.therapy,
+      Remind: remind,
+      RemindTime: this.state.remindTime,
+      Doctor: this.state.doctor
+    }
+
+    console.log(requestBody)
+    Httpclient.put(
+      Config.request_host + '/pet/case', requestBody, 'application/json')
+    .then(res => {
+      console.log(res)
+      if (res.Success) {
+        Taro.showToast({
+          title: '干的漂亮！',
+          duration: 1200,
+          icon: "none",
+          complete: function() {
+            Taro.navigateBack({
+              delta: 1
+            })
+          }
+        })
+      } else {
         Taro.atMessage({
-          message: '出错了？朕很生气！',
+          message: res.Message,
           type: 'error',
           duration: 3000
         })
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.atMessage({
+        message: '出错了？朕很生气！',
+        type: 'error',
+        duration: 3000
       })
-    }
+    })
   }
 
   goback = () => {

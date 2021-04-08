@@ -46,6 +46,7 @@ export default class PetGeneralSituation extends Component {
         tmplIds: [Config.msgTmpId],
         success: (res) => {
           console.log('用户授权成功')
+          console.log(res)
         },
         fail: (e) => {
           console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
