@@ -6,6 +6,7 @@ import {getDefaultHeadImg, jsGetAge, getGenderStr} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './petGeneralSituation.scss'
+import Config from '../../config/globalConfig.json'
 
 
 export default class PetGeneralSituation extends Component {
@@ -19,6 +20,38 @@ export default class PetGeneralSituation extends Component {
     
     let petID = this.props.info.petID
     console.log('进入详情页面')
+    // TODO 查看是否已经接受消息推送
+    var needRequestSubscription = true
+    Taro.getSetting({
+      withSubscriptions: true,
+      success: (res) => {
+        console.log(res.subscriptionsSetting)
+        if (res.subscriptionsSetting.mainSwitch) {
+          console.log(res.subscriptionsSetting)
+          console.log(Config.msgTmpId)
+          // if (k == Config.msgTmpId) {
+          //   needRequestSubscription = false
+          // }
+        } else {
+          needRequestSubscription = false
+        }
+      },
+      fail: () => {
+        console.log('获取用户权限失败')
+      }
+    })
+
+    if (needRequestSubscription) {
+      Taro.requestSubscribeMessage({
+        tmplIds: [Config.msgTmpId],
+        success: (res) => {
+          console.log('用户授权成功')
+        },
+        fail: (e) => {
+          console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
+        }
+      })
+    }
 
     Taro.navigateTo({
       url:'/case/pages/situationDetail/situationDetail?petID=' + petID

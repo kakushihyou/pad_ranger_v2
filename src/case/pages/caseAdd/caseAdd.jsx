@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getVaccineTypeMemo, getCurrentDate, getDiagnosisTypeMemo, getInitialDiagnosisMemo} from '../../../util/tool'
-
+import { getCurrentDate, getDiagnosisTypeMemo, getInitialDiagnosisMemo} from '../../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './caseAdd.scss'
 import Httpclient from '../../../../httpclient/http'
