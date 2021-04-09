@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getVaccineTypeMemo, getCurrentDate} from '../../../util/tool'
+import { getVaccineTypeMemo, getCurrentDate, doSubscription} from '../../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './inoculationUpdate.scss'
@@ -332,55 +332,59 @@ export default class InoculationUpdate extends Component {
         duration: 3000
       })
     } else {
-      var requestBody = {
-        ID: this.state.inoculationDetail.id,
-        PetID: this.state.inoculationDetail.petID,
-        VaccineName: this.state.inoculationDetail.vaccineName,
-        VaccineType: this.state.inoculationDetail.vaccineType, // 0:母，1:公，2:未知
-        Manufacturer: this.state.inoculationDetail.manufacturer,
-        Dosage: this.state.inoculationDetail.dosage, 
-        InoculationDate: this.state.inoculationDetail.inoculationDate,
-        Weight: Number(this.state.inoculationDetail.weight),
-        NextInoculationDate: this.state.inoculationDetail.nextInoculationDate,
-        InoculationAddress: this.state.inoculationDetail.inoculationAddress, // 绝育标识 1:已绝育，0:未绝育
-        Remind: this.state.inoculationDetail.remind,
-        RemindTime: this.state.inoculationDetail.remindTime,
-        Doctor: this.state.inoculationDetail.doctor
-      }
+      doSubscription(this.requestInoculationUpdate)
+    }
+  }
 
-      console.log(requestBody)
-      Httpclient.post(
-        Config.request_host + '/pet/inoculation', requestBody, 'application/json')
-      .then(res => {
-        console.log(res)
-        if (res.Success) {
-          Taro.showToast({
-            title: '干的漂亮！',
-            duration: 1200,
-            icon: "none",
-            complete: function() {
-              Taro.navigateBack({
-                delta: 1
-              })
-            }
-          })
-        } else {
-          Taro.atMessage({
-            message: res.Message,
-            type: 'error',
-            duration: 3000
-          })
-        }
-      })
-      .catch(err => {
-        console.error(err)
+  requestInoculationUpdate = (remind) => {
+    var requestBody = {
+      ID: this.state.inoculationDetail.id,
+      PetID: this.state.inoculationDetail.petID,
+      VaccineName: this.state.inoculationDetail.vaccineName,
+      VaccineType: this.state.inoculationDetail.vaccineType, // 0:母，1:公，2:未知
+      Manufacturer: this.state.inoculationDetail.manufacturer,
+      Dosage: this.state.inoculationDetail.dosage, 
+      InoculationDate: this.state.inoculationDetail.inoculationDate,
+      Weight: Number(this.state.inoculationDetail.weight),
+      NextInoculationDate: this.state.inoculationDetail.nextInoculationDate,
+      InoculationAddress: this.state.inoculationDetail.inoculationAddress, // 绝育标识 1:已绝育，0:未绝育
+      Remind: remind,
+      RemindTime: this.state.inoculationDetail.remindTime,
+      Doctor: this.state.inoculationDetail.doctor
+    }
+
+    console.log(requestBody)
+    Httpclient.post(
+      Config.request_host + '/pet/inoculation', requestBody, 'application/json')
+    .then(res => {
+      console.log(res)
+      if (res.Success) {
+        Taro.showToast({
+          title: '干的漂亮！',
+          duration: 1200,
+          icon: "none",
+          complete: function() {
+            Taro.navigateBack({
+              delta: 1
+            })
+          }
+        })
+      } else {
         Taro.atMessage({
-          message: '出错了？朕很生气！',
+          message: res.Message,
           type: 'error',
           duration: 3000
         })
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.atMessage({
+        message: '出错了？朕很生气！',
+        type: 'error',
+        duration: 3000
       })
-    }
+    })
   }
 
   goback = () => {

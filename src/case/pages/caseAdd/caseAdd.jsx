@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getCurrentDate, getDiagnosisTypeMemo, getInitialDiagnosisMemo} from '../../../util/tool'
+import { getCurrentDate, getDiagnosisTypeMemo, getInitialDiagnosisMemo, doSubscription} from '../../../util/tool'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './caseAdd.scss'
 import Httpclient from '../../../../httpclient/http'
@@ -401,46 +401,47 @@ export default class CaseUpdate extends Component {
     } else {
       
       // TODO 查看是否已经接受消息推送
-      var needRequestSubscription = true
-      Taro.getSetting({
-        withSubscriptions: true,
-        success: (res) => {
-          console.log(res.subscriptionsSetting)
-          if (res.subscriptionsSetting.mainSwitch) {
-            console.log(res.subscriptionsSetting)
-            if (res.subscriptionsSetting.itemSettings != nil && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
-              needRequestSubscription = false
-            }
-          } else {
-            needRequestSubscription = false
-          }
-        },
-        fail: () => {
-          console.log('获取用户权限失败')
-        }
-      })
+      doSubscription(this.requestAddPet)
+      // var needRequestSubscription = true
+      // Taro.getSetting({
+      //   withSubscriptions: true,
+      //   success: (res) => {
+      //     console.log(res.subscriptionsSetting)
+      //     if (res.subscriptionsSetting.mainSwitch) {
+      //       console.log(res.subscriptionsSetting)
+      //       if (res.subscriptionsSetting.itemSettings != nil && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
+      //         needRequestSubscription = false
+      //       }
+      //     } else {
+      //       needRequestSubscription = false
+      //     }
+      //   },
+      //   fail: () => {
+      //     console.log('获取用户权限失败')
+      //   }
+      // })
 
-      if (needRequestSubscription) {
-        var remind = 0
-        Taro.requestSubscribeMessage({
-          tmplIds: [Config.msgTmpId],
-          success: (res) => {
-            console.log('用户授权成功')
-            if (res[Config.msgTmpId] == 'accept') {
-              console.log('同意订阅')
-              remind = 1
-            } else {
-              console.log('订阅失败')
-            }
-            this.requestAddPet(remind)
-          },
-          fail: (e) => {
-            console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
-            console.log('订阅失败')
-            this.requestAddPet(remind)
-          }
-        })
-      }
+      // if (needRequestSubscription) {
+      //   var remind = 0
+      //   Taro.requestSubscribeMessage({
+      //     tmplIds: [Config.msgTmpId],
+      //     success: (res) => {
+      //       console.log('用户授权成功')
+      //       if (res[Config.msgTmpId] == 'accept') {
+      //         console.log('同意订阅')
+      //         remind = 1
+      //       } else {
+      //         console.log('订阅失败')
+      //       }
+      //       this.requestAddPet(remind)
+      //     },
+      //     fail: (e) => {
+      //       console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
+      //       console.log('订阅失败')
+      //       this.requestAddPet(remind)
+      //     }
+      //   })
+      // }
     }
   }
 

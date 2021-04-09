@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getDewormingTypeMemo, getCurrentDate} from '../../../util/tool'
+import { getDewormingTypeMemo, getCurrentDate, doSubscription} from '../../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './dewormingAdd.scss'
@@ -277,7 +277,12 @@ export default class DewormingAdd extends Component {
         duration: 3000
       })
     } else {
-      let petID = getCurrentInstance().router.params.petID
+      doSubscription(this.requestDewormingAdd)
+    }
+  }
+
+  requestDewormingAdd = (remind) => {
+    let petID = getCurrentInstance().router.params.petID
       var requestBody = {
         PetID: Number(petID),
         Medication: this.state.medication,
@@ -288,7 +293,7 @@ export default class DewormingAdd extends Component {
         Weight: Number(this.state.weight),
         NextDewormingDate: this.state.nextDewormingDate,
         DewormingAddress: this.state.dewormingAddress,
-        Remind: this.state.remind,
+        Remind: remind,
         RemindTime: this.state.remindTime,
         Doctor: this.state.doctor
       }
@@ -325,7 +330,6 @@ export default class DewormingAdd extends Component {
           duration: 3000
         })
       })
-    }
   }
 
   goback = () => {

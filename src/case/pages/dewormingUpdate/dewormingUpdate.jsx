@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Picker } from '@tarojs/components'
 import { AtButton, AtList, AtListItem, AtInput, AtMessage } from 'taro-ui'
-import { getDewormingTypeMemo } from '../../../util/tool'
+import { getDewormingTypeMemo, doSubscription } from '../../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './dewormingUpdate.scss'
@@ -326,57 +326,7 @@ export default class DewormingUpdate extends Component {
       })
     } else {
       
-      var requestBody = {
-        ID: this.state.dewormingDetail.id,
-        PetID: this.state.dewormingDetail.petID,
-        Medication: this.state.dewormingDetail.medication,
-        DewormingType: this.state.dewormingDetail.dewormingType, // 0:母，1:公，2:未知
-        Manufacturer: this.state.dewormingDetail.manufacturer,
-        Dosage: this.state.dewormingDetail.dosage, // 物种 1:猫，2:狗
-        DewormingDate: this.state.dewormingDetail.dewormingDate,
-        Weight: this.state.dewormingDetail.weight,
-        NextDewormingDate: this.state.dewormingDetail.nextDewormingDate,
-        DewormingAddress: this.state.dewormingDetail.dewormingAddress, // 绝育标识 1:已绝育，0:未绝育
-        Remind: this.state.dewormingDetail.remind,
-        RemindTime: this.state.dewormingDetail.remindTime,
-        Doctor: this.state.dewormingDetail.doctor
-      }
-
-      console.log(requestBody)
-      Httpclient.post(
-        Config.request_host + '/pet/deworming', requestBody, 'application/json')
-      .then(res => {
-        console.log(res)
-        if (res.Success) {
-          Taro.showToast({
-            title: '干的漂亮！',
-            duration: 1200,
-            icon: "none",
-            complete: function() {
-              Taro.navigateBack({
-                delta: 1
-              })
-            }
-          })
-          this.setState({
-            saved: true
-          })
-        } else {
-          Taro.atMessage({
-            message: res.Message,
-            type: 'error',
-            duration: 3000
-          })
-        }
-      })
-      .catch(err => {
-        console.error(err)
-        Taro.atMessage({
-          message: '出错了？朕很生气！',
-          type: 'error',
-          duration: 3000
-        })
-      })
+      doSubscription(this.requestDewormingUpdate)
     }
   }
 
@@ -409,6 +359,60 @@ export default class DewormingUpdate extends Component {
         delta: 1
       })
     }
+  }
+
+  requestDewormingUpdate = (remind) => {
+    var requestBody = {
+      ID: this.state.dewormingDetail.id,
+      PetID: this.state.dewormingDetail.petID,
+      Medication: this.state.dewormingDetail.medication,
+      DewormingType: this.state.dewormingDetail.dewormingType, // 0:母，1:公，2:未知
+      Manufacturer: this.state.dewormingDetail.manufacturer,
+      Dosage: this.state.dewormingDetail.dosage, // 物种 1:猫，2:狗
+      DewormingDate: this.state.dewormingDetail.dewormingDate,
+      Weight: this.state.dewormingDetail.weight,
+      NextDewormingDate: this.state.dewormingDetail.nextDewormingDate,
+      DewormingAddress: this.state.dewormingDetail.dewormingAddress, // 绝育标识 1:已绝育，0:未绝育
+      Remind: remind,
+      RemindTime: this.state.dewormingDetail.remindTime,
+      Doctor: this.state.dewormingDetail.doctor
+    }
+
+    console.log(requestBody)
+    Httpclient.post(
+      Config.request_host + '/pet/deworming', requestBody, 'application/json')
+    .then(res => {
+      console.log(res)
+      if (res.Success) {
+        Taro.showToast({
+          title: '干的漂亮！',
+          duration: 1200,
+          icon: "none",
+          complete: function() {
+            Taro.navigateBack({
+              delta: 1
+            })
+          }
+        })
+        this.setState({
+          saved: true
+        })
+      } else {
+        Taro.atMessage({
+          message: res.Message,
+          type: 'error',
+          duration: 3000
+        })
+      }
+    })
+    .catch(err => {
+      console.error(err)
+      Taro.atMessage({
+        message: '出错了？朕很生气！',
+        type: 'error',
+        duration: 3000
+      })
+    })
   }
 
   render () {

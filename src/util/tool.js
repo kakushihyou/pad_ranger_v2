@@ -411,6 +411,49 @@ const getNextDayTime = () => {
   return nextDay
 }
 
+const doSubscription = (callback) => {
+  var needRequestSubscription = true
+  Taro.getSetting({
+    withSubscriptions: true,
+    success: (res) => {
+      console.log(res.subscriptionsSetting)
+      if (res.subscriptionsSetting.mainSwitch) {
+        console.log(res.subscriptionsSetting)
+        if (res.subscriptionsSetting.itemSettings != nil && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
+          needRequestSubscription = false
+        }
+      } else {
+        needRequestSubscription = false
+      }
+    },
+    fail: () => {
+      console.log('获取用户权限失败')
+    }
+  })
+
+  if (needRequestSubscription) {
+    var remind = 0
+    Taro.requestSubscribeMessage({
+      tmplIds: [Config.msgTmpId],
+      success: (res) => {
+        console.log('用户授权成功')
+        if (res[Config.msgTmpId] == 'accept') {
+          console.log('同意订阅')
+          remind = 1
+        } else {
+          console.log('订阅失败')
+        }
+        callback(remind)
+      },
+      fail: (e) => {
+        console.log('用户授权失败[' + e.errCode + '],' + e.errMsg)
+        console.log('订阅失败')
+        callback(remind)
+      }
+    })
+  }
+}
+
 export {getDefaultHeadImg, jsGetAge, getAgeSD, getGenderStr, getSpeciesMemo, getSterilizationMemo, 
   getInoculationMemo, getCurrentDate, getDewormingTypeMemo, getVaccineTypeMemo, getInitialDiagnosisMemo,
-  getDiagnosisTypeMemo, getWeekdayMemo, uploadFile, getNextDayTime}
+  getDiagnosisTypeMemo, getWeekdayMemo, uploadFile, getNextDayTime, doSubscription}
