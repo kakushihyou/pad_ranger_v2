@@ -17,7 +17,7 @@ export default class Index extends Component {
 
   bindUserInfo = (e) => {
     console.log(e)
-    let detail = e.detail
+    // let detail = e.detail
     // 微信登录
     Taro.login({
       success: (loginRes) => {
@@ -30,7 +30,28 @@ export default class Index extends Component {
             console.log('微信授权页面登陆获取userID是' + userID)
             // 将userId存入缓存
             Taro.setStorageSync('userID', userID)
-            this.analysisWxuserInfo(detail)
+            Taro.getUserInfo({
+              success: function(res) {
+                console.log('获取用户信息成功')
+                console.log(res)
+                var jsonData = {
+                  UserID : Taro.getStorageSync('userID'),
+                  RawData : res.rawData,
+                  Signature : res.signature,
+                  EncryptedData : res.encryptedData,
+                  Iv : res.iv
+                }
+                Taro.setStorageSync('userInfo', jsonData)
+                console.log(jsonData)
+                Httpclient.post(Config.request_host + '/analysisWxUserInfo', jsonData, 'application/json')
+                  .then(res => {
+                    console.log(res)
+                  })
+                  .catch(err => {
+                    console.error(err)
+                  })
+              }
+            })
             Taro.navigateBack({
               delta: 1
             })
@@ -55,6 +76,14 @@ export default class Index extends Component {
     .catch((error) => {
       console.error(error)
     })
+
+    // 用户授权
+    // Taro.getSetting({
+    //   success(res) {
+        
+        
+      // }
+    // })
   }
 
   analysisWxuserInfo = (info) => {

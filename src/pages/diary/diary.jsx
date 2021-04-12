@@ -36,19 +36,6 @@ export default class Diary extends Component {
     console.log('UserID是' + userID)
     if (userID) {
 
-      Taro.getSetting({
-        success(res) {
-          if (!res.authSetting["scope.userInfo"]) {
-              
-            console.error('获取微信用户信息授权失败')
-            Taro.navigateTo({
-              url: '/pages/wxLogin/wxLogin'
-            })
-            return
-          }
-        }
-      })
-
       if (needRefresh || (dataList == null || dataList.length == 0)) {
         this.setState({
           pageNum: 1

@@ -72,48 +72,6 @@ export default class Index extends Component {
     let userID = Taro.getStorageSync('userID')
     console.log("首页获取的userID是" + userID)
     if (userID) {
-      // 用户授权
-      Taro.getSetting({
-        success(res) {
-          if (!res.authSetting["scope.userInfo"]) {
-              
-            console.error('获取微信用户信息授权失败')
-            // Taro.navigateTo({
-            //   url: '/pages/wxLogin/wxLogin'
-            // })
-            // return
-            Taro.showToast({
-              title: '获取微信信息异常，请稍后再试',
-              icon: 'none',
-              duration: 1200
-            })
-            return
-          } 
-          else {
-            Taro.getUserInfo({
-              success: function(res) {
-                var jsonData = {
-                  UserID : Taro.getStorageSync('userID'),
-                  RawData : res.rawData,
-                  Signature : res.signature,
-                  EncryptedData : res.encryptedData,
-                  Iv : res.iv
-                }
-                Taro.setStorageSync('userInfo', jsonData)
-                console.log(jsonData)
-                Httpclient.post(Config.request_host + '/analysisWxUserInfo', jsonData, 'application/json')
-                  .then(res => {
-                    console.log(res)
-                  })
-                  .catch(err => {
-                    console.error(err)
-                  })
-              }
-            })
-          }
-        }
-      })
-
       this.getPetList(Taro.getStorageSync('userID'))
     } else {
       Taro.showToast({
