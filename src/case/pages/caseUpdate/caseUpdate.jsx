@@ -436,7 +436,7 @@ export default class CaseUpdate extends Component {
     console.log(e.detail.value)
     let revisitDate = e.detail.value
     let caseDetail = this.state.caseDetail
-    let preRevisitDate = inoculationDetail.revisit
+    let preRevisitDate = caseDetail.revisit
     if (revisitDate === preRevisitDate) {
       console.log('修改前后没有变化')
       return
