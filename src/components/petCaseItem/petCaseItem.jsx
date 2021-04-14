@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
 import { AtButton, AtIcon, AtFloatLayout } from 'taro-ui'
-import Taro from '@tarojs/taro'
+import Taro , {getCurrentPages}from '@tarojs/taro'
 import {getInitialDiagnosisMemo, getDiagnosisTypeMemo} from '../../util/tool'
 
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -18,6 +18,7 @@ export default class PetCaseItem extends Component {
   trash = () => {
     console.log('开始删除')
     let petCaseItem = this.props.info
+    let callback = this.props.callback
     Taro.showModal({
       cancelText:'点错了',
       cancelColor:'#FFC1C1',
@@ -37,12 +38,7 @@ export default class PetCaseItem extends Component {
                 duration: 1200,
                 icon: "none",
                 complete: function() {
-                  var page = getCurrentPages().pop()
-                    console.log(page)
-                    if (page == undefined || page == null) {
-                      return
-                    }
-                    page.onShow()
+                  callback()
                 }
               })
             })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text} from '@tarojs/components'
+import { View, Text, Image} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { AtModal, AtFab, AtCurtain} from 'taro-ui'
 import 'taro-ui/dist/style/index.scss'
@@ -38,33 +38,22 @@ export default class Index extends Component {
     })
 
     let curtainDueTime = Taro.getStorageSync("curtainDueTime")
+    console.log('幕帘下次弹出的间隔 是' + curtainDueTime)
     if (!curtainDueTime || curtainDueTime == 0) {
-      Httpclient.get(Config.request_host + '/curtain')
-      .then(res => {
-        if (res.Data) {
-          this.setState({
-            showCurtain: true,
-            curtainImg: res.Data.CurtainImg,
-            curtainLinkUrl: res.Data.LinkUrl
-          })
 
-          Taro.setStorageSync("curtainDueTime", getNextDayTime().getTime())
-        }
-      })
-      .catch(err => {
-        console.error(err)
-      })
+      console.log('幕帘首次弹出')
+      this.getCurtain()
     } else {
+
+      // this.setState({
+      //   showCurtain: false
+      // })
       var currentTime = new Date().getTime()
       if (currentTime - curtainDueTime >= 0) {
-        Taro.setStorageSync("curtainDueTime", getNextDayTime().getTime())
-        this.setState({
-          showCurtain: true
-        })
+        console.log('幕帘重新弹出')
+        this.getCurtain()
       } else {
-        this.setState({
-          showCurtain: false
-        })
+        console.log('幕帘已弹出，并且未到下次弹出时间')
       }
     }
 
@@ -84,6 +73,24 @@ export default class Index extends Component {
         petResumeList: [],
       })
     }
+  }
+
+  getCurtain = () => {
+    Httpclient.get(Config.request_host + '/curtain')
+      .then(res => {
+        if (res.Data) {
+          this.setState({
+            showCurtain: true,
+            curtainImg: res.Data.CurtainImg,
+            curtainLinkUrl: res.Data.LinkUrl
+          })
+
+          Taro.setStorageSync("curtainDueTime", getNextDayTime().getTime())
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      })
   }
 
   getPetList = (userID) => {

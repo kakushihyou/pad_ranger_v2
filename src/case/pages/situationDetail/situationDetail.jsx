@@ -68,6 +68,10 @@ export default class SituationDetail extends Component {
         this.setState({
           petInoculationList: res.Data.petInoculationList
         })
+      } else {
+        this.setState({
+          petInoculationList: []
+        })
       }
     })
     .catch(err => {
@@ -90,6 +94,10 @@ export default class SituationDetail extends Component {
         this.setState({
           petDewormingList: res.Data.petDewormingList
         })
+      } else {
+        this.setState({
+          petDewormingList: []
+        })
       }
     })
     .catch(err => {
@@ -111,6 +119,10 @@ export default class SituationDetail extends Component {
       if (res.Data.count > 0) {
         this.setState({
           petCaseList: res.Data.petCaseList
+        })
+      } else {
+        this.setState({
+          petCaseList: []
         })
       }
     })
@@ -219,17 +231,17 @@ export default class SituationDetail extends Component {
           <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >
               <View style={scrollStyle}>
-                <PetInoculationList list={this.state.petInoculationList}/>
+                <PetInoculationList list={this.state.petInoculationList} callback={this.getInoculationList}/>
               </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
               <View style={scrollStyle}>
-                <PetDewormingList list={this.state.petDewormingList}/>
+                <PetDewormingList list={this.state.petDewormingList} callback={this.getDewormingList}/>
               </View>
             </AtTabsPane>
             <AtTabsPane class='case' current={this.state.current} index={2}>
               <View style={scrollStyle}>
-                <PetCaseList list={this.state.petCaseList} handleFloatLayoutShow={this.handleFloatLayoutShow}/>
+                <PetCaseList list={this.state.petCaseList} callback={this.getCaseList} handleFloatLayoutShow={this.handleFloatLayoutShow}/>
               </View>
             </AtTabsPane>
           </AtTabs>

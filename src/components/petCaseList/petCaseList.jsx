@@ -22,7 +22,7 @@ export default class PetCaseList extends Component {
         {
           petCaseList.map((item) => {
             return (
-              <PetCaseItem info={item} handleFloatLayoutShow={() => this.props.handleFloatLayoutShow(item.preID)}></PetCaseItem>
+              <PetCaseItem info={item} callback={this.props.callback} handleFloatLayoutShow={() => this.props.handleFloatLayoutShow(item.preID)}></PetCaseItem>
             )
           })
         }

@@ -22,7 +22,7 @@ export default class PetInoculationList extends Component {
         {
           petInoculationList.map((item) => {
             return (
-              <PetInoculationItem info={item}></PetInoculationItem>
+              <PetInoculationItem info={item} callback={this.props.callback}></PetInoculationItem>
             )
           })
         }

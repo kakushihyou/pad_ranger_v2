@@ -21,7 +21,7 @@ export default class PetDewormingList extends Component {
         {
           petDewormingList.map((item) => {
             return (
-              <PetDewormingItem info={item}></PetDewormingItem>
+              <PetDewormingItem info={item} callback={this.props.callback}></PetDewormingItem>
             )
           })
         }

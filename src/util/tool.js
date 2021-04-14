@@ -403,7 +403,7 @@ const uploadFile = (filePath, callback) => {
 
 const getNextDayTime = () => {
   var nextDay = new Date()
-  nextDay = nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
+  nextDay.setTime(nextDay.getTime() + 24 * 60 * 60 * 1000)
   nextDay.setHours(0)
   nextDay.setMinutes(0)
   nextDay.setSeconds(0)
@@ -419,7 +419,7 @@ const doSubscription = (callback) => {
       console.log(res.subscriptionsSetting)
       if (res.subscriptionsSetting.mainSwitch) {
         console.log(res.subscriptionsSetting)
-        if (res.subscriptionsSetting.itemSettings != nil && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
+        if (res.subscriptionsSetting.itemSettings != null && res.subscriptionsSetting.itemSettings[Config.msgTmpId] == Config.msgTmpId) {
           needRequestSubscription = false
         }
       } else {

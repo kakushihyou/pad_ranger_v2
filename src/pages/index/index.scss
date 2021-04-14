@@ -1,4 +1,5 @@
 @import "~taro-ui/dist/style/components/fab.scss";
+@import "~taro-ui/dist/style/components/curtain.scss";
 
 .page{
     height: 100%;
@@ -22,4 +23,8 @@
 
 text {
     font-size: 34px;
+}
+
+.at-curtain__container {
+    width: 88%;
 }
