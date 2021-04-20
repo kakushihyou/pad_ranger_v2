@@ -176,15 +176,14 @@ export default class Index extends Component {
     let linkUrl = this.state.curtainLinkUrl
     if (linkUrl) {
       Taro.navigateTo({
-        url:'/curtains/pages/curtainImg/curtainImg?curtainImg=' + linkUrl,
-        success: (res) => {
-          console.log('点击完毕，关闭幕帘')
-          this.setState({
-            showCurtain: false
-          })
-        }
+        url:'/curtains/pages/curtainImg/curtainImg?curtainImg=' + linkUrl
       })
     }
+
+    console.log('点击完毕，关闭幕帘')
+    this.setState({
+      showCurtain: false
+    })
   }
 
   closeCurtain = () => {
