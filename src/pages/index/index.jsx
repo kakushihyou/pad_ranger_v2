@@ -171,8 +171,12 @@ export default class Index extends Component {
   }
 
   clickCurtainImg = () => {
+    // TODO 个人版不支持webView，暂时做成页面跳转
     console.log('点击幕帘，跳转到相应的活动页面')
-    // TODO 个人版小程序暂不支持webView，等切换到企业小程序后补全
+    let linkUrl = this.state.curtainLinkUrl
+    Taro.navigateTo({
+      url:'/curtains/pages/curtainImg/curtainImg?curtainImg=' + linkUrl
+    })
   }
 
   closeCurtain = () => {

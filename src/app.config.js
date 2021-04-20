@@ -34,6 +34,12 @@ export default {
         'pages/petUpdate/petUpdate',
         'pages/petAdd/petAdd'
       ]
+    },
+    {
+      root: "curtains",
+      pages: [
+        'pages/curtainImg/curtainImg'
+      ]
     }
   ],
   window: {
